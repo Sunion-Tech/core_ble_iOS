@@ -852,6 +852,7 @@ public class CommandService {
             }
         }()
 
+
         guard let aesBytes = AESModel.shared.encrypt(key: key, bytesArray) else { return nil }
 
         return Data(aesBytes)
@@ -861,6 +862,8 @@ public class CommandService {
         if let characteristic = characteristic as? CBCharacteristic {
         
             guard let responseValue = characteristic.value else { return .error("Can't get characteristic: \(characteristic) value")}
+            
+   
             guard let decryptData = AESModel.shared.decrypt(key: key, responseValue) else { return .error("Decrypt data error") }
         
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}

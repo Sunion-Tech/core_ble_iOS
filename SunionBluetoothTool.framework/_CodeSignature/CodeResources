@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/SunionBluetoothTool-Swift.h</key>
 		<data>
-		xpd6r9adxojN/LsziGhhBvCZSZw=
+		SYpIxGonYR4mcE+JtHI4WiL2n3U=
 		</data>
 		<key>Headers/SunionBluetoothTool.h</key>
 		<data>
@@ -14,11 +14,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		jZ3nokrSvwTq04HKsAfOYWyRzGQ=
+		BrZkFwt2suoyl0jXPQYP2r41VDQ=
 		</data>
 		<key>Modules/SunionBluetoothTool.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		sOMK3JIf7C3j8dNZdjpcYN6Q7pQ=
+		NQH8KAM1tGZwgjhjixzjsApSTGY=
 		</data>
 		<key>Modules/SunionBluetoothTool.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -26,11 +26,11 @@
 		</data>
 		<key>Modules/SunionBluetoothTool.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		9c2r1mKgv67Utf0duUjFI+xpJH4=
+		veKvctqG9CMr6ozKtvhoCWjLRGA=
 		</data>
 		<key>Modules/SunionBluetoothTool.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		yewm7WK1bKSF1XL1tCkHcvSJj/o=
+		Di7aFHHsi3YcRVngdOOWEtsp4+s=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -43,11 +43,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xpd6r9adxojN/LsziGhhBvCZSZw=
+			SYpIxGonYR4mcE+JtHI4WiL2n3U=
 			</data>
 			<key>hash2</key>
 			<data>
-			2BXYc2TF6sIjXTny7AU3zjrjhbmWYvxaSEfCQ9SeCAw=
+			usFQffs2EJYOSieapKiLurbE8xEiT/wXq3fkJX2Juao=
 			</data>
 		</dict>
 		<key>Headers/SunionBluetoothTool.h</key>
@@ -65,11 +65,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			sOMK3JIf7C3j8dNZdjpcYN6Q7pQ=
+			NQH8KAM1tGZwgjhjixzjsApSTGY=
 			</data>
 			<key>hash2</key>
 			<data>
-			uaqIq+OKz0ExdOLsccoM7+3pxdJyn5jJlQyN5fKKU3o=
+			jcXkSXFeLR0bAHRpywNMtFs7by2PKw+2w0I7D6u5ZcE=
 			</data>
 		</dict>
 		<key>Modules/SunionBluetoothTool.swiftmodule/arm64-apple-ios.abi.json</key>
@@ -87,22 +87,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			9c2r1mKgv67Utf0duUjFI+xpJH4=
+			veKvctqG9CMr6ozKtvhoCWjLRGA=
 			</data>
 			<key>hash2</key>
 			<data>
-			2Nfd1+kUl/Qp0dBHYfml3sEXDdIGMLPyUP1u60JICf0=
+			pkJEgvR/TJYzIMOmmZpbIuvP3xZnZRmmjD6H/+90NAs=
 			</data>
 		</dict>
 		<key>Modules/SunionBluetoothTool.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yewm7WK1bKSF1XL1tCkHcvSJj/o=
+			Di7aFHHsi3YcRVngdOOWEtsp4+s=
 			</data>
 			<key>hash2</key>
 			<data>
-			URYRO+FbE2HQ7ssAPpgJF9cMq/ZWc4FPWj/p+ZSp9NM=
+			QZT2ECWA6N7Q0kmK0/s7XRqSJdZVtnxGS/6OZGMeRRg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
