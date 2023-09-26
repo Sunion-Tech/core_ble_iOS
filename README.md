@@ -433,11 +433,14 @@ func TokenOption(value: AddTokenResult?) {
 ---
 ### delToken
 ```
-SunionBluetoothTool.shared.delToken(model: TokenModel)
+SunionBluetoothTool.shared.delToken(model: TokenModel, ownerPinCode: String? = nil)
 ```
 
 #### Parameter
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|model|  TokenModel | requestModel
+| ownerPinCode| String| admincode
 
 ##### TokenModel
 | Name | Type | Description |
@@ -469,12 +472,13 @@ func Token(bool: Bool?) {
  ---
 ### getTokenQrCode
 ```
-SunionBluetoothTool.shared.getTokenQrCode(tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String)
+SunionBluetoothTool.shared.getTokenQrCode(barcodeKey: String,tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String)
 ```
 
 #### Parameter
 | Parameter | Type | Description |
 | -------- | -------- | -------- |
+|barcodeKey|String| enCode QrCode
 | tokenIndex     | Int     | position of token |
 |aes1Key| Data | get it from QR code
 | macAddress| String | bluetooth macAddress
@@ -999,6 +1003,81 @@ func DelAccess(value: DelAccessResponseModel?){
 |index| Int| position of Access
 |isSuccess| Bool| successed
 
+---
+### WifiList 
+
+```
+SunionBluetoothTool.shared.wifiList()
+```
+
+
+
+#### Delegate function
+```
+func  SetupAccess(value: SSIDModel?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameters
+##### SSIDModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| passwordLevel |  PasswordLevel |  required<br> none<br>completed <br>unknown
+|name| String| Wifi Name
+
+---
+
+### ConnectWifi 
+
+```
+SunionBluetoothTool.shared.connectWifi(SSIDName: String, passwrod: String)
+
+```
+#### Parameters
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| SSIDName |  String |  wifi Name
+|passwrod| String| Wifi password
+
+
+#### Delegate function
+```
+step1: 
+
+func  connectWifi(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+
+step2: 
+
+func  connectMQTT(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+
+step3: 
+
+func  connectCloud(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+
+---
 ## Models
 ### QRCodeContent
 

@@ -221,7 +221,7 @@ public class CommandService {
                 let vacationSetting:UInt8 = setupModel.vacationModeOn ? 0x01 : 0x00
                 let autoLockSetting:UInt8 = setupModel.autoLockOn ? 0x01 : 0x00
                 let autoLockTime = UInt8(setupModel.autoLockTime)
-                let leadCode: UInt8 = 0x00 // 非觸控鎖 前導碼一律關閉, 觸控鎖才可以 開啟/關閉
+                let leadCode: UInt8 = setupModel.guidingCode ? 0x01 : 0x00
                 var byteArray:[UInt8] = [0xD5, 0x16, resetBolt, soundSetting, vacationSetting, autoLockSetting, autoLockTime, leadCode]
                 let laititude1 = setupModel.laititude.toInt32
                 let laititude2 = setupModel.laititude.decimalPartToInt32
@@ -973,6 +973,7 @@ public class CommandService {
             var tokenPermission: TokenPermission {
                 guard let index1 = data[safe: 1] else { return .error }
                 guard let string = String(data: Data([index1]), encoding: .utf8)?.lowercased() else { return .error }
+                print("tokenPermission: \(string)")
                 switch string {
                 case "m":
                     return .owner

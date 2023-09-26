@@ -216,7 +216,6 @@ class BluetoothService: NSObject {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        
         let command = CommandService.shared.createAction(with: .D3(Date()), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
