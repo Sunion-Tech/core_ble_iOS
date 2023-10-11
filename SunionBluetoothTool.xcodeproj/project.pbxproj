@@ -15,6 +15,10 @@
 		9982A20429398C8D00874279 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20329398C8D00874279 /* Enum.swift */; };
 		9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */; };
 		9982A270294312A500874279 /* QrCodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A26F294312A500874279 /* QrCodeService.swift */; };
+		999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */; };
+		999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953A2AD638380063BD1F /* OTAResponseModel.swift */; };
+		999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */; };
+		999C953F2AD643750063BD1F /* OTADataResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953E2AD643750063BD1F /* OTADataResponseModel.swift */; };
 		99ACF28929343BA300B35773 /* SunionBluetoothTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 99ACF28829343BA300B35773 /* SunionBluetoothTool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		99ACF2A329343C4500B35773 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACF2A229343C4500B35773 /* SwiftyJSON */; };
 		99ACF2A629343C5B00B35773 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACF2A529343C5B00B35773 /* ObjectMapper */; };
@@ -57,6 +61,10 @@
 		9982A20329398C8D00874279 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModel.swift; sourceTree = "<group>"; };
 		9982A26F294312A500874279 /* QrCodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeService.swift; sourceTree = "<group>"; };
+		999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAStatusRequestModel.swift; sourceTree = "<group>"; };
+		999C953A2AD638380063BD1F /* OTAResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAResponseModel.swift; sourceTree = "<group>"; };
+		999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTADataRequsetModel.swift; sourceTree = "<group>"; };
+		999C953E2AD643750063BD1F /* OTADataResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTADataResponseModel.swift; sourceTree = "<group>"; };
 		99ACF28529343BA300B35773 /* SunionBluetoothTool.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SunionBluetoothTool.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		99ACF28829343BA300B35773 /* SunionBluetoothTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SunionBluetoothTool.h; sourceTree = "<group>"; };
 		99ACF2A729343D1A00B35773 /* SunionBluetoothTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunionBluetoothTool.swift; sourceTree = "<group>"; };
@@ -168,6 +176,8 @@
 				995AD78329923BF600810273 /* SearchAccessRequestModel.swift */,
 				99CB54432993742700A5C06F /* SetupAccessRequestModel.swift */,
 				99CB54472993799300A5C06F /* DelAccessRequestModel.swift */,
+				999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */,
+				999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */,
 			);
 			path = request;
 			sourceTree = "<group>";
@@ -189,6 +199,8 @@
 				99CB5445299374EB00A5C06F /* SetupAccessResponseModel.swift */,
 				99CB544929937A1600A5C06F /* DelAccessResponseModel.swift */,
 				99F3ABB429BF03CA00E29C23 /* AlertResponseModel.swift */,
+				999C953A2AD638380063BD1F /* OTAResponseModel.swift */,
+				999C953E2AD643750063BD1F /* OTADataResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -286,6 +298,7 @@
 				99AEB51A29347D3400CCAC9C /* LogModel.swift in Sources */,
 				9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */,
 				99AEB51229347CEE00CCAC9C /* UserCodeManageModel.swift in Sources */,
+				999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */,
 				995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */,
 				99AEB51429347CFD00CCAC9C /* UserCodeScheduleModel.swift in Sources */,
 				99AEB51C29347D4500CCAC9C /* AddTokenResult.swift in Sources */,
@@ -306,12 +319,15 @@
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */,
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
+				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
 				99ACF2A829343D1B00B35773 /* SunionBluetoothTool.swift in Sources */,
 				99AEB50829347C9A00CCAC9C /* EditAdminCodeModel.swift in Sources */,
 				99AEB52429347D9200CCAC9C /* Extension.swift in Sources */,
 				99AEB52229347D7C00CCAC9C /* apiResDeivceAccessCodeListAccessCode.swift in Sources */,
+				999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */,
 				99AEB50A29347CAA00CCAC9C /* DeviceSetupModel.swift in Sources */,
+				999C953F2AD643750063BD1F /* OTADataResponseModel.swift in Sources */,
 				9982A270294312A500874279 /* QrCodeService.swift in Sources */,
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,

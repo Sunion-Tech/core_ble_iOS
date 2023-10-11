@@ -43,6 +43,8 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func connectMQTT(bool: Bool?)
     func connectClould(bool: Bool?)
     func debug(value: String)
+    func OTAStatus(value: OTAResponseModel?)
+    func OTAData(value: OTADataResponseModel?)
    
 }
 
@@ -80,6 +82,8 @@ extension SunionBluetoothToolDelegate {
     public  func debug(value: String) {}
     public func connectMQTT(bool: Bool?) {}
     public func connectClould(bool: Bool?) {}
+    public func OTAStatus(value: OTAResponseModel?) {}
+    public func OTAData(value: OTADataResponseModel?) {}
 }
 
 public class SunionBluetoothTool: NSObject {
@@ -297,6 +301,14 @@ public class SunionBluetoothTool: NSObject {
     public func connectWifi(SSIDName: String, passwrod: String) {
         bluetoothService?.setSSID(SSIDName: SSIDName, password: passwrod)
     }
+    
+    public func otaStatus(req: OTAStatusRequestModel) {
+        bluetoothService?.otaStatus(req: req)
+    }
+    
+    public func otaData(req: OTADataRequestModel) {
+        bluetoothService?.otaData(req: req)
+    }
 }
 
 
@@ -393,6 +405,10 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.connectMQTT(bool: bool)
         case .connectClould(let bool):
             delegate?.connectClould(bool: bool)
+        case .OTAData(let model):
+            delegate?.OTAData(value: model)
+        case .OTAStatus(let model):
+            delegate?.OTAStatus(value: model)
         }
     }
     

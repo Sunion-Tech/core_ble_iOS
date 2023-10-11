@@ -84,6 +84,8 @@ public class CommandService {
         case setConnection
         case C0([UInt8]?)
         case C1([UInt8])
+        case C3(OTAStatusRequestModel)
+        case C4(OTADataRequestModel)
         case C7([Int])
         case C8(EditAdminCodeModel)
         case CC
@@ -149,6 +151,16 @@ public class CommandService {
             case .C1(let token):
                 var byteArray:[UInt8] = [0xC1, 0x08]
                 token.forEach{byteArray.append($0)}
+                return byteArray
+            case .C3(let data):
+                let length = UInt8(data.command.count)
+                var byteArray:[UInt8] = [0xC3, length]
+                data.command.forEach{byteArray.append($0)}
+                return byteArray
+            case .C4(let data):
+                let length = UInt8(data.command.count)
+                var byteArray:[UInt8] = [0xC4, length]
+                data.command.forEach{byteArray.append($0)}
                 return byteArray
             case .C7(let adminCode):
                 let length = UInt8(adminCode.count)
@@ -503,6 +515,10 @@ public class CommandService {
                 return 0x10
             case .C1:
                 return 0x08
+            case .C3(let data):
+                return UInt8(data.command.count)
+            case .C4(let data):
+                return UInt8(data.command.count)
             case .C7(let adminCode):
                 return UInt8(adminCode.count + 1)
             case .C8(let model):
@@ -623,6 +639,8 @@ public class CommandService {
         case setCloud(Bool)
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
+        case C3(OTAResponseModel)
+        case C4(OTADataResponseModel)
         case C7(Bool)
         case C8(Bool)
         case CC
@@ -686,6 +704,10 @@ public class CommandService {
                 return 0xC0
             case .C1:
                 return 0xC1
+            case .C3:
+                return 0xC3
+            case .C4:
+                return 0xC4
             case .C7:
                 return 0xC7
             case .C8:
@@ -988,6 +1010,12 @@ public class CommandService {
                 }
             }
             return .C1(tokenMode, tokenPermission)
+        case 0xC3:
+            let model = OTAResponseModel(response: data)
+            return .C3(model)
+        case 0xC4:
+            let model = OTADataResponseModel(data)
+            return .C4(model)
         case 0xC7:
             let isSuccess = data.first == 0x01
             return .C7(isSuccess)

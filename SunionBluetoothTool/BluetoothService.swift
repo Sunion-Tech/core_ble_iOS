@@ -551,6 +551,26 @@ class BluetoothService: NSObject {
         let command =  CommandService.shared.createAction(with: .setConnection, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+    // MARK: - OTA {
+    func otaStatus(req: OTAStatusRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .OTAStatus(nil)
+        let command =  CommandService.shared.createAction(with: .C3(req), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func otaData(req: OTADataRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .OTAData(nil)
+        let command =  CommandService.shared.createAction(with: .C4(req), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
 
 }
 
@@ -817,7 +837,10 @@ extension BluetoothService: CBPeripheralDelegate {
                     self.data.permanentToken = self.oneTimeToken!
                 }
                 
-             
+            case .C3(let model):
+                self.delegate?.commandState(value: .OTAStatus(model))
+            case .C4(let model):
+                self.delegate?.commandState(value: .OTAData(model))
             case .D5(let bool):
                 
                 if !bool {

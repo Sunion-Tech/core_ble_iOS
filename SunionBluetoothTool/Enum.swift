@@ -58,5 +58,7 @@ public enum commandState {
     case connectWifi(Bool?)
     case connectMQTT(Bool?)
     case connectClould(Bool?)
+    case OTAStatus(OTAResponseModel?)
+    case OTAData(OTADataResponseModel?)
    
 }
