@@ -235,11 +235,11 @@ public class CommandService {
                 let autoLockTime = UInt8(setupModel.autoLockTime)
                 let leadCode: UInt8 = setupModel.guidingCode ? 0x01 : 0x00
                 var byteArray:[UInt8] = [0xD5, 0x16, resetBolt, soundSetting, vacationSetting, autoLockSetting, autoLockTime, leadCode]
-                let laititude1 = setupModel.laititude.toInt32
-                let laititude2 = setupModel.laititude.decimalPartToInt32
+                let latitude1 = setupModel.latitude.toInt32
+                let latitude2 = setupModel.latitude.decimalPartToInt32
                 let longitude1 = setupModel.longitude.toInt32
                 let longitude2 = setupModel.longitude.decimalPartToInt32
-                withUnsafeBytes(of: laititude1) { bytes in
+                withUnsafeBytes(of: latitude1) { bytes in
                     for byte in bytes {
                         let stringHex = String(format: "%02x", byte)
                         let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
@@ -247,7 +247,7 @@ public class CommandService {
                     }
                 }
 
-                withUnsafeBytes(of: laititude2) { bytes in
+                withUnsafeBytes(of: latitude2) { bytes in
                     for byte in bytes {
                         let stringHex = String(format: "%02x", byte)
                         let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
@@ -273,11 +273,11 @@ public class CommandService {
                 return byteArray
             case .A1(let setupModel):
                 var byteArray:[UInt8] = [0xA1, 0x1C]
-                let laititude1 = setupModel.laititude.toInt32
-                let laititude2 = setupModel.laititude.decimalPartToInt32
+                let latitude1 = setupModel.latitude.toInt32
+                let latitude2 = setupModel.latitude.decimalPartToInt32
                 let longitude1 = setupModel.longitude.toInt32
                 let longitude2 = setupModel.longitude.decimalPartToInt32
-                withUnsafeBytes(of: laititude1) { bytes in
+                withUnsafeBytes(of: latitude1) { bytes in
                     for byte in bytes {
                         let stringHex = String(format: "%02x", byte)
                         let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
@@ -285,7 +285,7 @@ public class CommandService {
                     }
                 }
 
-                withUnsafeBytes(of: laititude2) { bytes in
+                withUnsafeBytes(of: latitude2) { bytes in
                     for byte in bytes {
                         let stringHex = String(format: "%02x", byte)
                         let uint8 = UInt8(stringHex, radix: 16) ?? 0x00

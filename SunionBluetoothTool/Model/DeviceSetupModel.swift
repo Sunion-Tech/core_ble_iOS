@@ -24,24 +24,24 @@ public class DeviceSetupModelD5 {
     public var autoLockOn:Bool
     public var autoLockTime:Int
     public var guidingCode:Bool
-    public var laititude:Double
+    public var latitude:Double
     public var longitude:Double
 
-    public  init(resetBolt:Bool = false, soundOn:Bool, vacationModeOn:Bool, autoLockOn:Bool, autoLockTime:Int,guidingCode: Bool, laititude:Double, longitude:Double) {
+    public  init(resetBolt:Bool = false, soundOn:Bool, vacationModeOn:Bool, autoLockOn:Bool, autoLockTime:Int,guidingCode: Bool, latitude:Double, longitude:Double) {
         self.resetBolt = resetBolt
         self.soundOn = soundOn
         self.vacationModeOn = vacationModeOn
         self.autoLockOn = autoLockOn
         self.autoLockTime = autoLockTime
         self.guidingCode = guidingCode
-        self.laititude = laititude
+        self.latitude = latitude
         self.longitude = longitude
     }
 }
 
 public class DeviceSetupModelA1 {
 
-    public var laititude: Double
+    public var latitude: Double
     public var longitude: Double
     public var guidingCode: CodeStatus
     public var virtualCode: CodeStatus
@@ -57,9 +57,9 @@ public class DeviceSetupModelA1 {
 
  
 
-    public init(direction: LockDirectionOption,soundOn: CodeStatus, vacationModeOn: CodeStatus, autoLockOn: CodeStatus, autoLockTime:Int, guidingCode:  CodeStatus, virtualCode: CodeStatus, twoFA: CodeStatus, laititude:Double, longitude:Double, fastMode: CodeStatus, voiceValue: VoiceValue) {
+    public init(direction: LockDirectionOption,soundOn: CodeStatus, vacationModeOn: CodeStatus, autoLockOn: CodeStatus, autoLockTime:Int, guidingCode:  CodeStatus, virtualCode: CodeStatus, twoFA: CodeStatus, latitude:Double, longitude:Double, fastMode: CodeStatus, voiceValue: VoiceValue) {
 
-        self.laititude = laititude
+        self.latitude = latitude
         self.longitude = longitude
         self.guidingCode = guidingCode
         self.virtualCode = virtualCode
@@ -104,8 +104,8 @@ public class DeviceSetupResultModelD4 {
         return self.getguidingCode()
     }
 
-    public var laititude:Double? {
-        self.getLaititude()
+    public var latitude:Double? {
+        self.getLatitude()
     }
 
     public var longitude:Double? {
@@ -155,7 +155,7 @@ public class DeviceSetupResultModelD4 {
         return index5 == 0x01
     }
 
-    private func getLaititude() -> Double? {
+    private func getLatitude() -> Double? {
         guard let index5 = response[safe: 6] else { return nil }
         guard let index6 = response[safe: 7] else { return nil }
         guard let index7 = response[safe: 8] else { return nil }
@@ -171,11 +171,11 @@ public class DeviceSetupResultModelD4 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("Laititude digitValue \(digitValue)")
+        print("latitude digitValue \(digitValue)")
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("Laititude withLeadingZero \(withLeadingZero)")
+        print("latitude withLeadingZero \(withLeadingZero)")
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("Laititude intvalue \(intValue), value is \(doubleValue)")
+        print("latitude intvalue \(intValue), value is \(doubleValue)")
         return Double(intValue) + doubleValue
     }
 
@@ -215,8 +215,8 @@ public class DeviceSetupResultModelA0 {
   
     }
     
-    public var laititude: Double? {
-        self.getLaititude()
+    public var latitude: Double? {
+        self.getLatitude()
     }
 
     public var longitude: Double? {
@@ -275,7 +275,7 @@ public class DeviceSetupResultModelA0 {
         self.getFastMode()
     }
     
-    private func getLaititude() -> Double? {
+    private func getLatitude() -> Double? {
         guard let index5 = response[safe: 0] else { return nil }
         guard let index6 = response[safe: 1] else { return nil }
         guard let index7 = response[safe: 2] else { return nil }
@@ -291,11 +291,11 @@ public class DeviceSetupResultModelA0 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("Laititude digitValue \(digitValue)")
+        print("latitude digitValue \(digitValue)")
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("Laititude withLeadingZero \(withLeadingZero)")
+        print("latitude withLeadingZero \(withLeadingZero)")
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("Laititude intvalue \(intValue), value is \(doubleValue)")
+        print("latitude intvalue \(intValue), value is \(doubleValue)")
         return Double(intValue) + doubleValue
     }
 
