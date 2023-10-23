@@ -20,6 +20,7 @@ public class CommandService {
         case unlock = 0x00
     }
     
+    
     public enum SecurityboltMode: UInt8 {
         case protrude = 0x01
         case unprotrude = 0x00
@@ -465,13 +466,14 @@ public class CommandService {
             case .EF:
                 return [0xEF, 0x00]
             case .F1(let identity):
+       
                 let length = identity.count
-                let commandLength = 1 + length
+                let commandLength = 2 + length
                 guard let data = identity.data(using: .utf8) else {
                     return [0x00]
                 }
                 
-                return [0xF1, UInt8(commandLength), 0x00] + data.map{$0}
+                return [0xF1, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
             case .Z0:
                 return [0x00, 0x00]
             case .Z1(let staus, let audio):
@@ -605,7 +607,7 @@ public class CommandService {
             case .F1(let identity):
                
                 let length = identity.count
-                let commandLength = 1 + length
+                let commandLength = length + 2
                 
                 return UInt8(commandLength)
             case .Z0:
@@ -674,7 +676,7 @@ public class CommandService {
         case ED(Bool)
         case EE(Bool)
         case EF(AdminCodeMode)
-        case F1
+        case F1(DeviceStatusModelA2)
         case error(String)
         case Z0(DeviceStatusModel00)
         case Z1
@@ -1147,6 +1149,9 @@ public class CommandService {
         case 0xAF:
             let result = AlertResponseModel(data)
             return .AF(result)
+        case 0xF1:
+            let state = DeviceStatusModelA2(data)
+            return .F1(state)
         default:
             return .error("Unkown action \(actionCode)")
         }

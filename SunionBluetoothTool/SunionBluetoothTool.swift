@@ -309,6 +309,10 @@ public class SunionBluetoothTool: NSObject {
     public func otaData(req: OTADataRequestModel) {
         bluetoothService?.otaData(req: req)
     }
+    
+    public func wifiAutounLock( identity: String) {
+        bluetoothService?.wifiAutoUnlock(identity: identity)
+    }
 }
 
 

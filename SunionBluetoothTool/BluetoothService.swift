@@ -571,6 +571,16 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+    // MARK: - wifi Autounlock
+    func wifiAutoUnlock(identity: String ) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .deviceStatus(nil)
+        let command =  CommandService.shared.createAction(with: .F1(identity), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
 
 }
 
@@ -868,13 +878,14 @@ extension BluetoothService: CBPeripheralDelegate {
                 let data = DeviceStatusModel()
                 data.D6 = model
                 self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
+            case .A2(let model), .F1(let model):
                 commandType = .A
                 // 保留藍芽資料
                 self.delegate?.updateData(value: self.data)
                 let data = DeviceStatusModel()
                 data.A2 = model
                 self.delegate?.commandState(value: .deviceStatus(data))
+     
             case .Z0(_):
                 // 保留藍芽資料
                 self.delegate?.updateData(value: self.data)
