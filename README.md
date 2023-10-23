@@ -1004,6 +1004,7 @@ func DelAccess(value: DelAccessResponseModel?){
 |isSuccess| Bool| successed
 
 ---
+## Wifi
 ### WifiList 
 
 ```
@@ -1076,6 +1077,75 @@ func  connectCloud(value: Bool?){
      }
 }
 ```
+
+---
+## OTA
+### OTAStatus 
+
+```
+SunionBluetoothTool.shared.otaStatus(req: OTAStatusRequestModel)
+```
+#### Parameters
+##### OTAStatusRequestModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| target |  otaTarget |  wireless<br> mcu
+|state| otaState| start<br>finish<br>cancel
+| fileSize| Int| update data size|
+|IV| String | initial vactor
+|Signature| String | file identify
+
+
+
+#### Delegate function
+```
+func  OTAStatus(value: OTAResponseModel?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameters
+##### OTAResponseModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| target |  otaTarget |  wireless<br> mcu
+|state| otaState| start<br>finish<br>cancel
+|isSuccess|Bool| data update success
+
+### OTAData 
+
+```
+SunionBluetoothTool.shared.otaData(req: OTADataRequestModel)
+```
+#### Parameters
+##### OTADataRequestModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| offset |  Int |  file location
+|data| [Uint8]| value of file
+
+
+
+
+#### Delegate function
+```
+func  OTAData(value: OTADataResponseModel?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameters
+##### OTAResponseModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| offset |  Int |  file location
+|data| [Uint8]| value of file
 
 ---
 ## Models
