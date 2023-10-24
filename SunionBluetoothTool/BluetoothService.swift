@@ -847,10 +847,7 @@ extension BluetoothService: CBPeripheralDelegate {
                     self.data.permanentToken = self.oneTimeToken!
                 }
                 
-            case .C3(let model):
-                self.delegate?.commandState(value: .OTAStatus(model))
-            case .C4(let model):
-                self.delegate?.commandState(value: .OTAData(model))
+
             case .D5(let bool):
                 
                 if !bool {
@@ -1642,7 +1639,23 @@ extension BluetoothService: CBPeripheralDelegate {
                 break
             }
 
+        case .OTAStatus:
+            switch response {
+            case .C3(let model):
+                self.delegate?.commandState(value: .OTAStatus(model))
+            default:
+                break
+            }
+        
             
+        case .OTAData:
+            switch response {
+            case .C4(let model):
+                self.delegate?.commandState(value: .OTAData(model))
+            default:
+                break
+            }
+          
         default:
             break
         }

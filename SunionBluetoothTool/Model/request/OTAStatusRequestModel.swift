@@ -42,16 +42,22 @@ public class OTAStatusRequestModel {
     }
 
     private func getCommand()-> [UInt8] {
+    
+        
         var byteArray:[UInt8] = []
         let target: UInt8 = self.target == .wireless ? 0x01 : 0x00
         let state: UInt8 = self.state == .cancel ? 0x00 : self.state == .finish ? 0x01 : 0x02
         byteArray.append(target)
         byteArray.append(state)
         
+    
         // file size
         if let fileSize = fileSize,
            self.state == .start || self.state == .finish {
             let size = Int32(fileSize)
+            
+        
+            
             withUnsafeBytes(of: size) { bytes in
                 
                 for byte in bytes {
@@ -62,6 +68,8 @@ public class OTAStatusRequestModel {
                 }
             }
         }
+        
+      
         
         if let IV = IV,
             let data = hexStringToUInt8Array(hexString: IV),
@@ -79,7 +87,8 @@ public class OTAStatusRequestModel {
                 byteArray.append(el)
             })
         }
-      
+        
+ 
         return byteArray
     }
     

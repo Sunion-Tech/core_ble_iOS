@@ -25,7 +25,7 @@ public class OTAResponseModel {
     }
 
 
-    init(response:[UInt8]) {
+    init(_ response:[UInt8]) {
         self.response = response
     }
     

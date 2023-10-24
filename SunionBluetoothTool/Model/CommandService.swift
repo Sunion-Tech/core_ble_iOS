@@ -937,6 +937,7 @@ public class CommandService {
     }
 
     private func resolveWithActionCode(actionCode:UInt8, data:[UInt8]) -> ActionResolveOption {
+  
         switch actionCode {
         case 0xF0:
             // set wifi 回傳 L
@@ -1013,7 +1014,9 @@ public class CommandService {
             }
             return .C1(tokenMode, tokenPermission)
         case 0xC3:
-            let model = OTAResponseModel(response: data)
+       
+            let model = OTAResponseModel(data)
+       
             return .C3(model)
         case 0xC4:
             let model = OTADataResponseModel(data)
