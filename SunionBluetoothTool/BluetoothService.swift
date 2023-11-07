@@ -244,6 +244,7 @@ class BluetoothService: NSObject {
     
     // MARK: - 查詢設定檔
     func getDeviceConfigKD0() {
+    
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
@@ -253,6 +254,7 @@ class BluetoothService: NSObject {
     }
     
     func getDeviceConfigTLR0() {
+     
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
@@ -1072,18 +1074,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .setupTimeZone(nil))
             default: break
             }
-//        case .setupDeviceTime:
-//            switch response {
-//            case .D3(let bool):
-//                var commandStateValue: commandState = .setupDeviceTime(true)
-//                if !bool {
-//                    commandStateValue = .setupDeviceTime(false)
-//                }
-//                self.delegate?.commandState(value: commandStateValue)
-//            case .EF( _):
-//                self.delegate?.commandState(value: .setupDeviceTime(nil))
-//            default: break
-//            }
+
         case .DeviceName:
             switch response {
             case .D6(let model):
@@ -1156,19 +1147,12 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = DeviceSetupResultModel()
                 res.D4 = model
                 self.delegate?.commandState(value: .deviceSetting(res))
+   
             case .A0(let model):
                 let res = DeviceSetupResultModel()
                 res.A0 = model
                 self.delegate?.commandState(value: .deviceSetting(res))
-            case .D6(let model):
-                // 配對完直接轉門鎖 需要判斷
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+     
             case .EF( _):
                 self.delegate?.commandState(value: .deviceSetting(nil))
             default: break

@@ -190,7 +190,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getDeviceConfigKD0()
     }
     
-    public func getDeviceConfigA2() {
+    public func getDeviceConfigA0() {
         bluetoothService?.getDeviceConfigTLR0()
     }
     

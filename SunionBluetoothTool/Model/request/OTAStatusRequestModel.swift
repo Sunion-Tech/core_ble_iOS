@@ -70,7 +70,7 @@ public class OTAStatusRequestModel {
         }
         
       
-        
+    
         if let IV = IV,
             let data = hexStringToUInt8Array(hexString: IV),
            self.state == .finish {
@@ -78,7 +78,7 @@ public class OTAStatusRequestModel {
                 byteArray.append(el)
             })
         }
- 
+     
         
         if let Signature = Signature,
             let data = hexStringToUInt8Array(hexString: Signature),
@@ -88,7 +88,7 @@ public class OTAStatusRequestModel {
             })
         }
         
- 
+      
         return byteArray
     }
     
