@@ -15,6 +15,7 @@ public class DeviceStatusModel {
     public var DeviceStatusModel00: DeviceStatusModel00?
     public var A2: DeviceStatusModelA2?
     public var AF: AlertResponseModel?
+    public var B0: plugStatusResponseModel?
     
     public init() {
         

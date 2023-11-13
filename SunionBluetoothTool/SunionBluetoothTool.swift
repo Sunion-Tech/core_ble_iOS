@@ -211,6 +211,10 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.switchDevice(mode: mode)
     }
     
+    public func switchPlug(mode: CommandService.plugMode) {
+        bluetoothService?.switchPlug(mode: mode)
+    }
+    
     public func switchSecurity(mode: CommandService.SecurityboltMode) {
         bluetoothService?.switchSecurity(mode: mode)
     }
@@ -265,6 +269,10 @@ public class SunionBluetoothTool: NSObject {
 
     public  func factoryReset(adminCode: [Int]) {
         bluetoothService?.factoryReset(adminCode: adminCode)
+    }
+    
+    public func plugFactoryReset() {
+        bluetoothService?.plugFactoryReset()
     }
     
     

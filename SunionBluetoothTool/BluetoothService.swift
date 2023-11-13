@@ -307,6 +307,15 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+    func switchPlug(mode: CommandService.plugMode) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .deviceStatus(nil)
+        let command =  CommandService.shared.createAction(with: .B1(mode), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
     func switchSecurity(mode: CommandService.SecurityboltMode?) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
@@ -452,6 +461,15 @@ class BluetoothService: NSObject {
         }
         action = .factoryReset(nil)
         let command =  CommandService.shared.createAction(with: .CE(adminCode), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func plugFactoryReset() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .factoryReset(nil)
+        let command =  CommandService.shared.createAction(with: .CF, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
@@ -610,7 +628,7 @@ extension BluetoothService: CBCentralManagerDelegate {
         guard let name = peripheral.name else { return }
         
         let macAddressSuffix = mackAddress!.subString(start: 6, end: 11).uppercased()
-        if name.hasPrefix("BT_Lock"),
+        if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
            name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
             print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
             self.data.bleName = name
@@ -884,7 +902,12 @@ extension BluetoothService: CBPeripheralDelegate {
                 let data = DeviceStatusModel()
                 data.A2 = model
                 self.delegate?.commandState(value: .deviceStatus(data))
-     
+            case .B0(let model):
+                // 保留藍芽資料
+                self.delegate?.updateData(value: self.data)
+                let data = DeviceStatusModel()
+                data.B0 = model
+                self.delegate?.commandState(value: .deviceStatus(data))
             case .Z0(_):
                 // 保留藍芽資料
                 self.delegate?.updateData(value: self.data)
@@ -1449,6 +1472,8 @@ extension BluetoothService: CBPeripheralDelegate {
                 data.A2 = model
                 self.delegate?.commandState(value: .deviceStatus(data))
             case .CE(let bool):
+                self.delegate?.commandState(value: .factoryReset(bool))
+            case .CF(let bool):
                 self.delegate?.commandState(value: .factoryReset(bool))
             case .EF(_):
                 self.delegate?.commandState(value: .factoryReset(nil))

@@ -50,6 +50,7 @@
 		99CB544A29937A1600A5C06F /* DelAccessResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB544929937A1600A5C06F /* DelAccessResponseModel.swift */; };
 		99E3CA7929CD3BA70028CF2C /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99E3CA7829CD3BA70028CF2C /* CryptoSwift */; };
 		99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F3ABB429BF03CA00E29C23 /* AlertResponseModel.swift */; };
+		99FE39E02B01FA9B00BAA99B /* plugStatusResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		99CB54472993799300A5C06F /* DelAccessRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelAccessRequestModel.swift; sourceTree = "<group>"; };
 		99CB544929937A1600A5C06F /* DelAccessResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelAccessResponseModel.swift; sourceTree = "<group>"; };
 		99F3ABB429BF03CA00E29C23 /* AlertResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertResponseModel.swift; sourceTree = "<group>"; };
+		99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plugStatusResponseModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 				99F3ABB429BF03CA00E29C23 /* AlertResponseModel.swift */,
 				999C953A2AD638380063BD1F /* OTAResponseModel.swift */,
 				999C953E2AD643750063BD1F /* OTADataResponseModel.swift */,
+				99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */,
 				99AEB51229347CEE00CCAC9C /* UserCodeManageModel.swift in Sources */,
 				999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */,
+				99FE39E02B01FA9B00BAA99B /* plugStatusResponseModel.swift in Sources */,
 				995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */,
 				99AEB51429347CFD00CCAC9C /* UserCodeScheduleModel.swift in Sources */,
 				99AEB51C29347D4500CCAC9C /* AddTokenResult.swift in Sources */,

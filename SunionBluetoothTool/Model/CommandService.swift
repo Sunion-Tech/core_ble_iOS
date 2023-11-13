@@ -20,6 +20,11 @@ public class CommandService {
         case unlock = 0x00
     }
     
+    public enum plugMode: UInt8 {
+        case on = 0x01
+        case off = 0x00
+    }
+    
     
     public enum SecurityboltMode: UInt8 {
         case protrude = 0x01
@@ -83,6 +88,8 @@ public class CommandService {
         case setSSID(String)
         case setPassword(String)
         case setConnection
+        case B0
+        case B1(plugMode)
         case C0([UInt8]?)
         case C1([UInt8])
         case C3(OTAStatusRequestModel)
@@ -91,6 +98,7 @@ public class CommandService {
         case C8(EditAdminCodeModel)
         case CC
         case CE([Int])
+        case CF
         case D0
         case D1(String)
         case D2
@@ -147,6 +155,10 @@ public class CommandService {
             case .setConnection:
                 guard let data = "C".data(using: .utf8) else { return [0x00] }
                 return [0xF0, UInt8(data.count)] + data.map{$0}
+            case .B0:
+                return [0xB0, 0x03]
+            case .B1(let data):
+                return [0xB1, 0x01, data.rawValue]
             case .C0:
                 return [0xC0, 0x10]
             case .C1(let token):
@@ -178,6 +190,8 @@ public class CommandService {
                 var byteArray = [0xCE, length + 1, length]
                 adminCode.forEach{byteArray.append(UInt8($0))}
                 return byteArray
+            case .CF:
+                return [0xCF, 0x00]
             case .D0:
                 return [0xD0, 0x00]
             case .D1(let lockName):
@@ -513,6 +527,10 @@ public class CommandService {
                 return length
             case .setConnection:
                 return 0x01
+            case .B0:
+                return 0x03
+            case .B1:
+                return 0x01
             case .C0:
                 return 0x10
             case .C1:
@@ -530,6 +548,8 @@ public class CommandService {
             case .CE(let adminCode):
                 let length = UInt8(1 + adminCode.count)
                 return length
+            case .CF:
+                return 0x00
             case .D0:
                 return 0x00
             case .D1(let lockName):
@@ -639,6 +659,8 @@ public class CommandService {
         case setConnection(Bool)
         case setMQTT(Bool)
         case setCloud(Bool)
+        case B0(plugStatusResponseModel)
+        case B1(plugStatusResponseModel)
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
         case C3(OTAResponseModel)
@@ -647,6 +669,7 @@ public class CommandService {
         case C8(Bool)
         case CC
         case CE(Bool)
+        case CF(Bool)
         case D0(String?)
         case D1(Bool)
         case D2
@@ -702,6 +725,10 @@ public class CommandService {
                 return 0xF0
             case .setCloud:
                 return 0xF0
+            case .B0:
+                return 0xB0
+            case .B1:
+                return 0xB1
             case .C0:
                 return 0xC0
             case .C1:
@@ -718,6 +745,8 @@ public class CommandService {
                 return 0xCC
             case .CE:
                 return 0xCE
+            case .CF:
+                return 0xCF
             case .D0:
                 return 0xD0
             case .D1:
@@ -976,6 +1005,14 @@ public class CommandService {
             default:
                 return .error("Unknown F0 response: \(data.bytesToHex())")
             }
+        case 0xB0:
+            let model = plugStatusResponseModel(data)
+       
+            return .B0(model)
+        case 0xB1:
+            let model = plugStatusResponseModel(data)
+       
+            return .B1(model)
         case 0xC0:
             return .C0(data)
         case 0xC1:
@@ -1032,6 +1069,9 @@ public class CommandService {
         case 0xCE:
             let isSuccess = data.first == 0x01
             return .CE(isSuccess)
+        case 0xCF:
+            let isSuccess = data.first == 0x01
+            return .CF(isSuccess)
         case 0xD0:
             let name = String(data: Data.init(data), encoding: .utf8)
             return .D0(name)
