@@ -1000,6 +1000,18 @@ public class CommandService {
                     return .setCloud(true)
                 }
                 
+                if string == "CWiFi Fail" {
+                    return .setConnection(false)
+                }
+                
+                if string == "CMQTT Fail" {
+                    return .setMQTT(false)
+                }
+                
+                if string == "CCloud Fail" {
+                    return .setCloud(false)
+                }
+                
                 return .setConnection(false)
                
             default:
