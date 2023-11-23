@@ -91,8 +91,12 @@ public class SunionBluetoothTool: NSObject {
 
     public static let shared = SunionBluetoothTool()
     public var data: BluetoothToolModel?
+    
     var bluetoothService: BluetoothService?
     public var delegate: SunionBluetoothToolDelegate?
+    
+    var remoteBleService: RemoteBleService?
+ 
     public var status: bluetoothState?
 
     
@@ -135,7 +139,19 @@ public class SunionBluetoothTool: NSObject {
     }
     
 
-
+    // MARK: - RemoteBle
+    public func initRemoteBle(macAddress: String, aes1Key: [UInt8], token: [UInt8]) {
+        remoteBleService = RemoteBleService(delegate: self, mackAddress: macAddress, aes1Key: aes1Key, token: token)
+    }
+    public func connectingRemote() -> String? {
+       return remoteBleService?.deviceTokenExchange()
+    }
+    
+    public func remoteResponse(base64String: String) {
+        remoteBleService?.responseData(base64String: base64String)
+    }
+    
+    // MARK: - BlueTooth
     public func initBluetooth(macAddress: String, aes1Key: [UInt8], token: [UInt8]) {
         bluetoothService = BluetoothService(delegate: self, mackAddress: macAddress, aes1Key: aes1Key, token: token)
     }
@@ -323,6 +339,31 @@ public class SunionBluetoothTool: NSObject {
     }
 }
 
+// MARK: - Delegate
+// MARK: - RemoteBleServiceDelegate
+extension SunionBluetoothTool: RemoteBleServiceDelegate {
+    func remotecommandState(value: commandState) {
+        print("💞💞💞remotecommandState💞💞💞")
+        print("\(value)")
+        print("💞💞💞💞💞💞")
+    }
+    
+    func remoteupdateData(value: BluetoothToolModel) {
+        print("💞💞💞remoteupdateData💞💞💞")
+        print("\(value)")
+        print("💞💞💞💞💞💞")
+    }
+    
+    func remotedebug(value: String) {
+        print("💞💞💞remotedebug💞💞💞")
+        print("\(value)")
+        print("💞💞💞💞💞💞")
+    }
+    
+    
+}
+
+// MARK: - BluetoothServiceDelegate
 
 extension SunionBluetoothTool: BluetoothServiceDelegate {
     func updateData(value: BluetoothToolModel) {
