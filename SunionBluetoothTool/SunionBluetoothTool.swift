@@ -8,86 +8,6 @@
 import Foundation
 import SwiftyJSON
 
-public protocol SunionBluetoothToolDelegate: AnyObject {
-    func BluetoothState(State: bluetoothState)
-    func DeviceStatus(value: DeviceStatusModel?)
-    func Config(bool: Bool?)
-    func AdminCodeExist(bool: Bool?)
-    func AdminCode(bool: Bool?)
-    func EditAdminCode(bool: Bool?)
-//    func DeviceTime(bool: Bool?)
-    func TimeZone(bool: Bool?)
-    func DeviceName(bool: Bool?)
-    func DeviceNameData(value: String?)
-    func EditToken(bool: Bool?)
-    func TokenArray(value: [Int]?)
-    func TokenData(value: TokenModel?)
-    func TokenOption(value: AddTokenResult?)
-    func Token(bool: Bool?)
-    func TokenQrCode(value: String?)
-    func DeviceConfig(value: DeviceSetupResultModel?)
-    func LogCount(value: Int?)
-    func LogData(value: LogModel?)
-    func PinCodeArray(value: PinCodeArrayModel?)
-    func PinCodeData(value: PinCodeModelResult?)
-    func PinCode(bool: Bool?)
-    func FactoryReset(bool: Bool?)
-    func SupportType(value: SupportDeviceTypesResponseModel?)
-    func AccessArray(value: AccessArrayResponseModel?)
-    func SearchAccess(value: AccessDataResponseModel?)
-    func AccessAction(value: AccessResponseModel?)
-    func SetupAccess(value: SetupAccessResponseModel?)
-    func DelAccess(value: DelAccessResponseModel?)
-    func wifiList(value: SSIDModel?)
-    func connectWifi(bool: Bool?)
-    func connectMQTT(bool: Bool?)
-    func connectClould(bool: Bool?)
-    func debug(value: String)
-    func OTAStatus(value: OTAResponseModel?)
-    func OTAData(value: OTADataResponseModel?)
-    func remoteResponse(value: String?)
-   
-}
-
-extension SunionBluetoothToolDelegate {
-    public func DeviceStatus(value: DeviceStatusModel?) {}
-    public func Config(bool: Bool?) {}
-    public func AdminCodeExist(bool: Bool?) {}
-    public func AdminCode(bool: Bool?) {}
-    public func EditAdminCode(bool: Bool?) {}
-//    public func DeviceTime(bool: Bool?) {}
-    public func TimeZone(bool: Bool?) {}
-    public func DeviceName(bool: Bool?) {}
-    public func DeviceNameData(value: String?) {}
-    public func EditToken(bool: Bool?) {}
-    public func TokenArray(value: [Int]?) {}
-    public func TokenData(value: TokenModel?) {}
-    public func TokenOption(value: AddTokenResult?) {}
-    public func Token(bool: Bool?) {}
-    public func TokenQrCode(value: String?) {}
-    public func DeviceConfig(value: DeviceSetupResultModel?) {}
-    public func LogCount(value: Int?) {}
-    public func LogData(value: LogModel?) {}
-    public func PinCodeArray(value: PinCodeArrayModel?) {}
-    public func PinCodeData(value: PinCodeModelResult?) {}
-    public func PinCode(bool: Bool?) {}
-    public func FactoryReset(bool: Bool?) {}
-    public func SupportType(value: SupportDeviceTypesResponseModel?) {}
-    public func AccessArray(value: AccessArrayResponseModel?) {}
-    public func SearchAccess(value: AccessDataResponseModel?) {}
-    public func AccessAction(value: AccessResponseModel?) {}
-    public func SetupAccess(value: SetupAccessResponseModel?) {}
-    public func DelAccess(value: DelAccessResponseModel?) {}
-    public func wifiList(value: SSIDModel?) {}
-    public  func connectWifi(bool: Bool?) {}
-    public  func debug(value: String) {}
-    public func connectMQTT(bool: Bool?) {}
-    public func connectClould(bool: Bool?) {}
-    public func OTAStatus(value: OTAResponseModel?) {}
-    public func OTAData(value: OTADataResponseModel?) {}
-    public func remoteResponse(value: String?) {}
-}
-
 public class SunionBluetoothTool: NSObject {
     
 
@@ -153,174 +73,174 @@ public class SunionBluetoothTool: NSObject {
         remoteBleService?.responseData(base64String: base64String)
     }
     
-    public func remmoteSetupDeviceName(name: String) -> String? {
+    public func remoteSetupDeviceName(name: String) -> String? {
         return remoteBleService?.setupDeviceName(name: name)
     }
     
     
-    public func remmoteIsAdminCode() -> String? {
+    public func remoteIsAdminCode() -> String? {
         return remoteBleService?.isAdminCode()
     }
     
-    public func remmoteSetupAdminCode(Code: String) -> String? {
+    public func remoteSetupAdminCode(Code: String) -> String? {
         return remoteBleService?.setupAdminCode(Code: Code)
     }
     
-    public func remmoteEditAdminCode(oldCode: String, newCode: String) -> String? {
+    public func remoteEditAdminCode(oldCode: String, newCode: String) -> String? {
         return remoteBleService?.editAdminCode(oldCode: oldCode, newCode: newCode)
     }
     
-    public func remmoteSetupTimeZone(timezone: String) -> String? {
+    public func remoteSetupTimeZone(timezone: String) -> String? {
         return remoteBleService?.setupTimeZone(timezone: timezone)
     }
     
-    public func remmoteSetupDeviceTime() -> String? {
+    public func remoteSetupDeviceTime() -> String? {
         return remoteBleService?.setupDeviceTime()
     }
     
 
     
-    public func remmoteGetDeviceName() -> String? {
+    public func remoteGetDeviceName() -> String? {
         return remoteBleService?.getDeviceName()
     }
     
-    public func remmoteEditToken(model: EditTokenModel) -> String? {
+    public func remoteEditToken(model: EditTokenModel) -> String? {
         return remoteBleService?.editToken(model: model)
     }
     
-    public func remmoteGetDeviceConfigD4() -> String? {
+    public func remoteGetDeviceConfigD4() -> String? {
         return remoteBleService?.getDeviceConfigKD0()
     }
     
-    public func remmoteGetDeviceConfigA0() -> String? {
+    public func remoteGetDeviceConfigA0() -> String? {
         return remoteBleService?.getDeviceConfigTLR0()
     }
     
-    public func remmoteSetupDeviceConfig(data: DeviceSetupModel) -> String? {
+    public func remoteSetupDeviceConfig(data: DeviceSetupModel) -> String? {
         return remoteBleService?.setupDeviceConfig(model: data)
     }
     
 
-    public func remmoteBlotCheck() -> String? {
+    public func remoteBlotCheck() -> String? {
         return remoteBleService?.boltCheck()
     }
     
-    public func remmoteGetDeviceStatus() -> String? {
+    public func remoteGetDeviceStatus() -> String? {
         return remoteBleService?.getDeviceStatus()
     }
     
-    public func remmoteSwitchDevice(mode: CommandService.DeviceMode) -> String? {
+    public func remoteSwitchDevice(mode: CommandService.DeviceMode) -> String? {
         return remoteBleService?.switchDevice(mode: mode)
     }
     
-    public func remmoteSwitchPlug(mode: CommandService.plugMode) -> String? {
+    public func remoteSwitchPlug(mode: CommandService.plugMode) -> String? {
         return remoteBleService?.switchPlug(mode: mode)
     }
     
-    public func remmoteSwitchSecurity(mode: CommandService.SecurityboltMode) -> String? {
+    public func remoteSwitchSecurity(mode: CommandService.SecurityboltMode) -> String? {
         return remoteBleService?.switchSecurity(mode: mode)
     }
     
-    public func remmoteGetLogCount() -> String? {
+    public func remoteGetLogCount() -> String? {
         return remoteBleService?.getLogCount()
     }
     
-    public func remmoteGetLog(count: Int) -> String? {
+    public func remoteGetLog(count: Int) -> String? {
         return remoteBleService?.getLog(count: count)
     }
     
-    public func remmoteSetupDeviceStatus01(status: CommandService.deviceMode00Status, audio: CommandService.deviceMode00Audio) -> String? {
+    public func remoteSetupDeviceStatus01(status: CommandService.deviceMode00Status, audio: CommandService.deviceMode00Audio) -> String? {
         return remoteBleService?.setupDeviceStatus01(status: status, audio: audio)
     }
     
-    public func remmoteGetTokenArray() -> String? {
+    public func remoteGetTokenArray() -> String? {
         return remoteBleService?.getTokenArray()
     }
     
-    public func remmoteGetToken(position: Int) -> String? {
+    public func remoteGetToken(position: Int) -> String? {
         return remoteBleService?.getToken(position: position)
     }
     
-    public func remmoteCreateToken(model: AddTokenModel) -> String? {
+    public func remoteCreateToken(model: AddTokenModel) -> String? {
         return remoteBleService?.createToken(model: model)
     }
     
-    public func remmoteDelToken(model: TokenModel, ownerPinCode: String? = nil) -> String? {
+    public func remoteDelToken(model: TokenModel, ownerPinCode: String? = nil) -> String? {
         return remoteBleService?.delToken(model: model, ownerPinCode: ownerPinCode)
     }
     
-    public func remmoteGetTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String) -> String? {
+    public func remoteGetTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String) -> String? {
         return remoteBleService?.getTokenQrCode(barcodeKey: barcodeKey, tokenIndex: tokenIndex, aes1Key: aes1Key, macAddress: macAddress, userName: userName, modelName: modelName, deviceName: deviceName)
     }
     
-    public func remmoteGetPinCodeArray() -> String? {
+    public func remoteGetPinCodeArray() -> String? {
         return remoteBleService?.getPinCodeArray()
     }
     
-    public func remmoteGetPinCode(position: Int) -> String? {
+    public func remoteGetPinCode(position: Int) -> String? {
         return remoteBleService?.getPinCode(position: position)
     }
     
-    public func remmotePinCodeOption(model: PinCodeManageModel) -> String? {
+    public func remotePinCodeOption(model: PinCodeManageModel) -> String? {
         return remoteBleService?.pinCodeOption(model: model)
     }
     
-    public func remmoteDelPinCode(position: Int)  -> String? {
+    public func remoteDelPinCode(position: Int)  -> String? {
         return remoteBleService?.delPinCode(position: position)
     }
 
-    public  func remmoteFactoryReset(adminCode: [Int]) -> String? {
+    public  func remoteFactoryReset(adminCode: [Int]) -> String? {
         return remoteBleService?.factoryReset(adminCode: adminCode)
     }
     
-    public func remmotePlugFactoryReset() -> String? {
+    public func remotePlugFactoryReset() -> String? {
         return remoteBleService?.plugFactoryReset()
     }
     
     
     // MARK: - TLR0
-    public func remmoteGetSupportType() -> String? {
+    public func remoteGetSupportType() -> String? {
         return remoteBleService?.getSupportType()
     }
     
-    public func remmoteGetAccessArray(type: CommandService.AccessTypeMode) -> String? {
+    public func remoteGetAccessArray(type: CommandService.AccessTypeMode) -> String? {
         return remoteBleService?.getAccessArray(type: type)
     }
     
-    public func remmoteSearchAccess(model: SearchAccessRequestModel) -> String? {
+    public func remoteSearchAccess(model: SearchAccessRequestModel) -> String? {
         return remoteBleService?.searchAccess(model: model)
     }
     
-    public func remmoteAccessAction(model: AccessRequestModel) -> String? {
+    public func remoteAccessAction(model: AccessRequestModel) -> String? {
         return remoteBleService?.accessAction(model: model)
     }
     
-    public func remmoteSetupAccess(model: SetupAccessRequestModel) -> String? {
+    public func remoteSetupAccess(model: SetupAccessRequestModel) -> String? {
         return remoteBleService?.setupAccess(model: model)
     }
     
-    public func remmoteDelAccess(model: DelAccessRequestModel) -> String? {
+    public func remoteDelAccess(model: DelAccessRequestModel) -> String? {
         return remoteBleService?.delAccess(model: model)
     }
     
     // MARK: - wifi
-    public func remmoteWifiList() -> String? {
+    public func remoteWifiList() -> String? {
         return remoteBleService?.wifiList()
     }
     
-    public func remmoteConnectWifi(SSIDName: String, passwrod: String) -> String? {
+    public func remoteConnectWifi(SSIDName: String, passwrod: String) -> String? {
         return remoteBleService?.setSSID(SSIDName: SSIDName, password: passwrod)
     }
     
-    public func remmoteOtaStatus(req: OTAStatusRequestModel) -> String? {
+    public func remoteOtaStatus(req: OTAStatusRequestModel) -> String? {
         return remoteBleService?.otaStatus(req: req)
     }
     
-    public func remmoteOtaData(req: OTADataRequestModel) -> String? {
+    public func remoteOtaData(req: OTADataRequestModel) -> String? {
         return remoteBleService?.otaData(req: req)
     }
     
-    public func remmoteWifiAutounLock( identity: String) -> String? {
+    public func remoteWifiAutounLock( identity: String) -> String? {
         return remoteBleService?.wifiAutoUnlock(identity: identity)
     }
     
@@ -531,75 +451,73 @@ extension SunionBluetoothTool: RemoteBleServiceDelegate {
         case .none:
             break
         case .deviceStatus(let optional):
-            delegate?.DeviceStatus(value: optional)
+            delegate?.remoteDeviceStatus(value: optional)
         case .config(let bool):
-            delegate?.Config(bool: bool)
+            delegate?.remoteConfig(bool: bool)
         case .updateName(let bool):
-            delegate?.DeviceName(bool: bool)
+            delegate?.remoteDeviceName(bool: bool)
         case .isAdminCode(let bool):
-            delegate?.AdminCodeExist(bool: bool)
+            delegate?.remoteAdminCodeExist(bool: bool)
         case .setupAdminCode(let bool):
-            delegate?.AdminCode(bool: bool)
+            delegate?.remoteAdminCode(bool: bool)
         case .editAdminCode(let bool):
-            delegate?.EditAdminCode(bool: bool)
+            delegate?.remoteEditAdminCode(bool: bool)
         case .setupTimeZone(let bool):
-            delegate?.TimeZone(bool: bool)
-//        case .setupDeviceTime(let bool):
-//            delegate?.DeviceTime(bool: bool)
+            delegate?.remoteTimeZone(bool: bool)
         case .DeviceName(let value):
-            delegate?.DeviceNameData(value: value)
+            delegate?.remoteDeviceNameData(value: value)
         case .editToken(let bool):
-            delegate?.EditToken(bool: bool)
+            delegate?.remoteEditToken(bool: bool)
         case .deviceSetting(let model):
-            delegate?.DeviceConfig(value: model)
+            delegate?.remoteDeviceConfig(value: model)
         case .logCount(let optional):
-            delegate?.LogCount(value: optional)
+            delegate?.remoteLogCount(value: optional)
         case .log(let optional):
-            delegate?.LogData(value: optional)
+            delegate?.remoteLogData(value: optional)
         case .getTokenArray(let ary):
-            delegate?.TokenArray(value: ary)
+            delegate?.remoteTokenArray(value: ary)
         case .getToken(let model):
-            delegate?.TokenData(value: model)
+            delegate?.remoteTokenData(value: model)
         case .createToken(let model):
-            delegate?.TokenOption(value: model)
+            delegate?.remoteTokenOption(value: model)
         case .delToken(let bool):
-            delegate?.Token(bool: bool)
+            delegate?.remoteToken(bool: bool)
         case .getTokenQrCode(let value):
-            delegate?.TokenQrCode(value: value)
+            delegate?.remoteTokenQrCode(value: value)
         case .getPinCodeArray(let model):
-            delegate?.PinCodeArray(value: model)
+            delegate?.remotePinCodeArray(value: model)
         case .getPinCode(let data):
-            delegate?.PinCodeData(value: data)
+            delegate?.remotePinCodeData(value: data)
         case .pinCodeoption(let bool):
-            delegate?.PinCode(bool: bool)
+            delegate?.remotePinCode(bool: bool)
         case .delPinCode(let bool):
-            delegate?.PinCode(bool: bool)
+            delegate?.remotePinCode(bool: bool)
         case .factoryReset(let bool):
-            delegate?.FactoryReset(bool: bool)
+            delegate?.remoteFactoryReset(bool: bool)
         case .supportType(let value):
-            delegate?.SupportType(value: value)
+            delegate?.remoteSupportType(value: value)
         case .accessArray(let value):
-            delegate?.AccessArray(value: value)
+            delegate?.remoteAccessArray(value: value)
         case .searchAccess(let value):
-            delegate?.SearchAccess(value: value)
+            delegate?.remoteSearchAccess(value: value)
         case .accessAction(let value):
-            delegate?.AccessAction(value: value)
+            delegate?.remoteAccessAction(value: value)
         case .setupAccess(let value):
-            delegate?.SetupAccess(value: value)
+            delegate?.remoteSetupAccess(value: value)
         case .delAccess(let value):
-            delegate?.DelAccess(value: value)
+            delegate?.remoteDelAccess(value: value)
         case .wifiList(let value):
-            delegate?.wifiList(value: value)
+            delegate?.remotewifiList(value: value)
         case .connectWifi(let bool):
-            delegate?.connectWifi(bool: bool)
+            delegate?.remoteconnectWifi(bool: bool)
         case .connectMQTT(let bool):
-            delegate?.connectMQTT(bool: bool)
+            delegate?.remoteconnectMQTT(bool: bool)
         case .connectClould(let bool):
-            delegate?.connectClould(bool: bool)
+            delegate?.remoteconnectClould(bool: bool)
         case .OTAData(let model):
-            delegate?.OTAData(value: model)
+            delegate?.remoteOTAData(value: model)
         case .OTAStatus(let model):
-            delegate?.OTAStatus(value: model)
+            delegate?.remoteOTAStatus(value: model)
         }
     }
     
@@ -675,8 +593,6 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.EditAdminCode(bool: bool)
         case .setupTimeZone(let bool):
             delegate?.TimeZone(bool: bool)
-//        case .setupDeviceTime(let bool):
-//            delegate?.DeviceTime(bool: bool)
         case .DeviceName(let value):
             delegate?.DeviceNameData(value: value)
         case .editToken(let bool):

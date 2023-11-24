@@ -12,6 +12,7 @@
 		995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77E2992270300810273 /* AccessArrayResponseModel.swift */; };
 		995AD78229922A7000810273 /* Uint8toBit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD78129922A7000810273 /* Uint8toBit.swift */; };
 		995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD78329923BF600810273 /* SearchAccessRequestModel.swift */; };
+		997EA0152B1044D0003F82DB /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997EA0142B1044CF003F82DB /* Delegate.swift */; };
 		9982A20429398C8D00874279 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20329398C8D00874279 /* Enum.swift */; };
 		9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */; };
 		9982A270294312A500874279 /* QrCodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A26F294312A500874279 /* QrCodeService.swift */; };
@@ -60,6 +61,7 @@
 		995AD77E2992270300810273 /* AccessArrayResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessArrayResponseModel.swift; sourceTree = "<group>"; };
 		995AD78129922A7000810273 /* Uint8toBit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uint8toBit.swift; sourceTree = "<group>"; };
 		995AD78329923BF600810273 /* SearchAccessRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAccessRequestModel.swift; sourceTree = "<group>"; };
+		997EA0142B1044CF003F82DB /* Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegate.swift; sourceTree = "<group>"; };
 		9982A20329398C8D00874279 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModel.swift; sourceTree = "<group>"; };
 		9982A26F294312A500874279 /* QrCodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeService.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				99AEB52329347D9200CCAC9C /* Extension.swift */,
 				9982A20329398C8D00874279 /* Enum.swift */,
 				99A9CC3F2B0F1BCF00B9FB78 /* RemoteBleService.swift */,
+				997EA0142B1044CF003F82DB /* Delegate.swift */,
 			);
 			path = SunionBluetoothTool;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */,
+				997EA0152B1044D0003F82DB /* Delegate.swift in Sources */,
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
 				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
