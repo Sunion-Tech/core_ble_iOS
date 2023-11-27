@@ -69,6 +69,10 @@ public class SunionBluetoothTool: NSObject {
        return remoteBleService?.deviceTokenExchange()
     }
     
+    public func remoteDisconnect() {
+        remoteBleService?.disconnect()
+    }
+    
     public func remoteResponse(base64String: String) {
         remoteBleService?.responseData(base64String: base64String)
     }

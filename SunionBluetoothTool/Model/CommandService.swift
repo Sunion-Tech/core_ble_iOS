@@ -922,7 +922,7 @@ public class CommandService {
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
 
-            print("🌜🌜🌜 \n response data \(decryptData.bytesToHex()) \n 🌜🌜🌜")
+            print("🌜🌜🌜 \n response data CBCharacteristic \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             if Int(dataLength) > decryptData.count {
                 return .error("Unknown response")
@@ -937,6 +937,10 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, data) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
+            
+            print("🌜🌜🌜 \n response data  Data \(decryptData.bytesToHex()) \n 🌜🌜🌜")
+            
+            
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])
             if action == 0xA5 {
                 dataWithoutHeader = Array(decryptData[3...Int(dataLength) + 3])
@@ -946,6 +950,9 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, Data.init(byteArray)) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
+            
+            print("🌜🌜🌜 \n response data  [UInt8] \(decryptData.bytesToHex()) \n 🌜🌜🌜")
+            
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])
             if action == 0xA5 {
                 dataWithoutHeader = Array(decryptData[3...Int(dataLength) + 3])

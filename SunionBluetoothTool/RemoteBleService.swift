@@ -69,9 +69,13 @@ class RemoteBleService: NSObject {
     }
     
     func deviceTokenExchange() -> String? {
-        
+        delegate?.remoteState(State: .connecting)
         let command = CommandService.shared.createAction(with: .C0(c0RandomData), key: aes1key!)
         return command?.base64EncodedString()
+    }
+    
+    func disconnect() {
+        delegate?.remoteState(State: .disconnect(.normal))
     }
     
     //MARK: -  設定名稱
@@ -416,7 +420,7 @@ class RemoteBleService: NSObject {
         return command?.base64EncodedString()
     }
     
-    // MARK: - OTA {
+    // MARK: - OTA
     func otaStatus(req: OTAStatusRequestModel) -> String? {
         
         action = .OTAStatus(nil)
@@ -450,9 +454,12 @@ class RemoteBleService: NSObject {
     
     // MARK: - Response
     func responseData(base64String: String) {
+        
+    
         if let characteristic = Data(base64Encoded: base64String) {
+   
             let response = CommandService.shared.resolveAction(characteristic, key: self.aes2key ?? self.aes1key!)
-            
+          
             
             switch response {
             case .AF(let model):
@@ -480,7 +487,7 @@ class RemoteBleService: NSObject {
                     
                     
                     self.data.permission = tokenPermission
-                    
+                    delegate?.remoteState(State: .connected(""))
                     switch tokenType {
                     case .invalid, .reject:
                         delegate?.remoteState(State: .disconnect(.deviceRefused))
