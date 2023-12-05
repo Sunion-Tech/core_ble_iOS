@@ -56,6 +56,8 @@ class RemoteBleService: NSObject {
     
     var action: commandState = .deviceStatus(nil)
     
+    var keepC1Data: DeviceStatusModel? = nil
+    
     
     init( delegate: RemoteBleServiceDelegate?, mackAddress: String, aes1Key: [UInt8], token: [UInt8]) {
         
@@ -476,6 +478,7 @@ class RemoteBleService: NSObject {
             case .deviceStatus:
                 switch response {
                 case .C0(let array):
+                    keepC1Data = nil
                     self.aes2key = self.getKey2(randomNum1: c0RandomData, randomNum2: array)
                     self.data.aes2Key = self.aes2key!
                     let command = CommandService.shared.createAction(with: .C1(self.permanentToken ?? self.oneTimeToken!), key: self.aes2key!)
@@ -497,6 +500,15 @@ class RemoteBleService: NSObject {
                         // qr code 已經被用過，產生的一次性 token == 永久 token
                         self.permanentToken = self.oneTimeToken
                         self.data.permanentToken = self.oneTimeToken!
+                        
+                        // 保留藍芽資料
+                        self.delegate?.remoteupdateData(value: self.data)
+                        
+                        // MQTT 可能 先回傳D6/A2 再回傳C1
+                        if let data = keepC1Data {
+                            self.delegate?.remotecommandState(value: .deviceStatus(data))
+
+                        }
                     }
                     
                     
@@ -526,14 +538,27 @@ class RemoteBleService: NSObject {
                     
                     let data = DeviceStatusModel()
                     data.D6 = model
-                    self.delegate?.remotecommandState(value: .deviceStatus(data))
+                    
+                    keepC1Data = data
+                    
+                    // MQTT 可能 先回傳D6/A2 再回傳C1
+                    if self.permanentToken != nil , self.data.permanentToken != nil {
+                        self.delegate?.remotecommandState(value: .deviceStatus(data))
+                    }
+                   
                 case .A2(let model), .F1(let model):
                     commandType = .A
                     // 保留藍芽資料
                     self.delegate?.remoteupdateData(value: self.data)
                     let data = DeviceStatusModel()
                     data.A2 = model
-                    self.delegate?.remotecommandState(value: .deviceStatus(data))
+                    
+                    keepC1Data = data
+                    // MQTT 可能 先回傳D6/A2 再回傳C1
+                    if self.permanentToken != nil , self.data.permanentToken != nil {
+                        self.delegate?.remotecommandState(value: .deviceStatus(data))
+                    }
+                 
                 case .B0(let model):
                     // 保留藍芽資料
                     self.delegate?.remoteupdateData(value: self.data)
