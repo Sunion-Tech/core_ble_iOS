@@ -513,16 +513,17 @@ public class DeviceSetupResultModelA0 {
         case .percentage:
             // 100 ~ 0
             var val = 0
-          
-            let hexString = "\(index5)" // 16 進制的 "10"
-            if let intValue = Int(hexString, radix: 16) {
-                print(intValue) // Prints "16"，這是 10 進制的表示方式
+            print("==percentage==")
+        
+            if let intValue = Int("\(index5)", radix: 16) {
+                print(intValue)
                 val = intValue
             } else {
                 print("Failed to convert string to Int")
                 val = 0
             }
             print("percentage: \(val)")
+            print("========")
             return .value(val)
         default:
             return .error
