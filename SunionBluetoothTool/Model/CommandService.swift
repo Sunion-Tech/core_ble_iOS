@@ -388,7 +388,7 @@ public class CommandService {
     
                     print("progress Value: \(value)")
                     print("progress uint8: \(element)")
-                    voice = [0x03, element]
+                    voice = [0x03, UInt8(value)]
                     
                 default:
                     voice = [0xFF, 0xFF]

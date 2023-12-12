@@ -451,6 +451,9 @@ public class DeviceSetupResultModelA0 {
     
     private func getSound() -> CodeStatus {
         guard let index5 = response[safe: 28] else { return .error }
+        print("getSound")
+        print(index5)
+        print("getSound")
         switch index5 {
         case 0x01:
             return .open
@@ -514,17 +517,9 @@ public class DeviceSetupResultModelA0 {
             // 100 ~ 0
             var val = 0
             print("==percentage==")
-        
-            if let intValue = Int("\(index5)", radix: 16) {
-                print(intValue)
-                val = intValue
-            } else {
-                print("Failed to convert string to Int")
-                val = 0
-            }
-            print("percentage: \(val)")
+            print(index5)
             print("========")
-            return .value(val)
+            return .value(Int(index5))
         default:
             return .error
         }
