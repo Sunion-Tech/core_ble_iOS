@@ -88,17 +88,19 @@ public class CommandService {
         case setSSID(String)
         case setPassword(String)
         case setConnection
-        case B0
-        case B1(plugMode)
         case C0([UInt8]?)
         case C1([UInt8])
+        case C2(RFMCURequestModel)
         case C3(OTAStatusRequestModel)
         case C4(OTADataRequestModel)
         case C7([Int])
         case C8(EditAdminCodeModel)
         case CC
+        case CB
         case CE([Int])
         case CF
+        case B0
+        case B1(plugMode)
         case D0
         case D1(String)
         case D2
@@ -131,6 +133,7 @@ public class CommandService {
         case EE(Int)
         case EF
         case F1(String)
+        case F2(String)
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -165,6 +168,8 @@ public class CommandService {
                 var byteArray:[UInt8] = [0xC1, 0x08]
                 token.forEach{byteArray.append($0)}
                 return byteArray
+            case .C2(let model):
+                return model.command
             case .C3(let data):
                 let length = UInt8(data.command.count)
                 var byteArray:[UInt8] = [0xC3, length]
@@ -185,6 +190,8 @@ public class CommandService {
                 return model.command
             case .CC:
                 return [0xCC, 0x00]
+            case .CB:
+                return [0xCB, 0x00]
             case .CE(let adminCode):
                 let length = UInt8(adminCode.count)
                 var byteArray = [0xCE, length + 1, length]
@@ -192,6 +199,8 @@ public class CommandService {
                 return byteArray
             case .CF:
                 return [0xCF, 0x00]
+            case .B0:
+                return [0xB0, 0x00]
             case .D0:
                 return [0xD0, 0x00]
             case .D1(let lockName):
@@ -488,6 +497,15 @@ public class CommandService {
                 }
                 
                 return [0xF1, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+            case .F2(let identity):
+       
+                let length = identity.count
+                let commandLength = 2 + length
+                guard let data = identity.data(using: .utf8) else {
+                    return [0x00]
+                }
+                
+                return [0xF2, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
             case .Z0:
                 return [0x00, 0x00]
             case .Z1(let staus, let audio):
@@ -535,6 +553,8 @@ public class CommandService {
                 return 0x10
             case .C1:
                 return 0x08
+            case .C2:
+                return 0x01
             case .C3(let data):
                 return UInt8(data.command.count)
             case .C4(let data):
@@ -545,10 +565,14 @@ public class CommandService {
                 return model.commandLength
             case .CC:
                 return 0x00
+            case .CB:
+                return 0x00
             case .CE(let adminCode):
                 let length = UInt8(1 + adminCode.count)
                 return length
             case .CF:
+                return 0x00
+            case .B0:
                 return 0x00
             case .D0:
                 return 0x00
@@ -630,6 +654,12 @@ public class CommandService {
                 let commandLength = length + 2
                 
                 return UInt8(commandLength)
+            case .F2(let identity):
+               
+                let length = identity.count
+                let commandLength = length + 2
+                
+                return UInt8(commandLength)
             case .Z0:
                 return 0x00
             case .Z1:
@@ -659,17 +689,19 @@ public class CommandService {
         case setConnection(Bool)
         case setMQTT(Bool)
         case setCloud(Bool)
-        case B0(plugStatusResponseModel)
-        case B1(plugStatusResponseModel)
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
+        case C2(RFMCUversionModel)
         case C3(OTAResponseModel)
         case C4(OTADataResponseModel)
         case C7(Bool)
         case C8(Bool)
         case CC
+        case CB(Bool)
         case CE(Bool)
         case CF(Bool)
+        case B0(plugStatusResponseModel)
+        case B1(plugStatusResponseModel)
         case D0(String?)
         case D1(Bool)
         case D2
@@ -700,6 +732,7 @@ public class CommandService {
         case EE(Bool)
         case EF(AdminCodeMode)
         case F1(DeviceStatusModelA2)
+        case F2(Bool)
         case error(String)
         case Z0(DeviceStatusModel00)
         case Z1
@@ -733,6 +766,8 @@ public class CommandService {
                 return 0xC0
             case .C1:
                 return 0xC1
+            case .C2:
+                return 0xC2
             case .C3:
                 return 0xC3
             case .C4:
@@ -743,6 +778,8 @@ public class CommandService {
                 return 0xC8
             case .CC:
                 return 0xCC
+            case .CB:
+                return 0xCB
             case .CE:
                 return 0xCE
             case .CF:
@@ -807,6 +844,8 @@ public class CommandService {
                 return 0xEF
             case .F1:
                 return 0xF1
+            case .F2:
+                return 0xF2
             case .Z0:
                 return 0x00
             case .Z1:
@@ -1069,6 +1108,8 @@ public class CommandService {
                 }
             }
             return .C1(tokenMode, tokenPermission)
+        case 0xC2:
+            return .C2(RFMCUversionModel(response: data))
         case 0xC3:
        
             let model = OTAResponseModel(data)
@@ -1085,6 +1126,9 @@ public class CommandService {
             return .C8(isSuccess)
         case 0xCC:
             return .CC
+        case 0xCB:
+            let isSuccess = data.first == 0x01
+            return .CB(isSuccess)
         case 0xCE:
             let isSuccess = data.first == 0x01
             return .CE(isSuccess)
@@ -1214,6 +1258,9 @@ public class CommandService {
         case 0xF1:
             let state = DeviceStatusModelA2(data)
             return .F1(state)
+        case 0xF2:
+            let isSuccess = data.first == 0x01
+            return .F2(isSuccess)
         default:
             return .error("Unkown action \(actionCode)")
         }
