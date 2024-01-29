@@ -134,20 +134,12 @@ let data = SunionBluetoothTool.shared.data
 | qrCodeDisplayNmae| String |  name of device
 | modelName| String |  name of device model
 | FirmwareVersioin| String | version of device firmware
+| RFVersion| String | version of RF
 | bleNmae | String | Bluetooth broadcast name
 | identifier| String| Bluetooth connted UUID
 
 # BLEUseCases
-| Content  |
-| :---- |
-| [adminCode](#AdminCodeUseCase)|
-| [lockTime](#LockTimeUseCase)
-| [lockName](#LockNameUsecase)
-| [token](#TokenUsecase)
-| [deviceConfig](#DeviceConfigUsecase)
-| [LockStatus](#LockStatusUsecase)
-| [Log](#LogUsecase)
-| [PinCode](#PinCodeUsecase)
+
 ### IncomingDeviceStatusUseCase
 IncomingDeviceStatusUseCase collects device status notified by lock. You can setup the observer when lock connection is ready: [info Link](#DeviceStatus)
 
@@ -176,7 +168,7 @@ func DeviceStatus(value: DeviceStatusModel?) {
 
 
 
-## AdminCodeUseCase [back](#BLEUseCases)
+## AdminCodeUseCase 
 ### Check if admin code has been set
 ```
 SunionBluetoothTool.shared.isAdminCode()
@@ -240,7 +232,7 @@ func EditAdminCode(bool: Bool?) {
 }
 ```
 
-## LockTimeUseCase  [back](#BLEUseCases)
+## LockTimeUseCase 
 
 ### Set time of lock
 ```
@@ -286,7 +278,7 @@ func TimeZone(bool: Bool?) {
 ```
 
 
-## LockNameUsecase [back](#BLEUseCases)
+## LockNameUsecase 
 
 
 ### Set lock name
@@ -328,7 +320,7 @@ func DeviceNameData(value: String?) {
 }
 ```
 
-## TokenUsecase [back](#BLEUseCases)
+## TokenUsecase
 
 
 ### Edit Token
@@ -502,7 +494,7 @@ func TokenQrCode(value: String?) {
 | -------- | -------- | -------- |
 | value     | String     | value of qrCdoe |
 
-## DeviceConfigUsecase [back](#BLEUseCases)
+## DeviceConfigUsecase 
 
 
 ### get DeviceConfig
@@ -626,7 +618,7 @@ func FactoryReset(bool: Bool?) {
 ```
 
 
-## LockStatusUsecase [back](#BLEUseCases)
+## LockStatusUsecase 
 
 
 ### bolt check
@@ -673,7 +665,7 @@ func SupportType(value: SupportDeviceTypesResponseModel?) {
 | Fingerprint| Int| count of finger
 | Face| Int| count of face
 
-## LogUsecase [back](#BLEUseCases)
+## LogUsecase 
 
 
 ### Log count
@@ -726,7 +718,7 @@ func LogData(value: LogModel?) {
 |name|String| name of log
 |message|String| message of log
 
-## PinCodeUsecase [back](#BLEUseCases)
+## PinCodeUsecase 
 
 
 ### PinCode Array
@@ -1077,6 +1069,50 @@ func  connectCloud(value: Bool?){
      }
 }
 ```
+---
+### wifiAutoUnlcok 
+
+```
+SunionBluetoothTool.shared.wifiAutoUnlock(identity: String )
+```
+#### Parameters
+##### OTAStatusRequestModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| identity |  String |  user identityID
+
+
+
+
+#### Delegate function [LINK](#DeviceStatus)
+```
+func DeviceStatus(value: DeviceStatusModel?) {...}
+```
+---
+### iswifiAutoUnlock 
+
+```
+SunionBluetoothTool.shared.iswifiAutoUnlock(identity: String )
+```
+#### Parameters
+##### OTAStatusRequestModel
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| identity |  String |  user identityID
+
+
+
+
+#### Delegate function [LINK](#DeviceStatus)
+```
+func isWifiAutonunlock(bool: Bool?) {
+    if let bool = bool {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
 
 ---
 ## OTA
@@ -1146,6 +1182,20 @@ func  OTAData(value: OTADataResponseModel?){
 | -------- | -------- | -------- |
 | offset |  Int |  file location
 |data| [Uint8]| value of file
+
+---
+## RFVersion
+
+```
+SunionBluetoothTool.shared.getRFVersion()
+```
+
+
+#### Response
+```
+SunionBluetoothTool.shared.data.RFVersion
+```
+
 
 ---
 ## Models

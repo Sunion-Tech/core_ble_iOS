@@ -22,7 +22,6 @@
 		999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953A2AD638380063BD1F /* OTAResponseModel.swift */; };
 		999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */; };
 		999C953F2AD643750063BD1F /* OTADataResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C953E2AD643750063BD1F /* OTADataResponseModel.swift */; };
-		99A9CC402B0F1BCF00B9FB78 /* RemoteBleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A9CC3F2B0F1BCF00B9FB78 /* RemoteBleService.swift */; };
 		99ACF28929343BA300B35773 /* SunionBluetoothTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 99ACF28829343BA300B35773 /* SunionBluetoothTool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		99ACF2A329343C4500B35773 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACF2A229343C4500B35773 /* SwiftyJSON */; };
 		99ACF2A629343C5B00B35773 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACF2A529343C5B00B35773 /* ObjectMapper */; };
@@ -73,7 +72,6 @@
 		999C953A2AD638380063BD1F /* OTAResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAResponseModel.swift; sourceTree = "<group>"; };
 		999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTADataRequsetModel.swift; sourceTree = "<group>"; };
 		999C953E2AD643750063BD1F /* OTADataResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTADataResponseModel.swift; sourceTree = "<group>"; };
-		99A9CC3F2B0F1BCF00B9FB78 /* RemoteBleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBleService.swift; sourceTree = "<group>"; };
 		99ACF28529343BA300B35773 /* SunionBluetoothTool.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SunionBluetoothTool.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		99ACF28829343BA300B35773 /* SunionBluetoothTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SunionBluetoothTool.h; sourceTree = "<group>"; };
 		99ACF2A729343D1A00B35773 /* SunionBluetoothTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunionBluetoothTool.swift; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 				9982A26F294312A500874279 /* QrCodeService.swift */,
 				99AEB52329347D9200CCAC9C /* Extension.swift */,
 				9982A20329398C8D00874279 /* Enum.swift */,
-				99A9CC3F2B0F1BCF00B9FB78 /* RemoteBleService.swift */,
 				997EA0142B1044CF003F82DB /* Delegate.swift */,
 			);
 			path = SunionBluetoothTool;
@@ -351,7 +348,6 @@
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,
 				99AEB51E29347D5600CCAC9C /* UserCodeArrayModel.swift in Sources */,
-				99A9CC402B0F1BCF00B9FB78 /* RemoteBleService.swift in Sources */,
 				99AEB51629347D1000CCAC9C /* SSIDModel.swift in Sources */,
 				99AEB50E29347CCE00CCAC9C /* EditTokenModel.swift in Sources */,
 			);

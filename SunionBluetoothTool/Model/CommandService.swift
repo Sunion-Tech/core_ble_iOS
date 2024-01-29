@@ -199,8 +199,6 @@ public class CommandService {
                 return byteArray
             case .CF:
                 return [0xCF, 0x00]
-            case .B0:
-                return [0xB0, 0x00]
             case .D0:
                 return [0xD0, 0x00]
             case .D1(let lockName):
@@ -689,6 +687,7 @@ public class CommandService {
         case setConnection(Bool)
         case setMQTT(Bool)
         case setCloud(Bool)
+   
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
         case C2(RFMCUversionModel)

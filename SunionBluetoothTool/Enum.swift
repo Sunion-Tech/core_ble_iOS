@@ -55,6 +55,7 @@ public enum commandState {
     case setupAccess(SetupAccessResponseModel?)
     case delAccess(DelAccessResponseModel?)
     case wifiList(SSIDModel?)
+    case isWifiAutonunlock(Bool?)
     case connectWifi(Bool?)
     case connectMQTT(Bool?)
     case connectClould(Bool?)

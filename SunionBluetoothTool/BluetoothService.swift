@@ -34,6 +34,7 @@ class BluetoothService: NSObject {
     enum modelCommandType {
         case D
         case A
+        case N8
     }
     
     
@@ -572,6 +573,24 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+    func wifiAutoUnlock(identity: String ) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .deviceStatus(nil)
+        let command =  CommandService.shared.createAction(with: .F1(identity), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func iswifiAutoUnlock(Identity: String) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .connectWifi(nil)
+        let command =  CommandService.shared.createAction(with: .F2(Identity), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
     // MARK: - OTA {
     func otaStatus(req: OTAStatusRequestModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
@@ -591,16 +610,19 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    // MARK: - wifi Autounlock
-    func wifiAutoUnlock(identity: String ) {
+
+    
+    // MARK: - 3.0
+    public func getRFVersion() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .F1(identity), key: aes2key!)
+        action = .config(nil)
+        var type: RFMCURequestModel = RFMCURequestModel(type: .RF)
+        
+        let command =  CommandService.shared.createAction(with: .C2(type), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
-    
 
 }
 
@@ -952,6 +974,8 @@ extension BluetoothService: CBPeripheralDelegate {
                     commandStateValue = .config(false)
                 }
                 self.delegate?.commandState(value: commandStateValue)
+            case .C2(let model):
+                self.data.RFVersion = model.version
             case .EF( _):
                 self.delegate?.commandState(value: .config(nil))
             default:
@@ -1642,6 +1666,8 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .connectMQTT(bool))
             case .setCloud(let bool):
                 self.delegate?.commandState(value: .connectClould(bool))
+            case .F2(let bool):
+                self.delegate?.commandState(value: .isWifiAutonunlock(bool))
             case .EF(_):
                 self.delegate?.commandState(value: .connectWifi(nil))
             default:
