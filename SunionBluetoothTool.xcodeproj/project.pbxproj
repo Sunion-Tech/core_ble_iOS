@@ -16,6 +16,10 @@
 		9982A20429398C8D00874279 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20329398C8D00874279 /* Enum.swift */; };
 		9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */; };
 		9982A270294312A500874279 /* QrCodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982A26F294312A500874279 /* QrCodeService.swift */; };
+		9992E4E52B677C3A00E44AB0 /* UserCredentialModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4E42B677C3A00E44AB0 /* UserCredentialModel.swift */; };
+		9992E4E72B678E9900E44AB0 /* CredentialStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */; };
+		9992E4E92B67933000E44AB0 /* WeekDayscheduleStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */; };
+		9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */; };
 		999848BC2B63828E00C6C0D2 /* RFMCUversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */; };
 		999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */; };
 		999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */; };
@@ -66,6 +70,10 @@
 		9982A20329398C8D00874279 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModel.swift; sourceTree = "<group>"; };
 		9982A26F294312A500874279 /* QrCodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeService.swift; sourceTree = "<group>"; };
+		9992E4E42B677C3A00E44AB0 /* UserCredentialModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCredentialModel.swift; sourceTree = "<group>"; };
+		9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStructModel.swift; sourceTree = "<group>"; };
+		9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDayscheduleStructModel.swift; sourceTree = "<group>"; };
+		9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearDayscheduleStructModel.swift; sourceTree = "<group>"; };
 		999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCUversionModel.swift; sourceTree = "<group>"; };
 		999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCURequestModel.swift; sourceTree = "<group>"; };
 		999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAStatusRequestModel.swift; sourceTree = "<group>"; };
@@ -213,6 +221,10 @@
 				999C953E2AD643750063BD1F /* OTADataResponseModel.swift */,
 				99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */,
 				999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */,
+				9992E4E42B677C3A00E44AB0 /* UserCredentialModel.swift */,
+				9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */,
+				9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */,
+				9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -335,10 +347,12 @@
 				999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */,
 				997EA0152B1044D0003F82DB /* Delegate.swift in Sources */,
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
+				9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */,
 				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
 				99ACF2A829343D1B00B35773 /* SunionBluetoothTool.swift in Sources */,
 				99AEB50829347C9A00CCAC9C /* EditAdminCodeModel.swift in Sources */,
+				9992E4E92B67933000E44AB0 /* WeekDayscheduleStructModel.swift in Sources */,
 				99AEB52429347D9200CCAC9C /* Extension.swift in Sources */,
 				99AEB52229347D7C00CCAC9C /* apiResDeivceAccessCodeListAccessCode.swift in Sources */,
 				999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */,
@@ -348,7 +362,9 @@
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,
 				99AEB51E29347D5600CCAC9C /* UserCodeArrayModel.swift in Sources */,
+				9992E4E52B677C3A00E44AB0 /* UserCredentialModel.swift in Sources */,
 				99AEB51629347D1000CCAC9C /* SSIDModel.swift in Sources */,
+				9992E4E72B678E9900E44AB0 /* CredentialStructModel.swift in Sources */,
 				99AEB50E29347CCE00CCAC9C /* EditTokenModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

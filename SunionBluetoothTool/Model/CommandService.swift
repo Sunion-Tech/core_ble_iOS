@@ -36,15 +36,7 @@ public class CommandService {
         case securitybolt = 0x02
     }
     
-    public enum deviceMode00Status: UInt8 {
-        case link = 0x00
-        case unlink = 0x01
-    }
-    
-    public enum deviceMode00Audio: UInt8 {
-        case sound = 0x01
-        case unsound = 0x00
-    }
+
     
     public enum AccessTypeMode: UInt8 {
         case AccessCode = 0x00
@@ -111,10 +103,8 @@ public class CommandService {
         case A1(DeviceSetupModelA1) // same D5
         case D6
         case A2 // same D6
-        case Z0 // same D6
         case D7(DeviceMode)
         case A3(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
-        case Z1(deviceMode00Status, deviceMode00Audio) // same D7
         case D9(Int32, Data)
         case E0
         case E1(Int)
@@ -134,6 +124,8 @@ public class CommandService {
         case EF
         case F1(String)
         case F2(String)
+        case N90
+        case N91(Int)
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -504,10 +496,7 @@ public class CommandService {
                 }
                 
                 return [0xF2, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
-            case .Z0:
-                return [0x00, 0x00]
-            case .Z1(let staus, let audio):
-                return [0x01, 0x02, staus.rawValue, audio.rawValue]
+
             case .A4:
                 return [0xA4, 0x00]
             case .A5(let type):
@@ -522,6 +511,10 @@ public class CommandService {
                 return [0xA9, 0x04] +  model.command
             case .AA(let model):
                 return [0xAA, 0x03] + model.command
+            case .N90:
+                return [0x90, 0x00]
+            case .N91(let index):
+                return [0x91, 0x01, UInt8(index)]
             }
         }
 
@@ -570,8 +563,7 @@ public class CommandService {
                 return length
             case .CF:
                 return 0x00
-            case .B0:
-                return 0x00
+         
             case .D0:
                 return 0x00
             case .D1(let lockName):
@@ -658,10 +650,7 @@ public class CommandService {
                 let commandLength = length + 2
                 
                 return UInt8(commandLength)
-            case .Z0:
-                return 0x00
-            case .Z1:
-                return 0x02
+          
             case .A4:
                 return 0x00
             case .A5:
@@ -676,6 +665,10 @@ public class CommandService {
                 return 0x04
             case .AA:
                 return 0x03
+            case .N90:
+                return 0x00
+            case .N91:
+                return 0x02
             }
         }
     }
@@ -687,7 +680,6 @@ public class CommandService {
         case setConnection(Bool)
         case setMQTT(Bool)
         case setCloud(Bool)
-   
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
         case C2(RFMCUversionModel)
@@ -732,9 +724,9 @@ public class CommandService {
         case EF(AdminCodeMode)
         case F1(DeviceStatusModelA2)
         case F2(Bool)
+        case N90([Int])
+        case N91(UserCredentialModel)
         case error(String)
-        case Z0(DeviceStatusModel00)
-        case Z1
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
         case A6(AccessDataResponseModel)
@@ -845,10 +837,10 @@ public class CommandService {
                 return 0xF1
             case .F2:
                 return 0xF2
-            case .Z0:
-                return 0x00
-            case .Z1:
-                return 0x01
+            case .N90:
+                return 0x90
+            case .N91:
+                return 0x91
             case .A4:
                 return 0xA4
             case .A5:
@@ -1225,11 +1217,7 @@ public class CommandService {
                 }
             }
             return .EF(adminCodeMode)
-        case 0x00:
-            let state = DeviceStatusModel00(data)
-            return .Z0(state)
-        case 0x01:
-            return .Z1
+ 
         case 0xA4:
             let result = SupportDeviceTypesResponseModel(response: data)
             return .A4(result)
@@ -1260,6 +1248,12 @@ public class CommandService {
         case 0xF2:
             let isSuccess = data.first == 0x01
             return .F2(isSuccess)
+        case 0x90:
+            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
+            return .N90(indexArray)
+        case 0x91:
+            let model = UserCredentialModel(response: data)
+            return .N91(model)
         default:
             return .error("Unkown action \(actionCode)")
         }

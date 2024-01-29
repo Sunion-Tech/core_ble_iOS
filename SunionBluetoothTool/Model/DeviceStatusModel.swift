@@ -12,7 +12,6 @@ import CryptoSwift
 
 public class DeviceStatusModel {
     public var D6: DeviceStatusModelD6?
-    public var DeviceStatusModel00: DeviceStatusModel00?
     public var A2: DeviceStatusModelA2?
     public var AF: AlertResponseModel?
     public var B0: plugStatusResponseModel?
@@ -154,51 +153,6 @@ public class DeviceStatusModelD6 {
     }
 }
 
-public class DeviceStatusModel00 {
-    
-    private var response:[UInt8]
-    
-    init(_ response:[UInt8]) {
-        self.response = response
-  
-    }
-    
-    public var deadbolt: Bool {
-        self.getDeadbolt()
-    }
-    
-    public var doorState: Bool {
-        self.getDoorState()
-    }
-    
-    public var lockState: Bool {
-        self.getLockState()
-    }
-    
-    public var securitybolt: Bool {
-        self.getSecuritybolt()
-    }
-    
-    private func getDeadbolt() -> Bool {
-        guard let index1 = response[safe: 0] else { return false }
-        return index1 == 0x01
-    }
-    
-    private func getDoorState() -> Bool {
-        guard let index2 = response[safe: 1] else { return false }
-        return index2 == 0x01
-    }
-    
-    private func getLockState() -> Bool {
-        guard let index3 = response[safe: 2] else { return false }
-        return index3 == 0x01
-    }
-    
-    private func getSecuritybolt() -> Bool {
-        guard let index4 = response[safe: 3] else { return false }
-        return index4 == 0x01
-    }
-}
 
 
 public class DeviceStatusModelA2 {

@@ -156,9 +156,6 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getLog(count: count)
     }
     
-    public func setupDeviceStatus01(status: CommandService.deviceMode00Status, audio: CommandService.deviceMode00Audio) {
-        bluetoothService?.setupDeviceStatus01(status: status, audio: audio)
-    }
     
     public func getTokenArray() {
         bluetoothService?.getTokenArray()
@@ -258,6 +255,14 @@ public class SunionBluetoothTool: NSObject {
     // MARK: - 3.0
     public func getRFVersion() {
         bluetoothService?.getRFVersion()
+    }
+    
+    public func getUserCredentialArray() {
+        bluetoothService?.getUserCredentialArray()
+    }
+    
+    public func getUserCredential(position: Int) {
+        bluetoothService?.getUserCredential(position: position)
     }
     
 }
@@ -363,6 +368,10 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.OTAStatus(value: model)
         case .isWifiAutonunlock(let bool):
             delegate?.isWifAutounlock(bool: bool)
+        case .getUserCredentialArray(let indexs):
+            delegate?.userCredentialArray(value: indexs)
+        case .getUserCredential(let model):
+            delegate?.userCredentialData(value: model)
         }
     }
     

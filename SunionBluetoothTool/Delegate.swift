@@ -47,6 +47,8 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func OTAStatus(value: OTAResponseModel?)
     func OTAData(value: OTADataResponseModel?)
     func isWifAutounlock( bool: Bool?)
+    func userCredentialArray(value: [Int]?)
+    func userCredentialData(value: UserCredentialModel?)
 
    
 }
@@ -90,5 +92,7 @@ extension SunionBluetoothToolDelegate {
     public func OTAStatus(value: OTAResponseModel?) {}
     public func OTAData(value: OTADataResponseModel?) {}
     public func isWifAutounlock( bool: Bool?) {}
+    public func userCredentialArray(value: [Int]?) {}
+    public func userCredentialData(value: UserCredentialModel?) {}
    
 }

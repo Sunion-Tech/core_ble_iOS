@@ -347,18 +347,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    // MARK: - 00 / 01
-    
-    func setupDeviceStatus01(status: CommandService.deviceMode00Status, audio: CommandService.deviceMode00Audio) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .Z1(status, audio), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-        
-    }
-    
+
     // MARK: - Share User
     // count
     func getTokenArray() {
@@ -618,9 +607,30 @@ class BluetoothService: NSObject {
             return
         }
         action = .config(nil)
-        var type: RFMCURequestModel = RFMCURequestModel(type: .RF)
+        let type: RFMCURequestModel = RFMCURequestModel(type: .RF)
         
         let command =  CommandService.shared.createAction(with: .C2(type), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    // MARK: -  UserCredential
+    
+    func getUserCredentialArray() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .getUserCredentialArray(nil)
+        let command =  CommandService.shared.createAction(with: .N90, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    
+    func getUserCredential(position: Int) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .getUserCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N91(position), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
 
@@ -929,13 +939,6 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.updateData(value: self.data)
                 let data = DeviceStatusModel()
                 data.B0 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .Z0(_):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-           
-                let data = DeviceStatusModel()
-               // data.DeviceStatusModel00 = model
                 self.delegate?.commandState(value: .deviceStatus(data))
   
             case .EF( _):
@@ -1687,6 +1690,22 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .C4(let model):
                 self.delegate?.commandState(value: .OTAData(model))
+            default:
+                break
+            }
+        case .getUserCredentialArray:
+            switch response {
+            case .N90(let model):
+                self.delegate?.commandState(value: .getUserCredentialArray(model))
+            default:
+                break
+            }
+            
+        case .getUserCredential:
+            
+            switch response {
+            case .N91(let model):
+                self.delegate?.commandState(value: .getUserCredential(model))
             default:
                 break
             }

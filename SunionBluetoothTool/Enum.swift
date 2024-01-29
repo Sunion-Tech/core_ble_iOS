@@ -61,5 +61,7 @@ public enum commandState {
     case connectClould(Bool?)
     case OTAStatus(OTAResponseModel?)
     case OTAData(OTADataResponseModel?)
+    case getUserCredentialArray([Int]?)
+    case getUserCredential(UserCredentialModel?)
    
 }
