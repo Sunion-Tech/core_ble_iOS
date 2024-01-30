@@ -236,7 +236,7 @@ public class UserCredentialModel {
         // 确保response有足够的元素来取出n1组数据
         for i in 0..<n3.toInt {
             let start = 22 + (n1.toInt * 3) + (n2.toInt * 6) + i * 5
-            let end = start + 4 // 取五个元素
+            let end = start + 8 // 取九个元素
             
             // 检查是否可以从response安全地取出这些元素
             guard let _ = response[safe: end] else { return nil }

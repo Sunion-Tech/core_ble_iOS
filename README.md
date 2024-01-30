@@ -1198,6 +1198,84 @@ SunionBluetoothTool.shared.data.RFVersion
 
 
 ---
+## Usercredential
+### Array
+```
+SunionBluetoothTool.shared.getUserCredentialArray()
+```
+#### Delegate function
+```
+func userCredentialArray(value: [Int]?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | [Int]     | position of users  |
+
+---
+### Data
+```
+SunionBluetoothTool.shared.getUserCredential(position: Int)
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| position     | Int     | position of user  |
+
+#### Delegate function
+```
+func userCredentialData(value: UserCredentialModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+##### UserCredentialModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of user  |
+|name| String| name of user|
+| uid| String| auth of user|
+status| UserStatusEnum| available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
+|type| UserTypeEnum| unrestrictedUser<br>yearDayScheduleUser<br>weekDayScheduleUser<br>programmingUser<br>nonAccessUser<br>forcedUser<br>disposableUser<br>expiringUser<br>scheduleRestrictedUser<br>remoteOnlyUser<br>unknownEnumValue|
+|credentialRule|CredentialRuleEnum|single<br>dual<br>tri<br>unknownEnumValue|
+|credentialStruct|[CredentialStructModel]| [LINK](#CredentialStructModel)
+|weekDayscheduleStruct|[WeekDayscheduleStructModel]|[LINK](#WeekDayscheduleStructModel)|
+|yearDayscheduleStruct|[YearDayscheduleStructModel]|[LINK](#YearDayscheduleStructModel)|
+
+
+###### CredentialStructModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of Credential  |
+|type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue<br>|
+
+###### WeekDayscheduleStructModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| status     | ScheduleStatusEnum     | available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue<br> |
+|daymask| DaysMaskMap|sunday<br>monday<br>tuesday<br>wednesday<br>thursday<br>friday<br>saturday|
+|startHour|String| start hour time|
+|startMinute|String| start Minute time|
+|endHour| String | end hour time|
+|endMinute| String| end Minute time
+
+###### YearDayscheduleStructModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| status     | ScheduleStatusEnum     | available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue<br> |
+|start| Date| start time
+| end| Date | end time
+
+---
 ## Models
 ### QRCodeContent
 

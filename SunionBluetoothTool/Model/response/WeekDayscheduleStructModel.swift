@@ -40,19 +40,19 @@ public class WeekDayscheduleStructModel: NSObject {
         self.getDayMaskMap()
     }
     
-    public var startHour: Int? {
+    public var startHour: String? {
         self.getStartHour()
     }
     
-    public var startMinute: Int? {
+    public var startMinute: String? {
         self.getStartMinute()
     }
     
-    public var endHour: Int? {
+    public var endHour: String? {
         self.getEndHour()
     }
     
-    public var endMinute: Int? {
+    public var endMinute: String? {
         self.getEndMinute()
     }
 
@@ -96,28 +96,30 @@ public class WeekDayscheduleStructModel: NSObject {
         
     }
     
-    private func getStartHour() -> Int? {
+
+    
+    private func getStartHour() -> String? {
         guard  let time = response[safe: 2]  else { return nil }
-        
-        return time.toInt
+        let startHour = (time.toInt / 4).toString
+        return startHour
     }
     
-    private func getStartMinute() -> Int? {
+    private func getStartMinute() -> String? {
         guard  let time = response[safe: 3]  else { return nil }
-        
-        return time.toInt
+        let startMinute = ((time % 4).toInt * 15).toString
+        return startMinute
     }
     
-    private func getEndHour() -> Int? {
+    private func getEndHour() -> String? {
         guard  let time = response[safe: 4]  else { return nil }
-        
-        return time.toInt
+        let endHour = (time.toInt / 4).toString
+        return endHour
     }
     
-    private func getEndMinute() -> Int? {
+    private func getEndMinute() -> String? {
         guard  let time = response[safe: 5]  else { return nil }
-        
-        return time.toInt
+        let endMinute = ((time % 4).toInt * 15).toString
+        return endMinute
     }
 
     
