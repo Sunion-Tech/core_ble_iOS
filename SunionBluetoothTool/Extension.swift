@@ -70,6 +70,10 @@ extension String {
         return newString
     }
     
+    var toInt:Int? {
+        return Int(self)
+    }
+    
     
 }
 

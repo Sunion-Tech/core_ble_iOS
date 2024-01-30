@@ -49,6 +49,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func isWifAutounlock( bool: Bool?)
     func userCredentialArray(value: [Int]?)
     func userCredentialData(value: UserCredentialModel?)
+    func userCredentialAction(value: N9ResponseModel?)
 
    
 }
@@ -94,5 +95,6 @@ extension SunionBluetoothToolDelegate {
     public func isWifAutounlock( bool: Bool?) {}
     public func userCredentialArray(value: [Int]?) {}
     public func userCredentialData(value: UserCredentialModel?) {}
+    public func userCredentialAction(value: N9ResponseModel?) {}
    
 }

@@ -48,6 +48,10 @@ public class UserCredentialModel {
         self.response = response
     }
     
+    var command:[UInt8] {
+        self.getCommand()
+    }
+    
     public var index: Int? {
         self.getUserIndex()
     }
@@ -122,7 +126,7 @@ public class UserCredentialModel {
             return .available
         case 0x01:
             return .occupiedEnabled
-        case 0x02:
+        case 0x03:
             return .occupiedDisabled
         default:
             return .unknownEnumValue
@@ -254,6 +258,129 @@ public class UserCredentialModel {
         return models
         
       
+    }
+    
+    private func getCommand()-> [UInt8] {
+        
+        var byteArray:[UInt8] = []
+        
+        // index
+        if let index = index {
+            let index1 = Int32(index)
+            withUnsafeBytes(of: index1) { bytes in
+           
+                for byte in bytes {
+                    let stringHex = String(format: "%02x", byte)
+                    let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
+                  
+                    byteArray.append(uint8)
+                }
+            }
+            // index has 4 byte command just need 2 byte
+            // remove last two byte
+            byteArray.removeLast(2)
+        }
+        
+        // name
+        if let name = name {
+         
+            name.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
+            
+            let nameLength = Int32(name.data(using: .utf8)?.count ?? 0)
+            
+            // (固定長度, 若不足請補 0x00) 10 byte
+            if nameLength < 10 {
+                let bytesToAdd = 10 - nameLength
+                for _ in 0..<bytesToAdd {
+                    byteArray.append(0x00)
+                }
+            }
+        }
+
+        
+        // uid
+        if let uid = uid {
+            uid.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
+        }
+   
+        
+        // status
+        switch self.status {
+        case .available:
+            byteArray.append(0x00)
+        case .occupiedEnabled:
+            byteArray.append(0x01)
+        case .occupiedDisabled:
+            byteArray.append(0x03)
+        case .unknownEnumValue:
+            byteArray.append(0x02)
+        }
+        
+        
+        // type
+        switch self.type {
+        case .unrestrictedUser:
+            byteArray.append(0x00)
+        case .yearDayScheduleUser:
+            byteArray.append(0x01)
+        case .weekDayScheduleUser:
+            byteArray.append(0x02)
+        case .programmingUser:
+            byteArray.append(0x03)
+        case .nonAccessUser:
+            byteArray.append(0x04)
+        case .forcedUser:
+            byteArray.append(0x05)
+        case .disposableUser:
+            byteArray.append(0x06)
+        case .expiringUser:
+            byteArray.append(0x07)
+        case .scheduleRestrictedUser:
+            byteArray.append(0x08)
+        case .remoteOnlyUser:
+            byteArray.append(0x09)
+        case .unknownEnumValue:
+            byteArray.append(0xA0)
+        }
+        
+        // rule
+        switch self.credentialRule {
+        case .single:
+            byteArray.append(0x00)
+        case .dual:
+            byteArray.append(0x01)
+        case .tri:
+            byteArray.append(0x02)
+        case .unknownEnumValue:
+            byteArray.append(0x03)
+        }
+        
+
+        if let credentialStruct = credentialStruct {
+            credentialStruct.forEach { value in
+                value.command.forEach { el in
+                    byteArray.append(el)
+                }
+            }
+        }
+        
+        if let weekDayscheduleStruct = weekDayscheduleStruct {
+            weekDayscheduleStruct.forEach { value in
+                value.command.forEach { el in
+                    byteArray.append(el)
+                }
+            }
+        }
+        
+        if let yearDayscheduleStruct = yearDayscheduleStruct {
+            yearDayscheduleStruct.forEach { value in
+                value.command.forEach { el in
+                    byteArray.append(el)
+                }
+            }
+        }
+
+        return byteArray
     }
 
 }

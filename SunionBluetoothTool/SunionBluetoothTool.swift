@@ -265,6 +265,10 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getUserCredential(position: position)
     }
     
+    public func userCredentialAction(model: UserCredentialModel, isCreate: Bool) {
+        bluetoothService?.userCredentialAction(model: model, isCreate: isCreate)
+    }
+    
 }
 
 
@@ -372,6 +376,8 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.userCredentialArray(value: indexs)
         case .getUserCredential(let model):
             delegate?.userCredentialData(value: model)
+        case .userCredentialAction(let model):
+            delegate?.userCredentialAction(value: model)
         }
     }
     

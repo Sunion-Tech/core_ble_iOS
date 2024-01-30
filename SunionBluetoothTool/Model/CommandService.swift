@@ -126,6 +126,8 @@ public class CommandService {
         case F2(String)
         case N90
         case N91(Int)
+        case N92(UserCredentialModel)
+        case N93(UserCredentialModel)
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -515,6 +517,15 @@ public class CommandService {
                 return [0x90, 0x00]
             case .N91(let index):
                 return [0x91, 0x01, UInt8(index)]
+            case .N92(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                return [0x92, commandLength] + model.command
+            case .N93(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                return [0x93, commandLength] + model.command
+                
             }
         }
 
@@ -669,6 +680,12 @@ public class CommandService {
                 return 0x00
             case .N91:
                 return 0x02
+            case .N92(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
+            case .N93(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
             }
         }
     }
@@ -726,6 +743,8 @@ public class CommandService {
         case F2(Bool)
         case N90([Int])
         case N91(UserCredentialModel)
+        case N92(N9ResponseModel)
+        case N93(N9ResponseModel)
         case error(String)
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
@@ -841,6 +860,10 @@ public class CommandService {
                 return 0x90
             case .N91:
                 return 0x91
+            case .N92:
+                return 0x92
+            case .N93:
+                return 0x93
             case .A4:
                 return 0xA4
             case .A5:
@@ -1254,6 +1277,12 @@ public class CommandService {
         case 0x91:
             let model = UserCredentialModel(response: data)
             return .N91(model)
+        case 0x92:
+            let model = N9ResponseModel(response: data)
+            return .N92(model)
+        case 0x93:
+            let model = N9ResponseModel(response: data)
+            return .N93(model)
         default:
             return .error("Unkown action \(actionCode)")
         }

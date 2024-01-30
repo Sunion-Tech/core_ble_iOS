@@ -32,6 +32,10 @@ public class WeekDayscheduleStructModel: NSObject {
         self.response = response
     }
     
+    var command:[UInt8] {
+        self.getCommand()
+    }
+    
     public var status: ScheduleStatusEnum {
         self.getScheduleStatusEnum()
     }
@@ -122,5 +126,61 @@ public class WeekDayscheduleStructModel: NSObject {
         return endMinute
     }
 
+    private func getCommand()-> [UInt8] {
+        var byteArray:[UInt8] = []
+        
+        switch status {
+        case .available:
+            byteArray.append(0x00)
+        case .occupiedEnabled:
+            byteArray.append(0x01)
+        case .occupiedDisabled:
+            byteArray.append(0x03)
+        case .unknownEnumValue:
+            byteArray.append(0x02)
+        }
+        
+        switch daymask {
+        case .sunday:
+            byteArray.append(0x01)
+        case .monday:
+            byteArray.append(0x02)
+        case .tuesday:
+            byteArray.append(0x04)
+        case .wednesday:
+            byteArray.append(0x08)
+        case .thursday:
+            byteArray.append(0x10)
+        case .friday:
+            byteArray.append(0x20)
+        case .saturday:
+            byteArray.append(0x40)
+        case nil:
+            byteArray.append(0xFF)
+        }
+        
+        if let startHour = startHour {
+            let startHourIndex = startHour.toInt ?? 100
+            byteArray.append(UInt8((startHourIndex * 4)))
+        }
+        
+        if let startMinute = startMinute {
+            let startMinuteIndex = startMinute.toInt ?? 100
+            byteArray.append(UInt8((startMinuteIndex / 15)))
+        }
+        
+        if let endHour = endHour {
+            let endHourIndex = endHour.toInt ?? 100
+            byteArray.append(UInt8((endHourIndex * 4)))
+        }
+        
+        if let endMinute = endMinute {
+            let endMinuteIndex = endMinute.toInt ?? 100
+            byteArray.append(UInt8((endMinuteIndex / 15)))
+        }
+
+
+        return byteArray
+    }
     
 }

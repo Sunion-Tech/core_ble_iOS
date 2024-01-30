@@ -20,6 +20,7 @@
 		9992E4E72B678E9900E44AB0 /* CredentialStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */; };
 		9992E4E92B67933000E44AB0 /* WeekDayscheduleStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */; };
 		9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */; };
+		9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4EE2B68DBFE00E44AB0 /* N9ResponseModel.swift */; };
 		999848BC2B63828E00C6C0D2 /* RFMCUversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */; };
 		999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */; };
 		999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */; };
@@ -74,6 +75,7 @@
 		9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStructModel.swift; sourceTree = "<group>"; };
 		9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDayscheduleStructModel.swift; sourceTree = "<group>"; };
 		9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearDayscheduleStructModel.swift; sourceTree = "<group>"; };
+		9992E4EE2B68DBFE00E44AB0 /* N9ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N9ResponseModel.swift; sourceTree = "<group>"; };
 		999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCUversionModel.swift; sourceTree = "<group>"; };
 		999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCURequestModel.swift; sourceTree = "<group>"; };
 		999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAStatusRequestModel.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */,
 				9992E4E82B67933000E44AB0 /* WeekDayscheduleStructModel.swift */,
 				9992E4EA2B6797D900E44AB0 /* YearDayscheduleStructModel.swift */,
+				9992E4EE2B68DBFE00E44AB0 /* N9ResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				99CB543E29933EDF00A5C06F /* AccessRequestModel.swift in Sources */,
 				995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */,
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
+				9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */,
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */,
 				999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */,

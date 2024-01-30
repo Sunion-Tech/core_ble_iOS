@@ -24,6 +24,10 @@ public class CredentialStructModel: NSObject {
         self.response = response
     }
     
+    var command:[UInt8] {
+        self.getCommand()
+    }
+    
     public var type: CredentialTypeEnum {
         self.getCredentialTypeEnum()
     }
@@ -64,6 +68,48 @@ public class CredentialStructModel: NSObject {
         let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
         let intValue = Int32(bitPattern: UInt32(uint32))
         return Int(intValue)
+    }
+    
+    private func getCommand()-> [UInt8] {
+        var byteArray:[UInt8] = []
+        
+        switch type {
+        case .programmingPIN:
+            byteArray.append(0x00)
+        case .pin:
+            byteArray.append(0x01)
+        case .rfid:
+            byteArray.append(0x02)
+        case .fingerprint:
+            byteArray.append(0x03)
+        case .fingerVein:
+            byteArray.append(0x04)
+        case .face:
+            byteArray.append(0x05)
+        case .unknownEnumValue:
+            byteArray.append(0x06)
+        }
+        
+        // index
+        if let index = self.index {
+            let index1 = Int32(index)
+            withUnsafeBytes(of: index1) { bytes in
+           
+                for byte in bytes {
+                    let stringHex = String(format: "%02x", byte)
+                    let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
+                  
+                    byteArray.append(uint8)
+                }
+            }
+            // index has 4 byte command just need 2 byte
+            // remove last two byte
+            byteArray.removeLast(2)
+            
+        }
+  
+        
+        return byteArray
     }
     
 }

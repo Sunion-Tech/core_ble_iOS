@@ -1255,7 +1255,7 @@ status| UserStatusEnum| available<br>occupiedEnabled<br>occupiedDisabled<br>unkn
 ###### CredentialStructModel
 | Parameter | Type | Description |
 | -------- | -------- | -------- |
-| index     | Int     | position of Credential  |
+| index     | Int     | position of User  |
 |type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue<br>|
 
 ###### WeekDayscheduleStructModel
@@ -1274,6 +1274,39 @@ status| UserStatusEnum| available<br>occupiedEnabled<br>occupiedDisabled<br>unkn
 | status     | ScheduleStatusEnum     | available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue<br> |
 |start| Date| start time
 | end| Date | end time
+
+---
+
+### Create/Edit
+```
+SunionBluetoothTool.shared.userCredentialAction(model: UserCredentialModel, isCreate: Bool)
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | UserCredentialModel     | [LINK](#UserCredentialModel)  |
+|isCreate| Bool| true: create<br> false: edit
+
+#### Delegate function
+```
+func func userCredentialAction(value: N9ResponseModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | N9ResponseModel     | [LINK](#N9ResponseModel)|
+##### N9ResponseModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of User|
+| isSuccess| Bool |  success or fail|
 
 ---
 ## Models
