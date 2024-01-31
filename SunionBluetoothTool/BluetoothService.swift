@@ -634,12 +634,21 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func userCredentialAction(model: UserCredentialModel, isCreate: Bool) {
+    func userCredentialAction(model: UserCredentialModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
         action = .userCredentialAction(nil)
-        let command =  CommandService.shared.createAction(with: isCreate ? .N92(model) : .N93(model), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: .N92(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func delUserCredentialAction(model: DelUserCredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .getUserCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N93(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     

@@ -266,7 +266,12 @@ public class SunionBluetoothTool: NSObject {
     }
     
     public func userCredentialAction(model: UserCredentialModel, isCreate: Bool) {
+        model.isCreate = isCreate
         bluetoothService?.userCredentialAction(model: model, isCreate: isCreate)
+    }
+    
+    public func delUserCredentialAction(model: DelUserCredentialRequestModel) {
+        bluetoothService?.delUserCredentialAction(model: model)
     }
     
 }

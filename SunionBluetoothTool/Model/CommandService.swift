@@ -127,7 +127,8 @@ public class CommandService {
         case N90
         case N91(Int)
         case N92(UserCredentialModel)
-        case N93(UserCredentialModel)
+        case N93(DelUserCredentialRequestModel)
+        case N94
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -522,9 +523,9 @@ public class CommandService {
                 let commandLength = UInt8(command.count)
                 return [0x92, commandLength] + model.command
             case .N93(let model):
-                let command = model.command
-                let commandLength = UInt8(command.count)
-                return [0x93, commandLength] + model.command
+                return [0x93, 0x02] + model.command
+            case .N94:
+                return [0x94, 0x00]
                 
             }
         }
@@ -684,8 +685,9 @@ public class CommandService {
                 let commandLength = UInt8(model.command.count)
                 return commandLength
             case .N93(let model):
-                let commandLength = UInt8(model.command.count)
-                return commandLength
+                return 0x02
+            case .N94:
+                return 0x00
             }
         }
     }
@@ -745,6 +747,7 @@ public class CommandService {
         case N91(UserCredentialModel)
         case N92(N9ResponseModel)
         case N93(N9ResponseModel)
+        case N94(N9ResponseModel)
         case error(String)
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
@@ -864,6 +867,8 @@ public class CommandService {
                 return 0x92
             case .N93:
                 return 0x93
+            case .N94:
+                return 0x94
             case .A4:
                 return 0xA4
             case .A5:
@@ -1283,6 +1288,9 @@ public class CommandService {
         case 0x93:
             let model = N9ResponseModel(response: data)
             return .N93(model)
+        case 0x94:
+            let model = N9ResponseModel(response: data)
+            return .N94(model)
         default:
             return .error("Unkown action \(actionCode)")
         }

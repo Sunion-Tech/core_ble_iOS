@@ -87,6 +87,8 @@ public class UserCredentialModel {
     public var yearDayscheduleStruct: [YearDayscheduleStructModel]? {
         self.getYearDayscheduleStruct()
     }
+    
+    public var isCreate: Bool?
 
     private func getUserIndex() -> Int? {
         guard let firstByte = response[safe: 0],
@@ -264,6 +266,11 @@ public class UserCredentialModel {
         
         var byteArray:[UInt8] = []
         
+        if let isCreate = isCreate {
+            
+            isCreate ? byteArray.append(0x00) : byteArray.append(0x01)
+        }
+        
         // index
         if let index = index {
             let index1 = Int32(index)
@@ -358,25 +365,22 @@ public class UserCredentialModel {
 
         if let credentialStruct = credentialStruct {
             credentialStruct.forEach { value in
-                value.command.forEach { el in
-                    byteArray.append(el)
-                }
+                byteArray = byteArray + value.command
+               
             }
         }
         
         if let weekDayscheduleStruct = weekDayscheduleStruct {
             weekDayscheduleStruct.forEach { value in
-                value.command.forEach { el in
-                    byteArray.append(el)
-                }
+                byteArray = byteArray + value.command
+              
             }
         }
         
         if let yearDayscheduleStruct = yearDayscheduleStruct {
             yearDayscheduleStruct.forEach { value in
-                value.command.forEach { el in
-                    byteArray.append(el)
-                }
+                byteArray = byteArray + value.command
+               
             }
         }
 
