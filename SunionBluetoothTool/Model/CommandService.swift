@@ -127,10 +127,15 @@ public class CommandService {
         case N90
         case N91(Int)
         case N92(UserCredentialRequestModel)
-        case N93(DelUserCredentialRequestModel)
+        case N93(IndexUserCredentialRequestModel)
         case N94
         case N95(SearchCredentialRequestModel)
         case N96(CredentialRequestModel)
+        case N97(SetupCredentialRequestModel)
+        case N98(IndexUserCredentialRequestModel)
+        case N99(HashusercredentialRequestModel)
+        case N9A
+        case N9D
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -534,6 +539,16 @@ public class CommandService {
                 let command = model.command
                 let commandLength = UInt8(command.count)
                 return [0x96, commandLength] + model.command
+            case .N97(let model):
+                return [0x97, 0x04] + model.command
+            case .N98(let model):
+                return [0x98, 0x02] + model.command
+            case .N99(let model):
+                return [0x99, 0x01] + model.command
+            case .N9A:
+                return [0x9A, 0x00]
+            case .N9D:
+                return [0x9D, 0x00]
                 
             }
         }
@@ -701,6 +716,16 @@ public class CommandService {
             case .N96(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
+            case .N97:
+                return 0x04
+            case .N98:
+                return 0x02
+            case .N99:
+                return 0x01
+            case .N9A:
+                return 0x00
+            case .N9D:
+                return 0x00
             }
         }
     }
@@ -763,6 +788,11 @@ public class CommandService {
         case N94([Int])
         case N95(CredentialModel)
         case N96(N9ResponseModel)
+        case N97(SetupCredentialModel)
+        case N98(N9ResponseModel)
+        case N99(HashusercredentialModel)
+        case N9A(Bool)
+        case N9D(Bool)
         case error(String)
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
@@ -888,6 +918,16 @@ public class CommandService {
                 return 0x95
             case .N96:
                 return 0x96
+            case .N97:
+                return 0x97
+            case .N98:
+                return 0x98
+            case .N99:
+                return 0x99
+            case .N9A:
+                return 0x9A
+            case .N9D:
+                return 0x9D
             case .A4:
                 return 0xA4
             case .A5:
@@ -1316,6 +1356,21 @@ public class CommandService {
         case 0x96:
             let model = N9ResponseModel(response: data)
             return .N96(model)
+        case 0x97:
+            let model = SetupCredentialModel(data)
+            return .N97(model)
+        case 0x98:
+            let model = N9ResponseModel(response: data)
+            return .N98(model)
+        case 0x99:
+            let model = HashusercredentialModel(response: data)
+            return .N99(model)
+        case 0x9A:
+            let isSuccess = data.first == 0x01
+            return .N9A(isSuccess)
+        case 0x9D:
+            let isSuccess = data.first == 0x01
+            return .N9D(isSuccess)
         default:
             return .error("Unkown action \(actionCode)")
         }

@@ -643,7 +643,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func delUserCredentialAction(model: DelUserCredentialRequestModel) {
+    func delUserCredentialAction(model: IndexUserCredentialRequestModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
@@ -669,12 +669,58 @@ class BluetoothService: NSObject {
         let command =  CommandService.shared.createAction(with: .N95(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
     func credentialAction(model: CredentialRequestModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
         action = .credentialAction(nil)
         let command =  CommandService.shared.createAction(with: .N96(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func setupCrential(model: SetupCredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .setupCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N97(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func delCredential(model: IndexUserCredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .delCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N98(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func hashUserCredential(model: HashusercredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .hashUserCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N99(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func syncUserCredential() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .syncUserCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N9A, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func finishSyncData() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .finishSyncData(nil)
+        let command =  CommandService.shared.createAction(with: .N9D, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
 
@@ -1790,6 +1836,44 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N96(let model):
                 self.delegate?.commandState(value: .userCredentialAction(model))
+            default:
+                break
+            }
+        case .setupCredential:
+            switch response {
+            case .N97(let model):
+                self.delegate?.commandState(value: .setupCredential(model))
+            default:
+                break
+            }
+            
+        case .delCredential:
+            switch response {
+            case .N98(let model):
+                self.delegate?.commandState(value: .delCredential(model))
+            default:
+                break
+            }
+            
+        case .hashUserCredential:
+            switch response {
+            case .N99(let model):
+                self.delegate?.commandState(value: .hashUserCredential(model))
+            default:
+                break
+            }
+            
+        case .syncUserCredential:
+            switch response {
+            case .N9A(let model):
+                self.delegate?.commandState(value: .syncUserCredential(model))
+            default:
+                break
+            }
+        case .finishSyncData:
+            switch response {
+            case .N9D(let model):
+                self.delegate?.commandState(value: .finishSyncData(model))
             default:
                 break
             }

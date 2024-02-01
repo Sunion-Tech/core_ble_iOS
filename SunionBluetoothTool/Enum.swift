@@ -68,5 +68,10 @@ public enum commandState {
     case getCredientialArray([Int]?)
     case searchCredential(CredentialModel?)
     case credentialAction(N9ResponseModel?)
+    case setupCredential(SetupCredentialModel?)
+    case delCredential(N9ResponseModel?)
+    case hashUserCredential(HashusercredentialModel?)
+    case syncUserCredential(Bool?)
+    case finishSyncData(Bool?)
    
 }

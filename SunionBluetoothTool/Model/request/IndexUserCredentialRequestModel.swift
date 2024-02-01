@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class DelUserCredentialRequestModel {
+public class IndexUserCredentialRequestModel {
 
 
 

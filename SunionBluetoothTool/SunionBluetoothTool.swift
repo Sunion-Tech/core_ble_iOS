@@ -202,6 +202,8 @@ public class SunionBluetoothTool: NSObject {
     }
     
     
+    
+    
     // MARK: - TLR0
     public func getSupportType() {
         bluetoothService?.getSupportType()
@@ -270,7 +272,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.userCredentialAction(model: model)
     }
     
-    public func delUserCredentialAction(model: DelUserCredentialRequestModel) {
+    public func delUserCredentialAction(model: IndexUserCredentialRequestModel) {
         bluetoothService?.delUserCredentialAction(model: model)
     }
     
@@ -285,6 +287,26 @@ public class SunionBluetoothTool: NSObject {
     public func credentialAction(model: CredentialRequestModel, isCreate: Bool) {
         model.isCreate = isCreate
         bluetoothService?.credentialAction(model: model)
+    }
+    
+    public func setupCredential(model: SetupCredentialRequestModel) {
+        bluetoothService?.setupCrential(model: model)
+    }
+    
+    public func delCredential(model: IndexUserCredentialRequestModel) {
+        bluetoothService?.delCredential(model: model)
+    }
+    
+    public func hashUserCredential(model: HashusercredentialRequestModel) {
+        bluetoothService?.hashUserCredential(model: model)
+    }
+    
+    public func syncUserCredential() {
+        bluetoothService?.syncUserCredential()
+    }
+    
+    public func finishSyncData() {
+        bluetoothService?.finishSyncData()
     }
     
 }
@@ -404,6 +426,16 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.delUserCredentialAction(value: model)
         case .credentialAction(let model):
             delegate?.credentialAction(value: model)
+        case .setupCredential(let model):
+            delegate?.setupCredential(value: model)
+        case .delCredential(let model):
+            delegate?.delCredential(value: model)
+        case .hashUserCredential(let model):
+            delegate?.hashUserCredential(value: model)
+        case .syncUserCredential(let model):
+            delegate?.syncUserCredential(value: model)
+        case .finishSyncData(let model):
+            delegate?.finishSyncData(value: model)
         }
     }
     
