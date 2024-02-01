@@ -70,7 +70,7 @@ public class CredentialDetailStructModel: NSObject {
     }
     
     private func getcredentialData() -> String? {
-        guard  let status = response[safe: 3]  else { return nil }
+        guard  response[safe: 3] != nil  else { return nil }
         
         let data = self.response[3...9]
         
@@ -80,33 +80,9 @@ public class CredentialDetailStructModel: NSObject {
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
         
-        switch type {
-        case .programmingPIN:
-            byteArray.append(0x00)
-        case .pin:
-            byteArray.append(0x01)
-        case .rfid:
-            byteArray.append(0x02)
-        case .fingerprint:
-            byteArray.append(0x03)
-        case .fingerVein:
-            byteArray.append(0x04)
-        case .face:
-            byteArray.append(0x05)
-        case .unknownEnumValue:
-            byteArray.append(0x06)
-        }
+        byteArray.append(self.type.rawValue)
         
-        switch self.status {
-        case .available:
-            byteArray.append(0x00)
-        case .occupiedEnabled:
-            byteArray.append(0x01)
-        case .occupiedDisabled:
-            byteArray.append(0x03)
-        case .unknownEnumValue:
-            byteArray.append(0x02)
-        }
+        byteArray.append(self.status.rawValue)
         
         self.data?.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
           

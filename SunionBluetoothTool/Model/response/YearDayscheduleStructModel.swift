@@ -9,12 +9,7 @@
 import Foundation
 
 public class YearDayscheduleStructModel: NSObject {
-    public enum ScheduleStatusEnum: String {
-        case available
-        case occupiedEnabled
-        case occupiedDisabled
-        case unknownEnumValue
-    }
+
     
     
     
@@ -28,7 +23,7 @@ public class YearDayscheduleStructModel: NSObject {
         self.getCommand()
     }
     
-    public var status: ScheduleStatusEnum {
+    public var status: WeekDayscheduleStructModel.ScheduleStatusEnum {
         self.getScheduleStatusEnum()
     }
     
@@ -45,7 +40,7 @@ public class YearDayscheduleStructModel: NSObject {
     
     
     
-    private func getScheduleStatusEnum() -> ScheduleStatusEnum {
+    private func getScheduleStatusEnum() -> WeekDayscheduleStructModel.ScheduleStatusEnum {
         guard  let status = response[safe: 0]  else { return .unknownEnumValue }
         
         switch status {
@@ -92,16 +87,7 @@ public class YearDayscheduleStructModel: NSObject {
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
         
-        switch status {
-        case .available:
-            byteArray.append(0x00)
-        case .occupiedEnabled:
-            byteArray.append(0x01)
-        case .occupiedDisabled:
-            byteArray.append(0x03)
-        case .unknownEnumValue:
-            byteArray.append(0x02)
-        }
+        byteArray.append(self.status.rawValue)
         
         
         if let start = start {

@@ -265,7 +265,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getUserCredential(position: position)
     }
     
-    public func userCredentialAction(model: UserCredentialModel, isCreate: Bool) {
+    public func userCredentialAction(model: UserCredentialRequestModel, isCreate: Bool) {
         model.isCreate = isCreate
         bluetoothService?.userCredentialAction(model: model)
     }
@@ -282,7 +282,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.searchCredential(model: model)
     }
     
-    public func credentialAction(model: CredentialModel, isCreate: Bool) {
+    public func credentialAction(model: CredentialRequestModel, isCreate: Bool) {
         model.isCreate = isCreate
         bluetoothService?.credentialAction(model: model)
     }

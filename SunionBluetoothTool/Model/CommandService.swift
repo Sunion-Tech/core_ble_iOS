@@ -126,11 +126,11 @@ public class CommandService {
         case F2(String)
         case N90
         case N91(Int)
-        case N92(UserCredentialModel)
+        case N92(UserCredentialRequestModel)
         case N93(DelUserCredentialRequestModel)
         case N94
         case N95(SearchCredentialRequestModel)
-        case N96(CredentialModel)
+        case N96(CredentialRequestModel)
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)

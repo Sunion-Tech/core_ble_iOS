@@ -9,21 +9,21 @@
 import Foundation
 
 public class WeekDayscheduleStructModel: NSObject {
-    public enum ScheduleStatusEnum: String {
-        case available
-        case occupiedEnabled
-        case occupiedDisabled
-        case unknownEnumValue
+    public enum ScheduleStatusEnum: UInt8 {
+        case available = 0x00
+        case occupiedEnabled = 0x01
+        case occupiedDisabled = 0x03
+        case unknownEnumValue = 0x02
     }
     
-    public enum DaysMaskMap: String {
-        case sunday
-        case monday
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
+    public enum DaysMaskMap: UInt8 {
+        case sunday = 0x01
+        case monday = 0x02
+        case tuesday = 0x04
+        case wednesday = 0x08
+        case thursday = 0x10
+        case friday = 0x20
+        case saturday = 0x40
     }
     
     private var response:[UInt8]
@@ -129,36 +129,13 @@ public class WeekDayscheduleStructModel: NSObject {
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
         
-        switch status {
-        case .available:
-            byteArray.append(0x00)
-        case .occupiedEnabled:
-            byteArray.append(0x01)
-        case .occupiedDisabled:
-            byteArray.append(0x03)
-        case .unknownEnumValue:
-            byteArray.append(0x02)
+        byteArray.append(self.status.rawValue)
+        
+        if let daymask = self.daymask {
+            byteArray.append(daymask.rawValue)
         }
         
-        switch daymask {
-        case .sunday:
-            byteArray.append(0x01)
-        case .monday:
-            byteArray.append(0x02)
-        case .tuesday:
-            byteArray.append(0x04)
-        case .wednesday:
-            byteArray.append(0x08)
-        case .thursday:
-            byteArray.append(0x10)
-        case .friday:
-            byteArray.append(0x20)
-        case .saturday:
-            byteArray.append(0x40)
-        case nil:
-            byteArray.append(0xFF)
-        }
-        
+   
         if let startHour = startHour {
             let startHourIndex = startHour.toInt ?? 100
             byteArray.append(UInt8((startHourIndex * 4)))

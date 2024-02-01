@@ -1,15 +1,16 @@
 //
-//  setupAccessResponseModel.swift
+//  SetupCredentialModel.swift
 //  SunionBluetoothTool
 //
-//  Created by Sunion User 2 on 2023/2/8.
+//  Created by Sunion User 2 on 2024/2/1.
 //
+
 
 import Foundation
 
-public class SetupAccessResponseModel {
+public class SetupCredentialModel {
     
-    public var type : AccessTypeOption {
+    public var type : CredentialStructModel.CredentialTypeEnum {
         self.getType()
     }
     
@@ -40,9 +41,11 @@ public class SetupAccessResponseModel {
     
     private var response:[UInt8]
     
+    
     public init(_ response:[UInt8]) {
         self.response = response
     }
+    
     
     private func getFaceError() -> String {
         guard let index0 = self.response[safe: 5] else { return "Please stand in front of the lockset and keep your face facing the camera" }
@@ -63,22 +66,30 @@ public class SetupAccessResponseModel {
 
     }
     
-    private func getType() -> AccessTypeOption {
-        guard let index0 = self.response[safe: 0] else { return .error }
-        switch index0 {
+    private func getType() -> CredentialStructModel.CredentialTypeEnum {
+        guard  let status = response[safe: 0]  else { return .unknownEnumValue }
+        
+        switch status {
+        case 0x00:
+            return .programmingPIN
         case 0x01:
-            return .AccessCard
+            return .pin
         case 0x02:
-            return .Fingerprint
+            return .rfid
         case 0x03:
-            return .Face
+            return .fingerprint
+        case 0x04:
+            return .fingerVein
+        case 0x05:
+            return .face
         default:
-            return .error
+            return .unknownEnumValue
         }
     }
     
     private func getState() -> setupAccessOption {
         guard let index1 = self.response[safe: 1] else { return .quit }
+        
         
         switch index1 {
         case 0x00:
@@ -118,6 +129,7 @@ public class SetupAccessResponseModel {
         return data
         
     }
-    
+  
     
 }
+

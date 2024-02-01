@@ -11,32 +11,32 @@ import Foundation
 
 public class UserCredentialModel {
     
-    public enum UserStatusEnum: String {
-        case available // 可用
-        case occupiedEnabled // 已使用 目前啟用
-        case occupiedDisabled // 已使用 目前停用
-        case unknownEnumValue
+    public enum UserStatusEnum: UInt8 {
+        case available = 0x00 // 可用
+        case occupiedEnabled  = 0x01// 已使用 目前啟用
+        case occupiedDisabled = 0x03 // 已使用 目前停用
+        case unknownEnumValue = 0x02
     }
     
-    public enum UserTypeEnum: String {
-        case unrestrictedUser
-        case yearDayScheduleUser
-        case weekDayScheduleUser
-        case programmingUser
-        case nonAccessUser
-        case forcedUser
-        case disposableUser
-        case expiringUser
-        case scheduleRestrictedUser
-        case remoteOnlyUser
-        case unknownEnumValue
+    public enum UserTypeEnum: UInt8 {
+        case unrestrictedUser = 0x00
+        case yearDayScheduleUser = 0x01
+        case weekDayScheduleUser = 0x02
+        case programmingUser = 0x03
+        case nonAccessUser = 0x04
+        case forcedUser = 0x05
+        case disposableUser = 0x06
+        case expiringUser = 0x07
+        case scheduleRestrictedUser = 0x08
+        case remoteOnlyUser = 0x09
+        case unknownEnumValue = 0xA0
     }
     
-    public enum CredentialRuleEnum: String {
-        case single
-        case dual
-        case tri
-        case unknownEnumValue
+    public enum CredentialRuleEnum: UInt8 {
+        case single = 0x00
+        case dual = 0x01
+        case tri = 0x02
+        case unknownEnumValue = 0x03
     }
     
 
@@ -310,57 +310,12 @@ public class UserCredentialModel {
             uid.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
         }
    
+        byteArray.append(self.status.rawValue)
+      
+        byteArray.append(self.type.rawValue)
         
-        // status
-        switch self.status {
-        case .available:
-            byteArray.append(0x00)
-        case .occupiedEnabled:
-            byteArray.append(0x01)
-        case .occupiedDisabled:
-            byteArray.append(0x03)
-        case .unknownEnumValue:
-            byteArray.append(0x02)
-        }
+        byteArray.append(self.credentialRule.rawValue)
         
-        
-        // type
-        switch self.type {
-        case .unrestrictedUser:
-            byteArray.append(0x00)
-        case .yearDayScheduleUser:
-            byteArray.append(0x01)
-        case .weekDayScheduleUser:
-            byteArray.append(0x02)
-        case .programmingUser:
-            byteArray.append(0x03)
-        case .nonAccessUser:
-            byteArray.append(0x04)
-        case .forcedUser:
-            byteArray.append(0x05)
-        case .disposableUser:
-            byteArray.append(0x06)
-        case .expiringUser:
-            byteArray.append(0x07)
-        case .scheduleRestrictedUser:
-            byteArray.append(0x08)
-        case .remoteOnlyUser:
-            byteArray.append(0x09)
-        case .unknownEnumValue:
-            byteArray.append(0xA0)
-        }
-        
-        // rule
-        switch self.credentialRule {
-        case .single:
-            byteArray.append(0x00)
-        case .dual:
-            byteArray.append(0x01)
-        case .tri:
-            byteArray.append(0x02)
-        case .unknownEnumValue:
-            byteArray.append(0x03)
-        }
         
 
         if let credentialStruct = credentialStruct {

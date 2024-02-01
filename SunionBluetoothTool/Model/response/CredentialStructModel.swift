@@ -7,15 +7,18 @@
 
 import Foundation
 
+
+
 public class CredentialStructModel: NSObject {
-    public enum CredentialTypeEnum: String {
-        case programmingPIN
-        case pin
-        case rfid
-        case fingerprint
-        case fingerVein
-        case face
-        case unknownEnumValue
+
+    public enum CredentialTypeEnum: UInt8 {
+        case programmingPIN = 0x00
+        case pin = 0x01
+        case rfid = 0x02
+        case fingerprint = 0x03
+        case fingerVein = 0x04
+        case face = 0x05
+        case unknownEnumValue = 0x06
     }
     
     private var response:[UInt8]
@@ -72,23 +75,8 @@ public class CredentialStructModel: NSObject {
     
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
-        
-        switch type {
-        case .programmingPIN:
-            byteArray.append(0x00)
-        case .pin:
-            byteArray.append(0x01)
-        case .rfid:
-            byteArray.append(0x02)
-        case .fingerprint:
-            byteArray.append(0x03)
-        case .fingerVein:
-            byteArray.append(0x04)
-        case .face:
-            byteArray.append(0x05)
-        case .unknownEnumValue:
-            byteArray.append(0x06)
-        }
+        byteArray.append(self.type.rawValue)
+ 
         
         // index
         if let index = self.index {

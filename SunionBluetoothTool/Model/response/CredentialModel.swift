@@ -9,9 +9,9 @@
 import Foundation
 public class CredentialModel {
     
-    public enum FormatEnum: String {
-        case user
-        case credential
+    public enum FormatEnum: UInt8 {
+        case user = 0x01
+        case credential = 0x00
 
     }
 
@@ -150,7 +150,7 @@ public class CredentialModel {
     }
     
     private func getcredentialData() -> String? {
-        guard  let status = response[safe: 7]  else { return nil }
+        guard  response[safe: 7] != nil  else { return nil }
         
         let data = self.response[7...self.response.count-1]
         
@@ -158,7 +158,7 @@ public class CredentialModel {
     }
     
     private func getcredentialDetailStruct() -> [CredentialDetailStructModel]? {
-        guard  let status = response[safe: 3]  else { return nil }
+        guard  response[safe: 3] != nil  else { return nil }
         var models: [CredentialDetailStructModel] = []
         
         let length = response.count
@@ -208,33 +208,11 @@ public class CredentialModel {
             
         }
         
-        switch self.status {
-        case .available:
-            byteArray.append(0x00)
-        case .occupiedEnabled:
-            byteArray.append(0x01)
-        case .occupiedDisabled:
-            byteArray.append(0x03)
-        case .unknownEnumValue:
-            byteArray.append(0x02)
-        }
+        byteArray.append(self.status.rawValue)
         
-        switch type {
-        case .programmingPIN:
-            byteArray.append(0x00)
-        case .pin:
-            byteArray.append(0x01)
-        case .rfid:
-            byteArray.append(0x02)
-        case .fingerprint:
-            byteArray.append(0x03)
-        case .fingerVein:
-            byteArray.append(0x04)
-        case .face:
-            byteArray.append(0x05)
-        case .unknownEnumValue:
-            byteArray.append(0x06)
-        }
+        byteArray.append(self.type.rawValue)
+        
+
         
         
         if let index = self.userIndex {

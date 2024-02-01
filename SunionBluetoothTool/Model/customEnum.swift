@@ -39,11 +39,10 @@ public enum AccessTypeOption: String {
     case error
 }
 
-public enum setupAccessOption: String {
-    case start
-    case quit
-    case update
-    case error
+public enum setupAccessOption: UInt8 {
+    case start = 0x01
+    case quit = 0x00
+    case update = 0x02
 }
 
 public enum CodeStatus: String {
