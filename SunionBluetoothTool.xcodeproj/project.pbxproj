@@ -24,6 +24,7 @@
 		9992E4F12B69E55D00E44AB0 /* DelUserCredentialRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4F02B69E55D00E44AB0 /* DelUserCredentialRequestModel.swift */; };
 		9992E4F32B6A26F000E44AB0 /* CredentialModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4F22B6A26F000E44AB0 /* CredentialModel.swift */; };
 		9992E4F52B6A334700E44AB0 /* CredentialDetailStructModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4F42B6A334700E44AB0 /* CredentialDetailStructModel.swift */; };
+		9992E4F72B6B26F300E44AB0 /* SearchCredentialRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E4F62B6B26F300E44AB0 /* SearchCredentialRequestModel.swift */; };
 		999848BC2B63828E00C6C0D2 /* RFMCUversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */; };
 		999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */; };
 		999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */; };
@@ -82,6 +83,7 @@
 		9992E4F02B69E55D00E44AB0 /* DelUserCredentialRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelUserCredentialRequestModel.swift; sourceTree = "<group>"; };
 		9992E4F22B6A26F000E44AB0 /* CredentialModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialModel.swift; sourceTree = "<group>"; };
 		9992E4F42B6A334700E44AB0 /* CredentialDetailStructModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDetailStructModel.swift; sourceTree = "<group>"; };
+		9992E4F62B6B26F300E44AB0 /* SearchCredentialRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCredentialRequestModel.swift; sourceTree = "<group>"; };
 		999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCUversionModel.swift; sourceTree = "<group>"; };
 		999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCURequestModel.swift; sourceTree = "<group>"; };
 		999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAStatusRequestModel.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				999C953C2AD641B60063BD1F /* OTADataRequsetModel.swift */,
 				999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */,
 				9992E4F02B69E55D00E44AB0 /* DelUserCredentialRequestModel.swift */,
+				9992E4F62B6B26F300E44AB0 /* SearchCredentialRequestModel.swift */,
 			);
 			path = request;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */,
 				99AEB51429347CFD00CCAC9C /* UserCodeScheduleModel.swift in Sources */,
 				99AEB51C29347D4500CCAC9C /* AddTokenResult.swift in Sources */,
+				9992E4F72B6B26F300E44AB0 /* SearchCredentialRequestModel.swift in Sources */,
 				99AEB50429347C7600CCAC9C /* AESModel.swift in Sources */,
 				99CB54442993742700A5C06F /* SetupAccessRequestModel.swift in Sources */,
 				9992E4F52B6A334700E44AB0 /* CredentialDetailStructModel.swift in Sources */,

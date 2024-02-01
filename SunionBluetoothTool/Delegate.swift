@@ -50,12 +50,15 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func userCredentialArray(value: [Int]?)
     func userCredentialData(value: UserCredentialModel?)
     func userCredentialAction(value: N9ResponseModel?)
-
+    func delUserCredentialAction(value: N9ResponseModel?)
+    func getCredentialArray(value: [Int]?)
+    func searchCredential(value: CredentialModel?)
+    func credentialAction(value: N9ResponseModel?)
    
 }
 
 extension SunionBluetoothToolDelegate {
- 
+    
     
     //  bluetooth
     public func DeviceStatus(value: DeviceStatusModel?) {}
@@ -96,5 +99,9 @@ extension SunionBluetoothToolDelegate {
     public func userCredentialArray(value: [Int]?) {}
     public func userCredentialData(value: UserCredentialModel?) {}
     public func userCredentialAction(value: N9ResponseModel?) {}
+    public func delUserCredentialAction(value: N9ResponseModel?) {}
+    public func getCredentialArray(value: [Int]?) {}
+    public func searchCredential(value: CredentialModel?) {}
+    public func credentialAction(value: N9ResponseModel?) {}
    
 }

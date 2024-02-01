@@ -652,7 +652,31 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-
+    func getCredientialArray() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .getCredientialArray(nil)
+        let command =  CommandService.shared.createAction(with: .N94, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func searchCredential(model: SearchCredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .searchCredential(nil)
+        let command =  CommandService.shared.createAction(with: .N95(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    func credentialAction(model: CredentialModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .credentialAction(nil)
+        let command =  CommandService.shared.createAction(with: .N96(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
 
 }
 
@@ -1732,7 +1756,39 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .userCredentialAction:
             switch response {
-            case .N92(let model), .N93(let model):
+            case .N92(let model):
+                self.delegate?.commandState(value: .userCredentialAction(model))
+            default:
+                break
+            }
+            
+        case .delUserCredential:
+            switch response {
+            case .N93(let model):
+                self.delegate?.commandState(value: .delUserCredential(model))
+            default:
+                break
+            }
+            
+        case .getCredientialArray:
+            switch response {
+            case .N94(let model):
+                self.delegate?.commandState(value: .getCredientialArray(model))
+            default:
+                break
+            }
+            
+        case .searchCredential:
+            switch response {
+            case .N95(let model):
+                self.delegate?.commandState(value: .searchCredential(model))
+            default:
+                break
+            }
+            
+        case .credentialAction:
+            switch response {
+            case .N96(let model):
                 self.delegate?.commandState(value: .userCredentialAction(model))
             default:
                 break

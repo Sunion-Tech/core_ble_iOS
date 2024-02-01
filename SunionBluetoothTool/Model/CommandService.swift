@@ -129,6 +129,8 @@ public class CommandService {
         case N92(UserCredentialModel)
         case N93(DelUserCredentialRequestModel)
         case N94
+        case N95(SearchCredentialRequestModel)
+        case N96(CredentialModel)
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -526,6 +528,12 @@ public class CommandService {
                 return [0x93, 0x02] + model.command
             case .N94:
                 return [0x94, 0x00]
+            case .N95(let model):
+                return [0x95, 0x02] + model.command
+            case .N96(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                return [0x96, commandLength] + model.command
                 
             }
         }
@@ -684,10 +692,15 @@ public class CommandService {
             case .N92(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
-            case .N93(let model):
+            case .N93:
                 return 0x02
             case .N94:
                 return 0x00
+            case .N95:
+                return 0x02
+            case .N96(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
             }
         }
     }
@@ -747,7 +760,9 @@ public class CommandService {
         case N91(UserCredentialModel)
         case N92(N9ResponseModel)
         case N93(N9ResponseModel)
-        case N94(N9ResponseModel)
+        case N94([Int])
+        case N95(CredentialModel)
+        case N96(N9ResponseModel)
         case error(String)
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
@@ -869,6 +884,10 @@ public class CommandService {
                 return 0x93
             case .N94:
                 return 0x94
+            case .N95:
+                return 0x95
+            case .N96:
+                return 0x96
             case .A4:
                 return 0xA4
             case .A5:
@@ -1289,8 +1308,14 @@ public class CommandService {
             let model = N9ResponseModel(response: data)
             return .N93(model)
         case 0x94:
+            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
+            return .N94(indexArray)
+        case 0x95:
+            let model = CredentialModel(response: data)
+            return .N95(model)
+        case 0x96:
             let model = N9ResponseModel(response: data)
-            return .N94(model)
+            return .N96(model)
         default:
             return .error("Unkown action \(actionCode)")
         }
