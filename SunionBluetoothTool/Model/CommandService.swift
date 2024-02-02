@@ -124,6 +124,13 @@ public class CommandService {
         case EF
         case F1(String)
         case F2(String)
+        case N80
+        case N81(DeviceSetupModelN81)
+        case N82
+        case N83(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
+        case N84(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
+        case N85
+        case N87
         case N90
         case N91(Int)
         case N92(UserCredentialRequestModel)
@@ -367,6 +374,30 @@ public class CommandService {
                 return [0xA9, 0x04] +  model.command
             case .AA(let model):
                 return [0xAA, 0x03] + model.command
+            case .N80:
+                return [0x80, 0x00]
+            case .N81(let model):
+                return  [0x81, 0x1C] + model.command
+            case .N82:
+                return [0x82, 0x00]
+            case .N83(let act, let lock, let security):
+                switch act {
+                case .lockstate:
+                    return [0x83, 0x02, 0x01, lock!.rawValue]
+                case .securitybolt:
+                    return [0x83, 0x02, 0x02, security!.rawValue]
+                }
+            case .N84(let act, let lock, let security):
+                switch act {
+                case .lockstate:
+                    return [0x84, 0x02, 0x01, lock!.rawValue]
+                case .securitybolt:
+                    return [0x84, 0x02, 0x02, security!.rawValue]
+                }
+            case .N85:
+                return [0x85, 0x00]
+            case .N87:
+                return [0x87, 0x00]
             case .N90:
                 return [0x90, 0x00]
             case .N91(let index):
@@ -546,6 +577,20 @@ public class CommandService {
                 return 0x04
             case .AA:
                 return 0x03
+            case .N80:
+                return 0x00
+            case .N81:
+                return 0x1C
+            case .N82:
+                return 0x00
+            case .N83:
+                return 0x02
+            case .N84:
+                return 0x02
+            case .N85:
+                return 0x00
+            case .N87:
+                return 0x00
             case .N90:
                 return 0x00
             case .N91:
@@ -627,6 +672,13 @@ public class CommandService {
         case EF(AdminCodeMode)
         case F1(DeviceStatusModelA2)
         case F2(Bool)
+        case N80(DeviceSetupResultModelN80)
+        case N81(N81ResponseModel)
+        case N82(DeviceStatusModelN82)
+        case N83
+        case N84(Bool)
+        case N85(UserableResponseModel)
+        case N87(Bool)
         case N90([Int])
         case N91(UserCredentialModel)
         case N92(N9ResponseModel)
@@ -750,6 +802,20 @@ public class CommandService {
                 return 0xF1
             case .F2:
                 return 0xF2
+            case .N80:
+                return 0x80
+            case .N81:
+                return 0x81
+            case .N82:
+                return 0x82
+            case .N83:
+                return 0x83
+            case .N84:
+                return 0x84
+            case .N85:
+                return 0x85
+            case .N87:
+                return 0x87
             case .N90:
                 return 0x90
             case .N91:
@@ -1181,6 +1247,26 @@ public class CommandService {
         case 0xF2:
             let isSuccess = data.first == 0x01
             return .F2(isSuccess)
+        case 0x80:
+            let model = DeviceSetupResultModelN80(data)
+            return .N80(model)
+        case 0x81:
+            let model = N81ResponseModel(response: data)
+            return .N81(model)
+        case 0x82:
+            let state = DeviceStatusModelN82(data)
+            return .N82(state)
+        case 0x83:
+            return .N83
+        case 0x84:
+            let isSuccess = data.first == 0x01
+            return .N84(isSuccess)
+        case 0x85:
+            let state = UserableResponseModel(response: data)
+            return .N85(state)
+        case 0x87:
+            let isSuccess = data.first == 0x01
+            return .N87(isSuccess)
         case 0x90:
             let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
             return .N90(indexArray)

@@ -42,6 +42,11 @@
 		9992E5172B6B84E700E44AB0 /* DeviceSetupResultModelD4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E5162B6B84E700E44AB0 /* DeviceSetupResultModelD4.swift */; };
 		9992E5192B6B850200E44AB0 /* DeviceSetupResultModelA0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E5182B6B850200E44AB0 /* DeviceSetupResultModelA0.swift */; };
 		9992E51B2B6B852F00E44AB0 /* DeviceSetupResultModelN80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E51A2B6B852F00E44AB0 /* DeviceSetupResultModelN80.swift */; };
+		9992E51D2B6C758000E44AB0 /* N81ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E51C2B6C758000E44AB0 /* N81ResponseModel.swift */; };
+		9992E5202B6C780200E44AB0 /* DeviceStatusModelD6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E51F2B6C780200E44AB0 /* DeviceStatusModelD6.swift */; };
+		9992E5222B6C784300E44AB0 /* DeviceStatusModelA2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E5212B6C784300E44AB0 /* DeviceStatusModelA2.swift */; };
+		9992E5242B6C788C00E44AB0 /* DeviceStatusModelN82.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E5232B6C788C00E44AB0 /* DeviceStatusModelN82.swift */; };
+		9992E5262B6C8C4C00E44AB0 /* UserableResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */; };
 		999848BC2B63828E00C6C0D2 /* RFMCUversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */; };
 		999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */; };
 		999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */; };
@@ -118,6 +123,11 @@
 		9992E5162B6B84E700E44AB0 /* DeviceSetupResultModelD4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSetupResultModelD4.swift; sourceTree = "<group>"; };
 		9992E5182B6B850200E44AB0 /* DeviceSetupResultModelA0.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSetupResultModelA0.swift; sourceTree = "<group>"; };
 		9992E51A2B6B852F00E44AB0 /* DeviceSetupResultModelN80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSetupResultModelN80.swift; sourceTree = "<group>"; };
+		9992E51C2B6C758000E44AB0 /* N81ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N81ResponseModel.swift; sourceTree = "<group>"; };
+		9992E51F2B6C780200E44AB0 /* DeviceStatusModelD6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModelD6.swift; sourceTree = "<group>"; };
+		9992E5212B6C784300E44AB0 /* DeviceStatusModelA2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModelA2.swift; sourceTree = "<group>"; };
+		9992E5232B6C788C00E44AB0 /* DeviceStatusModelN82.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusModelN82.swift; sourceTree = "<group>"; };
+		9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserableResponseModel.swift; sourceTree = "<group>"; };
 		999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCUversionModel.swift; sourceTree = "<group>"; };
 		999848BD2B63866700C6C0D2 /* RFMCURequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFMCURequestModel.swift; sourceTree = "<group>"; };
 		999C95382AD634340063BD1F /* OTAStatusRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAStatusRequestModel.swift; sourceTree = "<group>"; };
@@ -200,6 +210,18 @@
 			path = DeviceSetupResultModel;
 			sourceTree = "<group>";
 		};
+		9992E51E2B6C77F400E44AB0 /* DeviceStatusModel */ = {
+			isa = PBXGroup;
+			children = (
+				9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */,
+				9992E51F2B6C780200E44AB0 /* DeviceStatusModelD6.swift */,
+				9992E5212B6C784300E44AB0 /* DeviceStatusModelA2.swift */,
+				99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */,
+				9992E5232B6C788C00E44AB0 /* DeviceStatusModelN82.swift */,
+			);
+			path = DeviceStatusModel;
+			sourceTree = "<group>";
+		};
 		99ACF27B29343BA300B35773 = {
 			isa = PBXGroup;
 			children = (
@@ -240,7 +262,6 @@
 				99AEB50329347C7600CCAC9C /* AESModel.swift */,
 				99AEB50529347C8800CCAC9C /* CommandService.swift */,
 				99AEB52529347EC000CCAC9C /* BluetoothToolModel.swift */,
-				9982A20B293DBDBE00874279 /* DeviceStatusModel.swift */,
 				995AD7642990DB1F00810273 /* customEnum.swift */,
 			);
 			path = Model;
@@ -279,6 +300,7 @@
 		99CB5442299369EB00A5C06F /* response */ = {
 			isa = PBXGroup;
 			children = (
+				9992E51E2B6C77F400E44AB0 /* DeviceStatusModel */,
 				9992E5132B6B846800E44AB0 /* DeviceSetupResultModel */,
 				99AEB52129347D7C00CCAC9C /* apiResDeivceAccessCodeListAccessCode.swift */,
 				99AEB51F29347D6C00CCAC9C /* UserCodeModelResult.swift */,
@@ -296,7 +318,6 @@
 				99F3ABB429BF03CA00E29C23 /* AlertResponseModel.swift */,
 				999C953A2AD638380063BD1F /* OTAResponseModel.swift */,
 				999C953E2AD643750063BD1F /* OTADataResponseModel.swift */,
-				99FE39DF2B01FA9B00BAA99B /* plugStatusResponseModel.swift */,
 				999848BB2B63828D00C6C0D2 /* RFMCUversionModel.swift */,
 				9992E4E42B677C3A00E44AB0 /* UserCredentialModel.swift */,
 				9992E4E62B678E9900E44AB0 /* CredentialStructModel.swift */,
@@ -307,6 +328,8 @@
 				9992E4F42B6A334700E44AB0 /* CredentialDetailStructModel.swift */,
 				9992E4F82B6B397900E44AB0 /* SetupCredentialModel.swift */,
 				9992E50A2B6B6FA300E44AB0 /* HashusercredentialModel.swift */,
+				9992E51C2B6C758000E44AB0 /* N81ResponseModel.swift */,
+				9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -429,6 +452,7 @@
 				995AD7652990DB1F00810273 /* customEnum.swift in Sources */,
 				99CB543B29932B6B00A5C06F /* AccessDataResponseModel.swift in Sources */,
 				99AEB50629347C8800CCAC9C /* CommandService.swift in Sources */,
+				9992E5222B6C784300E44AB0 /* DeviceStatusModelA2.swift in Sources */,
 				9992E5152B6B847A00E44AB0 /* DeviceSetupResultModel.swift in Sources */,
 				999848BC2B63828E00C6C0D2 /* RFMCUversionModel.swift in Sources */,
 				9992E5032B6B440700E44AB0 /* UserCredentialRequestModel.swift in Sources */,
@@ -438,6 +462,7 @@
 				995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */,
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
 				9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */,
+				9992E5242B6C788C00E44AB0 /* DeviceStatusModelN82.swift in Sources */,
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				9992E4FB2B6B3F9800E44AB0 /* SetupCredentialRequestModel.swift in Sources */,
 				9992E50B2B6B6FA300E44AB0 /* HashusercredentialModel.swift in Sources */,
@@ -445,11 +470,13 @@
 				999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */,
 				997EA0152B1044D0003F82DB /* Delegate.swift in Sources */,
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
+				9992E51D2B6C758000E44AB0 /* N81ResponseModel.swift in Sources */,
 				9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */,
 				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
 				99ACF2A829343D1B00B35773 /* SunionBluetoothTool.swift in Sources */,
 				9992E51B2B6B852F00E44AB0 /* DeviceSetupResultModelN80.swift in Sources */,
+				9992E5202B6C780200E44AB0 /* DeviceStatusModelD6.swift in Sources */,
 				99AEB50829347C9A00CCAC9C /* EditAdminCodeModel.swift in Sources */,
 				9992E4F32B6A26F000E44AB0 /* CredentialModel.swift in Sources */,
 				9992E4F12B69E55D00E44AB0 /* IndexUserCredentialRequestModel.swift in Sources */,
@@ -464,6 +491,7 @@
 				9992E5192B6B850200E44AB0 /* DeviceSetupResultModelA0.swift in Sources */,
 				9992E4FF2B6B430B00E44AB0 /* WeekDayscheduleStructRequestModel.swift in Sources */,
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
+				9992E5262B6C8C4C00E44AB0 /* UserableResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,
 				99AEB51E29347D5600CCAC9C /* UserCodeArrayModel.swift in Sources */,
 				9992E4E52B677C3A00E44AB0 /* UserCredentialModel.swift in Sources */,

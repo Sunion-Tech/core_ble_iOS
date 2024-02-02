@@ -123,6 +123,10 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getDeviceConfigTLR0()
     }
     
+    public func getDeviceConfig80() {
+        bluetoothService?.getDeviceConfig80()
+    }
+    
     public func setupDeviceConfig(data: DeviceSetupModel) {
         bluetoothService?.setupDeviceConfig(model: data)
     }
@@ -309,6 +313,18 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.finishSyncData()
     }
     
+    public func isAutoUnLock() {
+        bluetoothService?.isAutoUnlock()
+    }
+    
+    public func userAble() {
+        bluetoothService?.userAble()
+    }
+    
+    public func isMatter() {
+        bluetoothService?.isMatter()
+    }
+    
 }
 
 
@@ -436,6 +452,12 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.syncUserCredential(value: model)
         case .finishSyncData(let model):
             delegate?.finishSyncData(value: model)
+        case .isAutoUnLock(let model):
+            delegate?.isAutoUnLock(value: model)
+        case .userAble(let model):
+            delegate?.userAble(value: model)
+        case .isMatter(let model):
+            delegate?.isMatter(value: model)
         }
     }
     

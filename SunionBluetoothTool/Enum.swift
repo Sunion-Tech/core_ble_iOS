@@ -73,5 +73,8 @@ public enum commandState {
     case hashUserCredential(HashusercredentialModel?)
     case syncUserCredential(Bool?)
     case finishSyncData(Bool?)
+    case isAutoUnLock(Bool?)
+    case userAble(UserableResponseModel?)
+    case isMatter(Bool?)
    
 }

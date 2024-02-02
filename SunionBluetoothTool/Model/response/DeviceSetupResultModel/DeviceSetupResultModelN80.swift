@@ -29,7 +29,7 @@ public class DeviceSetupResultModelN80 {
         self.getformatVersion()
     }
     
-    public var version: String? {
+    public var serverversion: String? {
         self.getVersion()
     }
     

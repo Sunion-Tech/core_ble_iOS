@@ -59,6 +59,9 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func hashUserCredential(value: HashusercredentialModel?)
     func syncUserCredential(value: Bool?)
     func finishSyncData(value: Bool?)
+    func isAutoUnLock(value: Bool?)
+    func userAble(value: UserableResponseModel?)
+    func isMatter(value: Bool?)
    
 }
 
@@ -113,4 +116,7 @@ extension SunionBluetoothToolDelegate {
     public func hashUserCredential(value: HashusercredentialModel?) {}
     public func syncUserCredential(value: Bool?) {}
     public func finishSyncData(value: Bool?) {}
+    public func isAutoUnLock(value: Bool?) {}
+    public func userAble(value: UserableResponseModel?) {}
+    public func isMatter(value: Bool?) {}
 }
