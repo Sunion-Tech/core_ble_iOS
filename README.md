@@ -515,6 +515,10 @@ func DeviceConfig(value: DeviceSetupResultModel?) {
         if let A0 = value.A0 {
                   // do something here
                 }
+                
+        if let N80 = value.N80 {
+            // do something here
+        }
      } else {
          // error
      }
@@ -552,6 +556,29 @@ func DeviceConfig(value: DeviceSetupResultModel?) {
 |voiceType| VoiceType| onoff<br>level<br>percentage<br>error
 |voiceValue| VoiceValue| open<br>close<br>loudly<br>whisper<br>value(Int)<br>error
 |fastMode| CodeStatus| open<br>close<br>unsupport<br>error
+##### DeviceSetupResultModel.A0
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|mainVersion|String| main of version
+|subVersion|String| sub of version|
+|formatVersion| String| format of version|
+|serverversion| String| server of version|
+|laititude| Double| Latitude of lock location
+|logitude| Double|  Logitude of lock location
+| direction| LockDirectionOption | left<br>right<br>unknown<br>ignore<br>unsupport<br>error
+|guidingCode| CodeStatus| open<br>close<br>unsupport<br>error
+|virtualCode| CodeStatus| open<br>close<br>unsupport<br>error
+|twoFA| CodeStatus| open<br>close<br>unsupport<br>error
+|vacationMode| CodeStatus| open<br>close<br>unsupport<br>error
+|isAutoLock| CodeStatus| open<br>close<br>unsupport<br>error
+|autoLockTime| Int| time of autolock
+|autoLockMinLimit| Int| min time of autolock
+|autoLockMaxLimit| Int | max time of autolock
+|sound| CodeStatus| open<br>close<br>unsupport<br>error
+|voiceType| VoiceType| onoff<br>level<br>percentage<br>error
+|voiceValue| VoiceValue| open<br>close<br>loudly<br>whisper<br>value(Int)<br>error
+|fastMode| CodeStatus| open<br>close<br>unsupport<br>error
+
 ---
 
 ### set DeviceConfig
@@ -561,7 +588,7 @@ SunionBluetoothTool.shared.setupDeviceConfig(data: DeviceSetupModel)
 #### Parameter
 | Parameter | Type | Description |
 | -------- | -------- | -------- |
-| data     | DeviceSetupModel   | D5<br>A1  |
+| data     | DeviceSetupModel   | D5<br>A1<br>N81  |
 
 ##### DeviceSetupResultModel.D5
 | Name | Type | Description |
@@ -592,6 +619,22 @@ SunionBluetoothTool.shared.setupDeviceConfig(data: DeviceSetupModel)
 |direction|LockDirectionOption|left<br>right<br>unknown<br>ignore<br>unsupport<br>error
 
 
+##### DeviceSetupModel.N81
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| laititude| Double| Latitude of lock location
+| longitude| Double|Longitude of lock location
+| guidingCode| CodeStatus| open<br>close<br>unsupport<br>error
+| virtualCode | CodeStatus| open<br>close<br>unsupport<br>error
+|twoFA| CodeStatus| open<br>close<br>unsupport<br>error
+|vacationModeOn| CodeStatus| open<br>close<br>unsupport<br>error
+| autoLockOn| CodeStatus| open<br>close<br>unsupport<br>error
+|autoLockTime| Int| time of autolock
+| soundOn| CodeStatus| open<br>close<br>unsupport<br>error
+|fastMode| CodeStatus| open<br>close<br>unsupport<br>error
+|voiceValue|VoiceValue|open<br>close<br>loudly<br>whisper<br>value(Int)<br>error
+|direction|LockDirectionOption|left<br>right<br>unknown<br>ignore<br>unsupport<br>error
+|sabbathMode|CodeStatus| open<br>close<br>unsupport<br>error
 
 #### [Delegate function](#DeviceStatus)
 
@@ -1309,6 +1352,365 @@ func func userCredentialAction(value: N9ResponseModel?) {
 | isSuccess| Bool |  success or fail|
 
 ---
+
+### Delete
+```
+SunionBluetoothTool.shared.delUserCredentialAction(model: IndexUserCredentialRequestModel)
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | IndexUserCredentialRequestModel     | position of of Uer |
+
+
+#### Delegate function
+```
+func func delUserCredentialAction(value: N9ResponseModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | N9ResponseModel     | [LINK](#N9ResponseModel)|
+##### N9ResponseModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of User|
+| isSuccess| Bool |  success or fail|
+
+---
+### hashUserCredential
+```
+SunionBluetoothTool.shared. hashUserCredential(model: HashusercredentialRequestModel)
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | HashusercredentialRequestModel     | user<br>credential<br>error |
+
+
+#### Delegate function
+```
+func func hashUserCredential(value: HashusercredentialModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | HashusercredentialModel     | user<br>credential<br>error |
+
+##### HashusercredentialModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| target     | HashTargetEnum     | user<br>credential<br>error |
+|data|[UInt8]| data of hash
+
+---
+### syncUserCredential
+```
+SunionBluetoothTool.shared.yncUserCredential()
+```
+
+#### Delegate function
+```
+func func syncUserCredential(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+---
+### finishSyncData
+```
+SunionBluetoothTool.shared.finishSyncData() 
+```
+
+#### Delegate function
+```
+func func finishSyncData(value: Bool?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+---
+### Able
+```
+SunionBluetoothTool.shared.userAble()
+```
+
+#### Delegate function
+```
+func func userAble(value: UserableResponseModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | UserableResponseModel     |[LINK](#UserableResponseModel)  |
+
+##### UserableResponseModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| isMatter     | Bool     |true<br>false  |
+|weekdayCount| Int| count of weekday|
+|yeardayCount| Int| count of yearday|
+|codeCount| Int| count of code|
+|cardCount| Int| count of card|
+|fpCount|Int| count of fp|
+|faceCount|Int| count of face
+
+---
+## Credential
+### Array
+```
+SunionBluetoothTool.shared.getCredentialArray()
+```
+#### Delegate function
+```
+func getCredentialArray(value: [Int]?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | [Int]     | position of Credentials  |
+
+---
+### Data
+```
+SunionBluetoothTool.shared.earchCredential(model: SearchCredentialRequestModel)
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | SearchCredentialRequestModel     |  [LINK](#SearchCredentialRequestModel) |
+
+##### SearchCredentialRequestModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     |  position of Credential |
+| format | FormatEnum| user<br>credential
+
+#### Delegate function
+```
+func searchCredential(value: CredentialModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | CredentialModel     | [LINK](#CredentialModel)  |
+
+##### CredentialModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| format | FormatEnum| user<br>credential
+|credientialIndex| int| position of Credential
+| userIndex| int | position of user|
+|status| UserStatusEnum|available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
+|type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|credentialData|String| value of credential|
+|credentialDetailStruct| [CredentialDetailStructModel]|[LINK](#CredentialDetailStructModel)|
+
+
+##### CredentialDetailStructModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| format | FormatEnum| user<br>credential
+|status| UserStatusEnum|available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
+|type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|data|String| value of credential|
+
+---
+### Action
+```
+SunionBluetoothTool.shared.credentialAction(model: CredentialRequestModel, isCreate: Bool) 
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | CredentialRequestModel     |  [LINK](#CredentialRequestModel) |
+|isCreate| Bool| create or not
+
+##### CredentialRequestModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| format | FormatEnum| user<br>credential
+|credientialIndex| int| position of Credential
+| userIndex| int | position of user|
+|status| UserStatusEnum|available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
+|type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|credentialData|String| value of credential|
+|credentialDetailStruct| [CredentialDetailStructRequestModel]|[LINK](#CredentialDetailStructRequestModel)|
+|isCreate| Bool | create or not
+
+##### CredentialDetailStructRequestModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| format | FormatEnum| user<br>credential
+|status| UserStatusEnum|available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
+|type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|data|String| value of credential|
+
+
+#### Delegate function
+```
+func credentialAction(value: N9ResponseModel?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | N9ResponseModel     | [LINK](#N9ResponseModel)|
+##### N9ResponseModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of User|
+| isSuccess| Bool |  success or fail|
+
+---
+### setUp
+```
+SunionBluetoothTool.shared.setupCredential(model: SetupCredentialRequestModel)
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | SetupCredentialRequestModel     | [LINK](#SetupCredentialRequestModel)|
+##### SetupCredentialRequestModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| accessType|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|state| setupAccessOption|start<br>quit<br>update|
+|index|int|position of credential|
+#### Delegate function
+```
+func setupCredential(value: SetupCredentialModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | SetupCredentialModel    | [LINK](#SetupCredentialModel)  |
+
+#### SetupCredentialModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|state| setupAccessOption|start<br>quit<br>update|
+|index|int|position of credential|
+|isSuccess|Bool|success or not|
+|data| [Uint8]| value of credential|
+|faceError| String|  message of face|
+
+---
+### Delete
+```
+SunionBluetoothTool.shared.delCredential(model: IndexUserCredentialRequestModel) 
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| model     | IndexUserCredentialRequestModel     | position of of Uer |
+
+#### Delegate function
+```
+func delCredential(value: N9ResponseModel?) {
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| value     | N9ResponseModel     | [LINK](#N9ResponseModel)|
+##### N9ResponseModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| index     | Int     | position of User|
+| isSuccess| Bool |  success or fail|
+
+---
+## isAutoUnlock
+```
+SunionBluetoothTool.shared.isAutoUnLock()
+```
+
+#### Delegate function
+```
+func isAutoUnLock(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+---
+## isMatter
+```
+SunionBluetoothTool.shared.isMatter()
+```
+
+#### Delegate function
+```
+func isMatter(value: Bool?){
+     if let value = value {
+        // do something here
+     } else {
+         // error
+     }
+}
+```
+---
 ## Models
 ### QRCodeContent
 
@@ -1364,6 +1766,10 @@ func DeviceStatus(value: DeviceStatusModel?) {
           // do something here
         }
         
+        if let N82 = vlaue.N82 {
+            // do something here
+        }
+        
         if let AF = value.AF {
          // do something here
         }
@@ -1398,6 +1804,21 @@ func DeviceStatus(value: DeviceStatusModel?) {
 #####  DeviceStatusModel.A2
 | Name | Type | Description |
 | -------- | -------- | -------- |
+|lockDirection|LockDirectionOption|Right<br>Left<br>unknown<br>ignore<br>unsupport<br>error|
+|vacationModeOn|CodeStatus|open<br>close<br>unsupport<br>error|
+|deadBolt|DeadboltStatus|protrude<br>retract<br>unsupport<br>error
+|doorState|DoorStateStatus|close<br>unclose<br>unsupport<br>error
+|lockState|LockStateSatus|lockedUnlinked<br>unlockedLinked<br>unknow<br>error
+|securityBolt|SecruityboltStatus|protrude<br>unprotrude<br>unsupport<br>error
+|battery|Int| number
+|batteryWarning|BatteryWarningOption|normal<br>low<br>emergancy<br>error
+
+
+#####  DeviceStatusModel.N82
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|mainVersion|String| main of version|
+|subVerssion| String| sub of version|
 |lockDirection|LockDirectionOption|Right<br>Left<br>unknown<br>ignore<br>unsupport<br>error|
 |vacationModeOn|CodeStatus|open<br>close<br>unsupport<br>error|
 |deadBolt|DeadboltStatus|protrude<br>retract<br>unsupport<br>error
