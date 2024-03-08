@@ -443,7 +443,7 @@ SunionBluetoothTool.shared.delToken(model: TokenModel, ownerPinCode: String? = n
 |tokenPermission|CommandService.TokenPermission| owner<br>manager<br>user<br>none<br>error
 |token|[UInt8]|token byte
 |name|String| name of token
-|indexOfToken| Int| index of token
+|indexOfToken| Int| index of token<br>Add from tokenArray 
 
 
 
