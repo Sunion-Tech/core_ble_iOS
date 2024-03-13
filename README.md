@@ -848,6 +848,7 @@ func PinCodeData(value: PinCodeModelResult?) {
 |PinCodeLength|UInt8|  length of PinCode
 |name| String | name of PinCode
 | schedule| PinCodeScheduleResult | all<br>none<br>once<br>weekly<br>validTime<br>error
+|index|Int|Add from PinCodeArray 
 
 ### command: A
 ```
