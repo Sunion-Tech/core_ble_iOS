@@ -29,6 +29,9 @@ class BluetoothService: NSObject {
         CBUUID(string: "fc3d8cf8-4ddc-7ade-1dd9-2497851131d7")
     ]
     
+    private let notifyUUID: CBUUID = CBUUID(string: "DE915DCE-3539-61EA-ADE7-D44A2237601F")
+    
+    
 
     
     enum modelCommandType {
@@ -70,14 +73,17 @@ class BluetoothService: NSObject {
     
     var wifiPassword = ""
     
+    var v3udid: String?
     
-    init( delegate: BluetoothServiceDelegate?, mackAddress: String, aes1Key: [UInt8], token: [UInt8]) {
+    
+    init(delegate: BluetoothServiceDelegate?, mackAddress: String?, aes1Key: [UInt8], token: [UInt8], udid: String?) {
         
         super.init()
         self.mackAddress = mackAddress
         self.delegate = delegate
         self.aes1key = aes1Key
         self.oneTimeToken = token
+        self.v3udid = udid
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
     }
@@ -128,6 +134,19 @@ class BluetoothService: NSObject {
     
     //MARK: - 連線 + 交換token
     func startConnecting() {
+        // 获取当前日期和时间
+        let now = Date()
+
+        // 获取当前用户的日历
+        let calendar = Calendar.current
+
+        // 从当前日期中提取小时、分钟和秒
+        let hour = calendar.component(.hour, from: now)
+        let minute = calendar.component(.minute, from: now)
+        let second = calendar.component(.second, from: now)
+
+        // 打印结果
+        print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
         print("🔧🔧🔧開始掃描🔧🔧🔧")
 
         action = .deviceStatus(nil)
@@ -795,46 +814,73 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-      
-        
-        guard let name = peripheral.name else { return }
-        
-        let macAddressSuffix = mackAddress!.subString(start: 6, end: 11).uppercased()
-        if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
-           name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
-            print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
-            self.data.bleName = name
-            self.data.identifier = peripheral.identifier.uuidString
-            self.delegate?.updateData(value: self.data)
-            connectedPeripheral = peripheral
-            DispatchQueue.global().async {
-                self.centralManager.connect(self.connectedPeripheral!, options: nil)
-            }
+ 
+        if let mac = mackAddress {
+            guard let name = peripheral.name else { return }
             
-            workItem = DispatchWorkItem {
-                if self.centralManager.isScanning {
-                    // Stop scanning
-              
-                    self.centralManager.stopScan()
-                    
-                    self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
-                    print("Stopped scanning after 5 seconds")
+            let macAddressSuffix = mac.subString(start: 6, end: 11).uppercased()
+            if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
+               name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
+                print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
+                self.data.bleName = name
+                self.data.identifier = peripheral.identifier.uuidString
+                self.delegate?.updateData(value: self.data)
+                connectedPeripheral = peripheral
+                DispatchQueue.global().async {
+                    self.centralManager.connect(self.connectedPeripheral!, options: nil)
+                }
+            }
+        }
+        
+        if let udid = v3udid,
+            let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data ,
+           manufacturerData.starts(with: [0xE3, 0x0C]) {
+            let range = 2..<10
+            let uuidData = manufacturerData.subdata(in: range)
+        
+            // 與udid 一樣的裝置
+            if uuidData.toHexString().lowercased() == udid.lowercased() {
+                print("🔧🔧🔧找到V3裝置🔧🔧🔧 \n \(udid) \n🔧🔧🔧🔧🔧🔧")
+                self.data.identifier = peripheral.identifier.uuidString
+                self.delegate?.updateData(value: self.data)
+                connectedPeripheral = peripheral
+                
+                
+                DispatchQueue.global().async {
+                    self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
             }
             
-            if let workItem = workItem {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
-            }
-            
-       
-           
         }
+        
+        workItem = DispatchWorkItem {
+            if self.centralManager.isScanning {
+                // Stop scanning
+          
+                self.centralManager.stopScan()
+                
+                self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
+                print("Stopped scanning after 5 seconds")
+            }
+        }
+        
+        if let workItem = workItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
+        }
+        
+     
         
     }
 
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        delegate?.bluetoothState(State: .connected(peripheral.name!))
+        print("didConnect: \(peripheral.name)")
+        if let name = peripheral.name {
+            delegate?.bluetoothState(State: .connected(name))
+        } else {
+            delegate?.bluetoothState(State: .connected("v3"))
+        }
+  
         connectedPeripheral = peripheral
         connectedPeripheral?.delegate = self
         
@@ -873,6 +919,8 @@ extension BluetoothService: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         
+        print("didDiscoverServices")
+        
         if (error != nil) {
             
             delegate?.bluetoothState(State: .disconnect(.discoverServices(error.debugDescription)))
@@ -905,6 +953,7 @@ extension BluetoothService: CBPeripheralDelegate {
        
         // Device Information -> get firewareVersion
         let service = self.data.FirmwareVersion == nil ? targetServices?.first : targetServices?.last
+      
         peripheral.discoverCharacteristics(nil, for: service!)
 
     }
@@ -912,18 +961,24 @@ extension BluetoothService: CBPeripheralDelegate {
     // step 2
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        print("didDiscoverCharacteristicsFor")
         guard let characteristics = service.characteristics else {
             delegate?.bluetoothState(State: .disconnect(.discoverCharacteristics))
             return
         }
         
+
+        
+        
         for characteristic in characteristics {
-            
+            print(characteristic)
+       
             
             let propertie = characteristic.properties
             
-            if propertie.contains(.notify) {
-              
+            if propertie.contains(.notify), characteristic.uuid == notifyUUID {
+                print("setNotifyValue: \(characteristic)")
                 peripheral.setNotifyValue(true, for: characteristic)
                 
             }
@@ -933,7 +988,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 
             }
             
-            if propertie.contains(.writeWithoutResponse) {
+            if propertie.contains(.writeWithoutResponse), characteristic.uuid == notifyUUID {
          
                 writableCharacteristic = characteristic
             }
@@ -970,10 +1025,12 @@ extension BluetoothService: CBPeripheralDelegate {
         print("🔧🔧🔧🔧🔧🔧")
         // get Firmware version
         if self.data.FirmwareVersion == nil {
-        
+           
+  
             let str = String(data: characteristic.value!, encoding: .utf8)
             self.data.FirmwareVersion = str
             print("🔧🔧🔧FirmwareVersion🔧🔧🔧\n \(str)\n🔧🔧🔧🔧🔧🔧")
+        
             self.connectedPeripheral!.discoverCharacteristics(nil, for: self.targetServices!.last!)
             return
         }

@@ -936,7 +936,7 @@ public class CommandService {
 
 
         guard let aesBytes = AESModel.shared.encrypt(key: key, bytesArray) else { return nil }
-
+        print("aes : \(aesBytes.toHexString())")
         return Data(aesBytes)
     }
 
@@ -950,7 +950,19 @@ public class CommandService {
         
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
+            // 获取当前日期和时间
+            let now = Date()
 
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data CBCharacteristic \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             if Int(dataLength) > decryptData.count {
@@ -966,7 +978,19 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, data) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            
+            // 获取当前日期和时间
+            let now = Date()
+
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data  Data \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             
@@ -979,7 +1003,19 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, Data.init(byteArray)) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            
+            // 获取当前日期和时间
+            let now = Date()
+
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data  [UInt8] \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])

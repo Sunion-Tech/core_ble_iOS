@@ -65,8 +65,8 @@ public class SunionBluetoothTool: NSObject {
   
     
     // MARK: - BlueTooth
-    public func initBluetooth(macAddress: String, aes1Key: [UInt8], token: [UInt8]) {
-        bluetoothService = BluetoothService(delegate: self, mackAddress: macAddress, aes1Key: aes1Key, token: token)
+    public func initBluetooth(macAddress: String?, aes1Key: [UInt8], token: [UInt8], v3udid: String?) {
+        bluetoothService = BluetoothService(delegate: self, mackAddress: macAddress, aes1Key: aes1Key, token: token, udid: v3udid)
     }
     
     public func connectWithIdentifier(value: String) {
