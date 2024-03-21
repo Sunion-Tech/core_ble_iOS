@@ -14,6 +14,19 @@ public class WeekDayscheduleStructModel: NSObject {
         case occupiedEnabled = 0x01
         case occupiedDisabled = 0x03
         case unknownEnumValue = 0x02
+        
+        public var description: String {
+             switch self {
+             case .available:
+                 return "Available"
+             case .occupiedEnabled:
+                 return "Occupied Enabled"
+             case .occupiedDisabled:
+                 return "Occupied Disabled"
+             case .unknownEnumValue:
+                 return "Unknown"
+             }
+         }
     }
     
     public enum DaysMaskMap: UInt8 {
@@ -24,6 +37,25 @@ public class WeekDayscheduleStructModel: NSObject {
         case thursday = 0x10
         case friday = 0x20
         case saturday = 0x40
+        
+        public var description: String {
+            switch self {
+            case .sunday:
+                return "Sunday"
+            case .monday:
+                return "Monday"
+            case .tuesday:
+                return "Tuesday"
+            case .wednesday:
+                return "Wednesday"
+            case .thursday:
+                return "Thursday"
+            case .friday:
+                return "Friday"
+            case .saturday:
+                return "Saturday"
+            }
+        }
     }
     
     private var response:[UInt8]

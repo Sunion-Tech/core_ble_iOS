@@ -19,6 +19,25 @@ public class CredentialStructModel: NSObject {
         case fingerVein = 0x04
         case face = 0x05
         case unknownEnumValue = 0x06
+        
+        public var description: String {
+            switch self {
+            case .programmingPIN:
+                return "Programming PIN"
+            case .pin:
+                return "PIN"
+            case .rfid:
+                return "RFID"
+            case .fingerprint:
+                return "Fingerprint"
+            case .fingerVein:
+                return "Finger Vein"
+            case .face:
+                return "Face"
+            case .unknownEnumValue:
+                return "Unknown"
+            }
+        }
     }
     
     private var response:[UInt8]

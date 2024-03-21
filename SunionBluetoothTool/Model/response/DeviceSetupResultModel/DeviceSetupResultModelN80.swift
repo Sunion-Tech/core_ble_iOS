@@ -17,19 +17,19 @@ public class DeviceSetupResultModelN80 {
   
     }
     
-    public var mainVersion: String? {
+    public var mainVersion: Int? {
         self.getmainVersion()
     }
     
-    public var subVersion: String? {
+    public var subVersion: Int? {
         self.getsubVersion()
     }
     
-    public var formatVersion: String? {
+    public var formatVersion: Int? {
         self.getformatVersion()
     }
     
-    public var serverversion: String? {
+    public var serverversion: Int? {
         self.getVersion()
     }
     
@@ -97,36 +97,32 @@ public class DeviceSetupResultModelN80 {
         self.getsabbathMode()
     }
     
-    private func getmainVersion() -> String? {
+    private func getmainVersion() -> Int? {
         guard let index5 = response[safe: 0] else { return nil }
-        
-        let data = self.response[0...0]
-        return String(data: Data(data), encoding: .utf8)
+        return index5.toInt
       
     }
     
-    private func getsubVersion() -> String? {
+    private func getsubVersion() -> Int? {
         guard let index5 = response[safe: 1] else { return nil }
-        
-        let data = self.response[1...1]
-        return String(data: Data(data), encoding: .utf8)
+        return index5.toInt
     }
     
-    private func getformatVersion() -> String? {
+    private func getformatVersion() -> Int? {
         guard let index5 = response[safe: 2] else { return nil }
-        
-        let data = self.response[2...2]
-        return String(data: Data(data), encoding: .utf8)
+        return index5.toInt
     }
     
-    private func getVersion() -> String? {
+    private func getVersion() -> Int? {
         guard let index5 = response[safe: 3] else { return nil }
         guard let index6 = response[safe: 4] else { return nil }
         guard let index7 = response[safe: 5] else { return nil }
         guard let index8 = response[safe: 6] else { return nil }
         
-        let data = self.response[3...6]
-        return String(data: Data(data), encoding: .utf8)
+        let data = Data([index5, index6, index7, index8])
+        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let intValue = Int32(bitPattern: UInt32(uint32))
+        return Int(intValue)
         
     }
     

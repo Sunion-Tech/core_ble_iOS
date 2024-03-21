@@ -377,7 +377,7 @@ public class CommandService {
             case .N80:
                 return [0x80, 0x00]
             case .N81(let model):
-                return  [0x81, 0x1C] + model.command
+                return  [0x81, 0x1D] + model.command
             case .N82:
                 return [0x82, 0x00]
             case .N83(let act, let lock, let security):
@@ -1304,8 +1304,37 @@ public class CommandService {
             let isSuccess = data.first == 0x01
             return .N87(isSuccess)
         case 0x90:
-            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
-            return .N90(indexArray)
+            
+            var hasDataAIndex: [Int] = []
+            
+          
+                let stringData = Array(data[1...data.count - 1])
+                print(stringData.toHexString())
+          
+                for (location, element) in stringData.enumerated() {
+            
+                    var count  = 0
+                    let val = element.bits.map{Int($0)}
+                    
+          
+                    for el in val {
+                    
+                        if el == 1 {
+                       
+                            let index = (location * 8) + count
+                            if index < 199 {
+                              hasDataAIndex.append(index)
+                            }
+                           
+                        }
+                        count = count + 1
+                    }
+               
+                }
+               
+            
+          
+            return .N90(hasDataAIndex)
         case 0x91:
             let model = UserCredentialModel(response: data)
             return .N91(model)

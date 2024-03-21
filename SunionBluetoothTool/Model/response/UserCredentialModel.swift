@@ -16,6 +16,19 @@ public class UserCredentialModel {
         case occupiedEnabled  = 0x01// 已使用 目前啟用
         case occupiedDisabled = 0x03 // 已使用 目前停用
         case unknownEnumValue = 0x02
+        
+        public var description: String {
+            switch self {
+            case .available:
+                return "available"
+            case .occupiedEnabled:
+                return "occupiedEnabled"
+            case .occupiedDisabled:
+                return "occupiedDisabled"
+            case .unknownEnumValue:
+                return "unknownEnumValue"
+            }
+        }
     }
     
     public enum UserTypeEnum: UInt8 {
@@ -30,6 +43,33 @@ public class UserCredentialModel {
         case scheduleRestrictedUser = 0x08
         case remoteOnlyUser = 0x09
         case unknownEnumValue = 0xA0
+        
+        public var description: String {
+            switch self {
+            case .unrestrictedUser:
+                return "Unrestricted User"
+            case .yearDayScheduleUser:
+                return "Year Day Schedule User"
+            case .weekDayScheduleUser:
+                return "Week Day Schedule User"
+            case .programmingUser:
+                return "Programming User"
+            case .nonAccessUser:
+                return "Non-Access User"
+            case .forcedUser:
+                return "Forced User"
+            case .disposableUser:
+                return "Disposable User"
+            case .expiringUser:
+                return "Expiring User"
+            case .scheduleRestrictedUser:
+                return "Schedule Restricted User"
+            case .remoteOnlyUser:
+                return "Remote Only User"
+            case .unknownEnumValue:
+                return "Unknown Enum Value"
+            }
+        }
     }
     
     public enum CredentialRuleEnum: UInt8 {
@@ -37,6 +77,19 @@ public class UserCredentialModel {
         case dual = 0x01
         case tri = 0x02
         case unknownEnumValue = 0x03
+        
+        public var description: String {
+            switch self {
+            case .single:
+                return "Single"
+            case .dual:
+                return "Dual"
+            case .tri:
+                return "Tri"
+            case .unknownEnumValue:
+                return "Unknown"
+            }
+        }
     }
     
 

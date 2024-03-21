@@ -17,11 +17,11 @@ public class DeviceStatusModelN82 {
   
     }
     
-    public var mainVersion: String? {
+    public var mainVersion: Int? {
         self.getmainVersion()
     }
     
-    public var subVersion: String? {
+    public var subVersion: Int? {
         self.getsubVersion()
     }
     
@@ -57,20 +57,16 @@ public class DeviceStatusModelN82 {
         return self.getBatteryStatus()
     }
     
-    private func getmainVersion() -> String? {
+    private func getmainVersion() -> Int? {
         guard let index0 = response[safe: 0] else { return nil }
         
-        let data = Array(self.response[0...0])
-        
-        return String(data: Data(data), encoding: .utf8)
+        return index0.toInt
     }
     
-    private func getsubVersion() -> String? {
+    private func getsubVersion() -> Int? {
         guard let index0 = response[safe: 1] else { return nil }
         
-        let data = Array(self.response[1...1])
-        
-        return String(data: Data(data), encoding: .utf8)
+        return index0.toInt
     }
     
     private func getDirection()-> LockDirectionOption {
