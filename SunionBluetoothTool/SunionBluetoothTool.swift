@@ -271,12 +271,12 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.getUserCredential(position: position)
     }
     
-    public func userCredentialAction(model: UserCredentialRequestModel, isCreate: Bool) {
-        model.isCreate = isCreate
+    public func userCredentialAction(model: UserCredentialRequestModel) {
         bluetoothService?.userCredentialAction(model: model)
     }
     
-    public func delUserCredentialAction(model: IndexUserCredentialRequestModel) {
+    public func delUserCredentialAction(position: Int) {
+        let model = IndexUserCredentialRequestModel(index: position)
         bluetoothService?.delUserCredentialAction(model: model)
     }
     
@@ -288,8 +288,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.searchCredential(model: model)
     }
     
-    public func credentialAction(model: CredentialRequestModel, isCreate: Bool) {
-        model.isCreate = isCreate
+    public func credentialAction(model: CredentialRequestModel) {
         bluetoothService?.credentialAction(model: model)
     }
     
@@ -297,7 +296,8 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.setupCrential(model: model)
     }
     
-    public func delCredential(model: IndexUserCredentialRequestModel) {
+    public func delCredential(position: Int) {
+        let model = IndexUserCredentialRequestModel(index: position)
         bluetoothService?.delCredential(model: model)
     }
     
@@ -323,6 +323,10 @@ public class SunionBluetoothTool: NSObject {
     
     public func isMatter() {
         bluetoothService?.isMatter()
+    }
+    
+    public func getUserSupportedCount() {
+        bluetoothService?.getUserSupportedCount()
     }
     
 }
@@ -458,6 +462,8 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.userAble(value: model)
         case .isMatter(let model):
             delegate?.isMatter(value: model)
+        case .userSupportedCount(let model):
+            delegate?.usersupportedCount(value: model)
         }
     }
     

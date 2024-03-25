@@ -667,7 +667,8 @@ class BluetoothService: NSObject {
             return
         }
         action = .getUserCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N91(position), key: aes2key!)
+        let model = IndexUserCredentialRequestModel(index: position)
+        let command =  CommandService.shared.createAction(with: .N91(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
@@ -788,6 +789,16 @@ class BluetoothService: NSObject {
         action = .isMatter(nil)
         
         let command =  CommandService.shared.createAction(with:  .N87, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func getUserSupportedCount() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .userSupportedCount(nil)
+        
+        let command =  CommandService.shared.createAction(with:  .N86, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
@@ -1526,6 +1537,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .C3(let model):
                 self.delegate?.commandState(value: .OTAStatus(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .OTAStatus(nil))
             default:
                 break
             }
@@ -1535,6 +1548,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .C4(let model):
                 self.delegate?.commandState(value: .OTAData(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .OTAData(nil))
             default:
                 break
             }
@@ -1542,6 +1557,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N90(let model):
                 self.delegate?.commandState(value: .getUserCredentialArray(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .getUserCredentialArray(nil))
             default:
                 break
             }
@@ -1551,6 +1568,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N91(let model):
                 self.delegate?.commandState(value: .getUserCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .getUserCredential(nil))
             default:
                 break
             }
@@ -1559,6 +1578,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N92(let model):
                 self.delegate?.commandState(value: .userCredentialAction(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .userCredentialAction(nil))
             default:
                 break
             }
@@ -1567,6 +1588,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N93(let model):
                 self.delegate?.commandState(value: .delUserCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .delUserCredential(nil))
             default:
                 break
             }
@@ -1575,6 +1598,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N94(let model):
                 self.delegate?.commandState(value: .getCredientialArray(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .getCredientialArray(nil))
             default:
                 break
             }
@@ -1583,6 +1608,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N95(let model):
                 self.delegate?.commandState(value: .searchCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .searchCredential(nil))
             default:
                 break
             }
@@ -1590,7 +1617,9 @@ extension BluetoothService: CBPeripheralDelegate {
         case .credentialAction:
             switch response {
             case .N96(let model):
-                self.delegate?.commandState(value: .userCredentialAction(model))
+                self.delegate?.commandState(value: .credentialAction(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .credentialAction(nil))
             default:
                 break
             }
@@ -1598,6 +1627,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N97(let model):
                 self.delegate?.commandState(value: .setupCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .setupCredential(nil))
             default:
                 break
             }
@@ -1606,6 +1637,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N98(let model):
                 self.delegate?.commandState(value: .delCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .delCredential(nil))
             default:
                 break
             }
@@ -1614,6 +1647,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N99(let model):
                 self.delegate?.commandState(value: .hashUserCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .hashUserCredential(nil))
             default:
                 break
             }
@@ -1622,6 +1657,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N9A(let model):
                 self.delegate?.commandState(value: .syncUserCredential(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .syncUserCredential(nil))
             default:
                 break
             }
@@ -1629,6 +1666,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N9D(let model):
                 self.delegate?.commandState(value: .finishSyncData(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .finishSyncData(nil))
             default:
                 break
             }
@@ -1637,6 +1676,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N84(let model):
                 self.delegate?.commandState(value: .isAutoUnLock(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .isAutoUnLock(nil))
             default:
                 break
             }
@@ -1644,6 +1685,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N85(let model):
                 self.delegate?.commandState(value: .userAble(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .userAble(nil))
             default:
                 break
             }
@@ -1652,9 +1695,21 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .N87(let model):
                 self.delegate?.commandState(value: .isMatter(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .isMatter(nil))
             default:
                 break
             }
+        case .userSupportedCount:
+            switch response {
+            case .N86(let model):
+                self.delegate?.commandState(value: .userSupportedCount(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .userSupportedCount(nil))
+            default:
+                break
+            }
+        
           
         default:
             break

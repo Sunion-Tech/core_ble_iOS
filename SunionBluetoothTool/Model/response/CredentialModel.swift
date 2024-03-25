@@ -12,15 +12,23 @@ public class CredentialModel {
     public enum FormatEnum: UInt8 {
         case user = 0x01
         case credential = 0x00
+        
+        public var description: String {
+               switch self {
+               case .user:
+                   return "User"
+               case .credential:
+                   return "Credential"
+              
+               }
+           }
 
     }
 
     
     private var response:[UInt8]
     
-    var command:[UInt8] {
-        self.getCommand()
-    }
+
     
    
     init(response:[UInt8]) {
@@ -85,7 +93,7 @@ public class CredentialModel {
         
         guard let val = response[safe: 0] else { return nil}
         
-        if val == 0x00 {
+        if val == 0x01 {
             guard  let firstByte = response[safe: 1],
                    let secondByte = response[safe: 2] else {
                 return nil
@@ -153,8 +161,27 @@ public class CredentialModel {
         guard  response[safe: 7] != nil  else { return nil }
         
         let data = self.response[7...self.response.count-1]
+    
         
-        return String(data: Data(data), encoding: .utf8)
+        if type == .pin {
+            let filteredData = data.filter { $0 >= 0x30 && $0 <= 0x39 }
+            
+       
+            return String(filteredData.map { Character(UnicodeScalar($0)) })
+        }
+        
+        if type == .fingerprint || type == .face {
+            let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+            let intValue = Int32(bitPattern: UInt32(uint32))
+            return String(Int(intValue))
+        }
+        
+        if type == .rfid {
+            return Array(data).toHexString()
+        }
+        
+        return ""
+  
     }
     
     private func getcredentialDetailStruct() -> [CredentialDetailStructModel]? {
@@ -169,7 +196,7 @@ public class CredentialModel {
             // 获取从index开始的10个字节
             let unitData = Array(response[index..<(index + sizeOfUnit)])
             // 假设你有一个方法来从一个字节数组创建一个CredentialDetailStructModel
-     
+            print("CredentialDetailStructModel: \(Array(response[index..<(index + sizeOfUnit)]).toHexString())")
             models.append(CredentialDetailStructModel(response: unitData))
             
             
@@ -181,60 +208,5 @@ public class CredentialModel {
         
     }
     
-    private func getCommand()-> [UInt8] {
-        var byteArray:[UInt8] = []
-        
-        if let isCreate = isCreate {
-            
-            isCreate ? byteArray.append(0x00) : byteArray.append(0x01)
-        }
-        
-        
-        // credientialIndex
-        if let index = self.credientialIndex {
-            let index1 = Int32(index)
-            withUnsafeBytes(of: index1) { bytes in
-           
-                for byte in bytes {
-                    let stringHex = String(format: "%02x", byte)
-                    let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                  
-                    byteArray.append(uint8)
-                }
-            }
-            // index has 4 byte command just need 2 byte
-            // remove last two byte
-            byteArray.removeLast(2)
-            
-        }
-        
-        byteArray.append(self.status.rawValue)
-        
-        byteArray.append(self.type.rawValue)
-        
-
-        
-        
-        if let index = self.userIndex {
-            let index1 = Int32(index)
-            withUnsafeBytes(of: index1) { bytes in
-           
-                for byte in bytes {
-                    let stringHex = String(format: "%02x", byte)
-                    let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                  
-                    byteArray.append(uint8)
-                }
-            }
-            // index has 4 byte command just need 2 byte
-            // remove last two byte
-            byteArray.removeLast(2)
-            
-        }
-        
-        self.credentialData?.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-  
-        
-        return byteArray
-    }
+ 
 }

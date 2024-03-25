@@ -9,7 +9,6 @@ import Foundation
 
 public class CredentialRequestModel {
     
-    public var format: CredentialModel.FormatEnum
     
     public var credientialIndex: Int
     
@@ -21,22 +20,20 @@ public class CredentialRequestModel {
     
     public var credentialData: String
     
-    public var credentialDetailStruct: [CredentialDetailStructRequestModel]?
+
     
-    public var isCreate: Bool?
+    public var isCreate: Bool
     
     var command:[UInt8] {
         self.getCommand()
     }
     
-    public init(format: CredentialModel.FormatEnum, credientialIndex: Int, userIndex: Int, status: UserCredentialModel.UserStatusEnum, type: CredentialStructModel.CredentialTypeEnum, credentialData: String, credentialDetailStruct: [CredentialDetailStructRequestModel]? = nil, isCreate: Bool? = nil) {
-        self.format = format
+    public init(credientialIndex: Int, userIndex: Int, status: UserCredentialModel.UserStatusEnum, type: CredentialStructModel.CredentialTypeEnum, credentialData: String, isCreate: Bool) {
         self.credientialIndex = credientialIndex
         self.userIndex = userIndex
         self.status = status
         self.type = type
         self.credentialData = credentialData
-        self.credentialDetailStruct = credentialDetailStruct
         self.isCreate = isCreate
     }
     
@@ -44,10 +41,10 @@ public class CredentialRequestModel {
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
         
-        if let isCreate = isCreate {
+
             
             isCreate ? byteArray.append(0x00) : byteArray.append(0x01)
-        }
+        
         
         
         // credientialIndex
@@ -85,9 +82,18 @@ public class CredentialRequestModel {
         // remove last two byte
         byteArray.removeLast(2)
         
-        self.credentialData.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-  
+        if let data = self.credentialData.data(using: .utf8) {
+            let bytes = [UInt8](data)
+            byteArray.append(contentsOf: bytes)
+            
+            // 如果bytes的长度不足8位，补足0x00直到长度为8
+            if bytes.count < 8 {
+                let padding = [UInt8](repeating: 0x00, count: 8 - bytes.count)
+                byteArray.append(contentsOf: padding)
+            }
+        }
         
+    
         return byteArray
     }
 }

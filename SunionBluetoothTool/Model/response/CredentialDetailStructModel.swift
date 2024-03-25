@@ -16,9 +16,7 @@ public class CredentialDetailStructModel: NSObject {
         self.response = response
     }
     
-    var command:[UInt8] {
-        self.getCommand()
-    }
+
     
     public var status: UserCredentialModel.UserStatusEnum {
         self.getStatus()
@@ -70,22 +68,29 @@ public class CredentialDetailStructModel: NSObject {
     }
     
     private func getcredentialData() -> String? {
-        guard  response[safe: 3] != nil  else { return nil }
+        guard  response[safe: 2] != nil  else { return nil }
         
-        let data = self.response[3...9]
+        let data = self.response[2...self.response.count-1]
         
-        return String(data: Data(data), encoding: .utf8)
+        if type == .pin {
+            let filteredData = data.filter { $0 >= 0x30 && $0 <= 0x39 }
+            
+       
+            return String(filteredData.map { Character(UnicodeScalar($0)) })
+        }
+        
+        if type == .fingerprint || type == .face {
+            let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+            let intValue = Int32(bitPattern: UInt32(uint32))
+            return String(Int(intValue))
+        }
+        
+        if type == .rfid {
+            return Array(data).toHexString()
+        }
+        
+        return ""
     }
     
-    private func getCommand()-> [UInt8] {
-        var byteArray:[UInt8] = []
-        
-        byteArray.append(self.type.rawValue)
-        
-        byteArray.append(self.status.rawValue)
-        
-        self.data?.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-          
-        return byteArray
-    }
+
 }

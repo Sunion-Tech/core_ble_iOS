@@ -130,9 +130,10 @@ public class CommandService {
         case N83(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
         case N84(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
         case N85
+        case N86
         case N87
         case N90
-        case N91(Int)
+        case N91(IndexUserCredentialRequestModel)
         case N92(UserCredentialRequestModel)
         case N93(IndexUserCredentialRequestModel)
         case N94
@@ -396,12 +397,15 @@ public class CommandService {
                 }
             case .N85:
                 return [0x85, 0x00]
+            case .N86:
+                return [0x86, 0x00]
             case .N87:
                 return [0x87, 0x00]
             case .N90:
                 return [0x90, 0x00]
-            case .N91(let index):
-                return [0x91, 0x01, UInt8(index)]
+            case .N91(let model):
+                
+                return [0x91, 0x02] + model.command
             case .N92(let model):
                 let command = model.command
                 let commandLength = UInt8(command.count)
@@ -411,7 +415,7 @@ public class CommandService {
             case .N94:
                 return [0x94, 0x00]
             case .N95(let model):
-                return [0x95, 0x02] + model.command
+                return [0x95, 0x03] + model.command
             case .N96(let model):
                 let command = model.command
                 let commandLength = UInt8(command.count)
@@ -589,6 +593,8 @@ public class CommandService {
                 return 0x02
             case .N85:
                 return 0x00
+            case .N86:
+                return 0x00
             case .N87:
                 return 0x00
             case .N90:
@@ -603,7 +609,7 @@ public class CommandService {
             case .N94:
                 return 0x00
             case .N95:
-                return 0x02
+                return 0x03
             case .N96(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
@@ -678,6 +684,7 @@ public class CommandService {
         case N83
         case N84(Bool)
         case N85(UserableResponseModel)
+        case N86(resUserSupportedCountModel)
         case N87(Bool)
         case N90([Int])
         case N91(UserCredentialModel)
@@ -814,6 +821,8 @@ public class CommandService {
                 return 0x84
             case .N85:
                 return 0x85
+            case .N86:
+                return 0x86
             case .N87:
                 return 0x87
             case .N90:
@@ -1300,6 +1309,9 @@ public class CommandService {
         case 0x85:
             let state = UserableResponseModel(response: data)
             return .N85(state)
+        case 0x86:
+            let data = resUserSupportedCountModel(response: data)
+            return .N86(data)
         case 0x87:
             let isSuccess = data.first == 0x01
             return .N87(isSuccess)
@@ -1309,7 +1321,7 @@ public class CommandService {
             
           
                 let stringData = Array(data[1...data.count - 1])
-                print(stringData.toHexString())
+              
           
                 for (location, element) in stringData.enumerated() {
             
@@ -1345,8 +1357,35 @@ public class CommandService {
             let model = N9ResponseModel(response: data)
             return .N93(model)
         case 0x94:
-            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
-            return .N94(indexArray)
+            
+            var hasDataAIndex: [Int] = []
+            
+          
+                let stringData = Array(data[1...data.count - 1])
+              
+          
+                for (location, element) in stringData.enumerated() {
+            
+                    var count  = 0
+                    let val = element.bits.map{Int($0)}
+                    
+          
+                    for el in val {
+                    
+                        if el == 1 {
+                       
+                            let index = (location * 8) + count
+                            if index < 199 {
+                              hasDataAIndex.append(index)
+                            }
+                           
+                        }
+                        count = count + 1
+                    }
+               
+                }
+   
+            return .N94(hasDataAIndex)
         case 0x95:
             let model = CredentialModel(response: data)
             return .N95(model)

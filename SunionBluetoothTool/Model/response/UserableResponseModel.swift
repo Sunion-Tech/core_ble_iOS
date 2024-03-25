@@ -21,27 +21,27 @@ public class UserableResponseModel {
         self.getisMatter()
     }
     
-    public var weekdayCount: Int? {
+    public var weekdayCount: Int {
         self.getweekdayCount()
     }
     
-    public var yeardayCount: Int? {
+    public var yeardayCount: Int {
         self.getyeardayCount()
     }
     
-    public var codeCount: Int? {
+    public var codeCount: Int {
         self.getcodeCount()
     }
     
-    public var cardCount: Int? {
+    public var cardCount: Int {
         self.getcardCount()
     }
     
-    public var fpCount: Int? {
+    public var fpCount: Int {
         self.getfpCount()
     }
     
-    public var faceCount: Int? {
+    public var faceCount: Int {
         self.getfaceCount()
     }
     
@@ -50,34 +50,34 @@ public class UserableResponseModel {
         return index1 == 0x00 ? false : true
     }
     
-    private func getweekdayCount() -> Int? {
-        guard let index1 = response[safe: 1] else { return nil }
-        return index1.toInt
+    private func getweekdayCount() -> Int {
+        guard let index1 = response[safe: 1] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
     
-    private func getyeardayCount() -> Int? {
-        guard let index1 = response[safe: 2] else { return nil }
-        return index1.toInt
+    private func getyeardayCount() -> Int {
+        guard let index1 = response[safe: 2] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
     
-    private func getcodeCount() -> Int? {
-        guard let index1 = response[safe: 3] else { return nil }
-        return index1.toInt
+    private func getcodeCount() -> Int {
+        guard let index1 = response[safe: 3] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
     
-    private func getcardCount() -> Int? {
-        guard let index1 = response[safe: 4] else { return nil }
-        return index1.toInt
+    private func getcardCount() -> Int {
+        guard let index1 = response[safe: 4] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
     
-    private func getfpCount() -> Int? {
-        guard let index1 = response[safe: 5] else { return nil }
-        return index1.toInt
+    private func getfpCount() -> Int {
+        guard let index1 = response[safe: 5] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
     
-    private func getfaceCount() -> Int? {
-        guard let index1 = response[safe: 6] else { return nil }
-        return index1.toInt
+    private func getfaceCount() -> Int {
+        guard let index1 = response[safe: 6] else { return 0 }
+        return index1.toInt > 254 ? 0 : index1.toInt
     }
 
 }

@@ -76,5 +76,6 @@ public enum commandState {
     case isAutoUnLock(Bool?)
     case userAble(UserableResponseModel?)
     case isMatter(Bool?)
+    case userSupportedCount(resUserSupportedCountModel?)
    
 }

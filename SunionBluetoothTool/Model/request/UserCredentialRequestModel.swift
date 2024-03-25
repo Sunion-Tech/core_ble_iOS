@@ -15,7 +15,7 @@ public class UserCredentialRequestModel {
     
     public var name: String
     
-    public var uid: String
+    public var uid: Int
     
     public var status: UserCredentialModel.UserStatusEnum
     
@@ -23,18 +23,18 @@ public class UserCredentialRequestModel {
     
     public var credentialRule: UserCredentialModel.CredentialRuleEnum
     
-    public var credentialStruct: [CredentialStructRequestModel]?
+    public var credentialStruct: [CredentialStructRequestModel]
     
-    public var weekDayscheduleStruct: [WeekDayscheduleStructRequestModel]?
+    public var weekDayscheduleStruct: [WeekDayscheduleStructRequestModel]
     
-    public var yearDayscheduleStruct: [YearDayscheduleStructRequestModel]?
+    public var yearDayscheduleStruct: [YearDayscheduleStructRequestModel]
     
     
     var command:[UInt8] {
         self.getCommand()
     }
     
-    public init(isCreate: Bool, index: Int, name: String, uid: String, status: UserCredentialModel.UserStatusEnum, type: UserCredentialModel.UserTypeEnum, credentialRule: UserCredentialModel.CredentialRuleEnum, credentialStruct: [CredentialStructRequestModel]? = nil, weekDayscheduleStruct: [WeekDayscheduleStructRequestModel]? = nil, yearDayscheduleStruct: [YearDayscheduleStructRequestModel]? = nil) {
+    public init(isCreate: Bool, index: Int, name: String, uid: Int, status: UserCredentialModel.UserStatusEnum, type: UserCredentialModel.UserTypeEnum, credentialRule: UserCredentialModel.CredentialRuleEnum, credentialStruct: [CredentialStructRequestModel], weekDayscheduleStruct: [WeekDayscheduleStructRequestModel], yearDayscheduleStruct: [YearDayscheduleStructRequestModel]) {
         self.isCreate = isCreate
         self.index = index
         self.name = name
@@ -82,9 +82,27 @@ public class UserCredentialRequestModel {
                }
            }
         
+        print("before: \(byteArray.count)")
         // uid
-        uid.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-   
+        withUnsafeBytes(of: uid) { bytes in
+            for byte in bytes {
+                let stringHex = String(format: "%02X", byte)
+                let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
+                byteArray.append(uint8)
+            }
+        }
+        
+        print("after: \(byteArray.count)")
+        
+        // uid has 8 byte command just need 4 byte
+        // remove last two byte
+        byteArray.removeLast(4)
+
+      
+        
+        print("after removeLast: \(byteArray.count)")
+        
+        
         byteArray.append(self.status.rawValue)
       
         byteArray.append(self.type.rawValue)
@@ -92,27 +110,33 @@ public class UserCredentialRequestModel {
         byteArray.append(self.credentialRule.rawValue)
         
         
-
-        if let credentialStruct = credentialStruct {
-            credentialStruct.forEach { value in
-                byteArray = byteArray + value.command
-               
-            }
+        print("before credentialStruct: \(byteArray.count)")
+        
+        credentialStruct.forEach { value in
+            byteArray = byteArray + value.command
+            
         }
         
-        if let weekDayscheduleStruct = weekDayscheduleStruct {
-            weekDayscheduleStruct.forEach { value in
-                byteArray = byteArray + value.command
-              
-            }
+        print("after credentialStruct: \(byteArray.count)")
+        
+        
+        print("before weekDayscheduleStruct: \(byteArray.count)")
+        
+        weekDayscheduleStruct.forEach { value in
+            byteArray = byteArray + value.command
+            
         }
         
-        if let yearDayscheduleStruct = yearDayscheduleStruct {
-            yearDayscheduleStruct.forEach { value in
-                byteArray = byteArray + value.command
-               
-            }
+        print("after weekDayscheduleStruct: \(byteArray.count)")
+        
+        
+        print("before yearDayscheduleStruct: \(byteArray.count)")
+        yearDayscheduleStruct.forEach { value in
+            byteArray = byteArray + value.command
+            
         }
+        
+        print("after yearDayscheduleStruct: \(byteArray.count)")
 
         return byteArray
     }

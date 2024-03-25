@@ -62,6 +62,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func isAutoUnLock(value: Bool?)
     func userAble(value: UserableResponseModel?)
     func isMatter(value: Bool?)
+    func usersupportedCount(value: resUserSupportedCountModel?)
    
 }
 
@@ -119,4 +120,5 @@ extension SunionBluetoothToolDelegate {
     public func isAutoUnLock(value: Bool?) {}
     public func userAble(value: UserableResponseModel?) {}
     public func isMatter(value: Bool?) {}
+    public func usersupportedCount(value: resUserSupportedCountModel?) {}
 }

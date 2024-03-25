@@ -101,9 +101,7 @@ public class UserCredentialModel {
         self.response = response
     }
     
-    var command:[UInt8] {
-        self.getCommand()
-    }
+ 
     
     public var index: Int? {
         self.getUserIndex()
@@ -113,7 +111,7 @@ public class UserCredentialModel {
         self.getName()
     }
     
-    public var uid: String? {
+    public var uid: Int? {
         self.getUid()
     }
     
@@ -129,15 +127,15 @@ public class UserCredentialModel {
         self.getcredentialRule()
     }
     
-    public var credentialStruct: [CredentialStructModel]? {
+    public var credentialStruct: [CredentialStructModel] {
         self.getCredentialStruct()
     }
     
-    public var weekDayscheduleStruct: [WeekDayscheduleStructModel]? {
+    public var weekDayscheduleStruct: [WeekDayscheduleStructModel] {
         self.getWeekDayscheduleStructModel()
     }
     
-    public var yearDayscheduleStruct: [YearDayscheduleStructModel]? {
+    public var yearDayscheduleStruct: [YearDayscheduleStructModel] {
         self.getYearDayscheduleStruct()
     }
     
@@ -165,12 +163,16 @@ public class UserCredentialModel {
         return String(data: Data(data), encoding: .utf8)
     }
     
-    private func getUid() -> String? {
+    private func getUid() -> Int? {
         guard response[safe: 12] != nil else { return nil }
         guard response[safe: 15] != nil else { return nil }
         
+        
         let data = self.response[12...15]
-        return String(data: Data(data), encoding: .utf8)
+  
+        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let intValue = Int32(bitPattern: UInt32(uint32))
+        return Int(intValue)
     }
 
     private func getStatus() -> UserStatusEnum {
@@ -232,9 +234,9 @@ public class UserCredentialModel {
         }
     }
 
-    private func getCredentialStruct() -> [CredentialStructModel]? {
+    private func getCredentialStruct() -> [CredentialStructModel] {
         guard let n1 = response[safe: 19],
-        n1 != 0 else { return nil }
+        n1 != 0 else { return [] }
         
         var structs: [[UInt8]] = []
         // 确保response有足够的元素来取出n1组数据
@@ -243,7 +245,7 @@ public class UserCredentialModel {
             let end = start + 2 // 取三个元素
             
             // 检查是否可以从response安全地取出这些元素
-            guard let _ = response[safe: end] else { return nil }
+            guard let _ = response[safe: end] else { return [] }
             let group = Array(response[start...end])
             structs.append(group)
         }
@@ -258,9 +260,9 @@ public class UserCredentialModel {
         return models
     }
     
-    private func getWeekDayscheduleStructModel() -> [WeekDayscheduleStructModel]? {
+    private func getWeekDayscheduleStructModel() -> [WeekDayscheduleStructModel] {
         guard let n1 = response[safe: 19], n1 != 0,
-              let n2 = response[safe: 20], n2 != 0 else { return nil }
+              let n2 = response[safe: 20], n2 != 0 else { return [] }
         
         var structs: [[UInt8]] = []
         // 确保response有足够的元素来取出n1组数据
@@ -269,7 +271,7 @@ public class UserCredentialModel {
             let end = start + 5 // 取六个元素
             
             // 检查是否可以从response安全地取出这些元素
-            guard let _ = response[safe: end] else { return nil }
+            guard let _ = response[safe: end] else { return [] }
             let group = Array(response[start...end])
             structs.append(group)
         }
@@ -286,10 +288,10 @@ public class UserCredentialModel {
       
     }
     
-    private func getYearDayscheduleStruct() -> [YearDayscheduleStructModel]? {
+    private func getYearDayscheduleStruct() -> [YearDayscheduleStructModel] {
         guard let n1 = response[safe: 19], n1 != 0,
               let n2 = response[safe: 20], n2 != 0,
-              let n3 = response[safe: 21], n3 != 0 else { return nil }
+              let n3 = response[safe: 21], n3 != 0 else { return [] }
         
         var structs: [[UInt8]] = []
         // 确保response有足够的元素来取出n1组数据
@@ -298,7 +300,7 @@ public class UserCredentialModel {
             let end = start + 8 // 取九个元素
             
             // 检查是否可以从response安全地取出这些元素
-            guard let _ = response[safe: end] else { return nil }
+            guard let _ = response[safe: end] else { return [] }
             let group = Array(response[start...end])
             structs.append(group)
         }
@@ -315,84 +317,6 @@ public class UserCredentialModel {
       
     }
     
-    private func getCommand()-> [UInt8] {
-        
-        var byteArray:[UInt8] = []
-        
-        if let isCreate = isCreate {
-            
-            isCreate ? byteArray.append(0x00) : byteArray.append(0x01)
-        }
-        
-        // index
-        if let index = index {
-            let index1 = Int32(index)
-            withUnsafeBytes(of: index1) { bytes in
-           
-                for byte in bytes {
-                    let stringHex = String(format: "%02x", byte)
-                    let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                  
-                    byteArray.append(uint8)
-                }
-            }
-            // index has 4 byte command just need 2 byte
-            // remove last two byte
-            byteArray.removeLast(2)
-        }
-        
-        // name
-        if let name = name {
-         
-            name.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-            
-            let nameLength = Int32(name.data(using: .utf8)?.count ?? 0)
-            
-            // (固定長度, 若不足請補 0x00) 10 byte
-            if nameLength < 10 {
-                let bytesToAdd = 10 - nameLength
-                for _ in 0..<bytesToAdd {
-                    byteArray.append(0x00)
-                }
-            }
-        }
-
-        
-        // uid
-        if let uid = uid {
-            uid.data(using: .utf8)?.bytes.forEach{ byteArray.append($0)}
-        }
-   
-        byteArray.append(self.status.rawValue)
-      
-        byteArray.append(self.type.rawValue)
-        
-        byteArray.append(self.credentialRule.rawValue)
-        
-        
-
-        if let credentialStruct = credentialStruct {
-            credentialStruct.forEach { value in
-                byteArray = byteArray + value.command
-               
-            }
-        }
-        
-        if let weekDayscheduleStruct = weekDayscheduleStruct {
-            weekDayscheduleStruct.forEach { value in
-                byteArray = byteArray + value.command
-              
-            }
-        }
-        
-        if let yearDayscheduleStruct = yearDayscheduleStruct {
-            yearDayscheduleStruct.forEach { value in
-                byteArray = byteArray + value.command
-               
-            }
-        }
-
-        return byteArray
-    }
+  
 
 }
