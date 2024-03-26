@@ -122,8 +122,8 @@ public class CommandService {
         case ED(PinCodeManageModel)
         case EE(Int)
         case EF
-        case F1(String)
-        case F2(String)
+        case F3(String)
+        case F4(String)
         case N80
         case N81(DeviceSetupModelN81)
         case N82
@@ -158,16 +158,16 @@ public class CommandService {
             switch self {
             case .getWifiList:
                 guard let data = "L".data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setSSID(let ssidName):
                 guard let data = ("S" + ssidName).data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setPassword(let ssidPassword):
                 guard let data = ("P" + ssidPassword).data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setConnection:
                 guard let data = "C".data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .B0:
                 return [0xB0, 0x03]
             case .B1(let data):
@@ -342,7 +342,7 @@ public class CommandService {
                 return [0xEE, 0x01, UInt8(index)]
             case .EF:
                 return [0xEF, 0x00]
-            case .F1(let identity):
+            case .F3(let identity):
        
                 let length = identity.count
                 let commandLength = 2 + length
@@ -350,8 +350,8 @@ public class CommandService {
                     return [0x00]
                 }
                 
-                return [0xF1, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
-            case .F2(let identity):
+                return [0xF3, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+            case .F4(let identity):
        
                 let length = identity.count
                 let commandLength = 2 + length
@@ -359,7 +359,7 @@ public class CommandService {
                     return [0x00]
                 }
                 
-                return [0xF2, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+                return [0xF4, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
 
             case .A4:
                 return [0xA4, 0x00]
@@ -554,13 +554,13 @@ public class CommandService {
                 return 0x01
             case .EF:
                 return 0x00
-            case .F1(let identity):
+            case .F3(let identity):
                
                 let length = identity.count
                 let commandLength = length + 2
                 
                 return UInt8(commandLength)
-            case .F2(let identity):
+            case .F4(let identity):
                
                 let length = identity.count
                 let commandLength = length + 2
@@ -676,8 +676,8 @@ public class CommandService {
         case ED(Bool)
         case EE(Bool)
         case EF(AdminCodeMode)
-        case F1(DeviceStatusModelA2)
-        case F2(Bool)
+        case F3(DeviceStatusModelN82)
+        case F4(Bool)
         case N80(DeviceSetupResultModelN80)
         case N81(N81ResponseModel)
         case N82(DeviceStatusModelN82)
@@ -710,17 +710,17 @@ public class CommandService {
         var transmissionKey:UInt8? {
             switch self {
             case .getWifiList:
-                return 0xF0
+                return 0xF2
             case .setSSID:
-                return 0xF0
+                return 0xF2
             case .setPassword:
-                return 0xF0
+                return 0xF2
             case .setConnection:
-                return 0xF0
+                return 0xF2
             case .setMQTT:
-                return 0xF0
+                return 0xF2
             case .setCloud:
-                return 0xF0
+                return 0xF2
             case .B0:
                 return 0xB0
             case .B1:
@@ -805,10 +805,11 @@ public class CommandService {
                 return 0xEE
             case .EF:
                 return 0xEF
-            case .F1:
-                return 0xF1
-            case .F2:
-                return 0xF2
+ 
+            case .F3:
+                return 0xF3
+            case .F4:
+                return 0xF4
             case .N80:
                 return 0x80
             case .N81:
@@ -1049,13 +1050,13 @@ public class CommandService {
     private func resolveWithActionCode(actionCode:UInt8, data:[UInt8]) -> ActionResolveOption {
   
         switch actionCode {
-        case 0xF0:
+        case 0xF2:
             // set wifi 回傳 L
             // set ssid 回傳 S
             // set password 回傳 P
             // set connection 回傳 "CWiFi Succ" or "LE"
-            guard let index0 = data[safe: 0] else { return .error("Can't get F0 response") }
-            guard let stringValue = String(data: Data([index0]), encoding: .utf8) else { return .error("[F0]:Convert data to string error")}
+            guard let index0 = data[safe: 0] else { return .error("Can't get F2 response") }
+            guard let stringValue = String(data: Data([index0]), encoding: .utf8) else { return .error("[F2]:Convert data to string error")}
             print("👊👊👊  WifiConnectState 👊👊👊 \n \(String(data: Data(data), encoding: .utf8)) \n 👊👊👊👊👊👊")
             // CWiFi Succ
             // SWiFi Fail
@@ -1096,7 +1097,7 @@ public class CommandService {
                 return .setConnection(false)
                
             default:
-                return .error("Unknown F0 response: \(data.bytesToHex())")
+                return .error("Unknown F2 response: \(data.bytesToHex())")
             }
         case 0xB0:
             let model = plugStatusResponseModel(data)
@@ -1286,12 +1287,12 @@ public class CommandService {
         case 0xAF:
             let result = AlertResponseModel(data)
             return .AF(result)
-        case 0xF1:
-            let state = DeviceStatusModelA2(data)
-            return .F1(state)
-        case 0xF2:
+        case 0xF3:
+            let state = DeviceStatusModelN82(data)
+            return .F3(state)
+        case 0xF4:
             let isSuccess = data.first == 0x01
-            return .F2(isSuccess)
+            return .F4(isSuccess)
         case 0x80:
             let model = DeviceSetupResultModelN80(data)
             return .N80(model)

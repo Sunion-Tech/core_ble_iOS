@@ -253,13 +253,7 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.otaData(req: req)
     }
     
-    public func wifiAutounLock( identity: String) {
-        bluetoothService?.wifiAutoUnlock(identity: identity)
-    }
-    
-    public func iswifiAutoUnlock(identity: String) {
-        bluetoothService?.iswifiAutoUnlock(Identity: identity)
-    }
+
     
     // MARK: - 3.0
     public func getRFVersion() {
@@ -476,7 +470,23 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
         case .v3adminCode(let model):
             delegate?.v3adminCode(vlaue: model)
         case .v3Direction(let model):
-            delegate?.v3Direction(valu: model)
+            delegate?.v3Direction(value: model)
+        case .v3Config(let model):
+            delegate?.v3Config(value: model)
+        case .v3utility(let model):
+            delegate?.v3utility(value: model)
+        case .v3Token(let model):
+            delegate?.v3Token(value: model)
+        case .v3Log(let model):
+            delegate?.v3Log(value: model)
+        case .v3Name(let model):
+            delegate?.v3Name(value: model)
+        case .v3Wifi(let model):
+            delegate?.v3Wifi(value: model)
+        case .v3Plug(let model):
+            delegate?.v3Plug(value: model)
+        case .v3OTA(let model):
+            delegate?.v3OTA(value: model)
         }
     }
     

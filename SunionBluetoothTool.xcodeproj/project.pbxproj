@@ -17,9 +17,23 @@
 		60BE21C32BB26D0F003AD4E8 /* Ex+Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C22BB26D0F003AD4E8 /* Ex+Time.swift */; };
 		60BE21C52BB26D3F003AD4E8 /* Ex+AdminCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */; };
 		60BE21C72BB26D67003AD4E8 /* Ex+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */; };
-		60BE21C92BB26DC9003AD4E8 /* resNameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */; };
+		60BE21C92BB26DC9003AD4E8 /* resUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C82BB26DC9003AD4E8 /* resUseCase.swift */; };
 		60BE21CB2BB26F74003AD4E8 /* Ex+Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */; };
 		60BE21CD2BB2713C003AD4E8 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21CC2BB2713C003AD4E8 /* Direction.swift */; };
+		60BE21CF2BB298D3003AD4E8 /* Ex+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21CE2BB298D3003AD4E8 /* Ex+Config.swift */; };
+		60BE21D12BB29A30003AD4E8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D02BB29A30003AD4E8 /* Config.swift */; };
+		60BE21D32BB29B04003AD4E8 /* Ex+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */; };
+		60BE21D52BB2A31F003AD4E8 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D42BB2A31F003AD4E8 /* Utility.swift */; };
+		60BE21D72BB2A3E4003AD4E8 /* Ex+Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */; };
+		60BE21D92BB2ABCE003AD4E8 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D82BB2ABCE003AD4E8 /* Token.swift */; };
+		60BE21DB2BB2B111003AD4E8 /* Ex+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */; };
+		60BE21DD2BB2B1F8003AD4E8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DC2BB2B1F8003AD4E8 /* Log.swift */; };
+		60BE21DF2BB2B24B003AD4E8 /* Ex+Wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */; };
+		60BE21E32BB2B9B7003AD4E8 /* Wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21E22BB2B9B7003AD4E8 /* Wifi.swift */; };
+		60BE21E52BB2BB68003AD4E8 /* Ex+Plug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21E42BB2BB68003AD4E8 /* Ex+Plug.swift */; };
+		60BE21E72BB2BD26003AD4E8 /* Plug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21E62BB2BD26003AD4E8 /* Plug.swift */; };
+		60BE21EA2BB2BDB0003AD4E8 /* Ex+OTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21E92BB2BDB0003AD4E8 /* Ex+OTA.swift */; };
+		60BE21EC2BB2BEF0003AD4E8 /* OTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21EB2BB2BEF0003AD4E8 /* OTA.swift */; };
 		995AD7652990DB1F00810273 /* customEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD7642990DB1F00810273 /* customEnum.swift */; };
 		995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */; };
 		995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77E2992270300810273 /* AccessArrayResponseModel.swift */; };
@@ -111,9 +125,23 @@
 		60BE21C22BB26D0F003AD4E8 /* Ex+Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Time.swift"; sourceTree = "<group>"; };
 		60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+AdminCode.swift"; sourceTree = "<group>"; };
 		60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Name.swift"; sourceTree = "<group>"; };
-		60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resNameUseCase.swift; sourceTree = "<group>"; };
+		60BE21C82BB26DC9003AD4E8 /* resUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resUseCase.swift; sourceTree = "<group>"; };
 		60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Direction.swift"; sourceTree = "<group>"; };
 		60BE21CC2BB2713C003AD4E8 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
+		60BE21CE2BB298D3003AD4E8 /* Ex+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Config.swift"; sourceTree = "<group>"; };
+		60BE21D02BB29A30003AD4E8 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Utility.swift"; sourceTree = "<group>"; };
+		60BE21D42BB2A31F003AD4E8 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Token.swift"; sourceTree = "<group>"; };
+		60BE21D82BB2ABCE003AD4E8 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Log.swift"; sourceTree = "<group>"; };
+		60BE21DC2BB2B1F8003AD4E8 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Wifi.swift"; sourceTree = "<group>"; };
+		60BE21E22BB2B9B7003AD4E8 /* Wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wifi.swift; sourceTree = "<group>"; };
+		60BE21E42BB2BB68003AD4E8 /* Ex+Plug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Plug.swift"; sourceTree = "<group>"; };
+		60BE21E62BB2BD26003AD4E8 /* Plug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plug.swift; sourceTree = "<group>"; };
+		60BE21E92BB2BDB0003AD4E8 /* Ex+OTA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+OTA.swift"; sourceTree = "<group>"; };
+		60BE21EB2BB2BEF0003AD4E8 /* OTA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTA.swift; sourceTree = "<group>"; };
 		995AD7642990DB1F00810273 /* customEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customEnum.swift; sourceTree = "<group>"; };
 		995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportDeviceTypesResponseModel.swift; sourceTree = "<group>"; };
 		995AD77E2992270300810273 /* AccessArrayResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessArrayResponseModel.swift; sourceTree = "<group>"; };
@@ -214,6 +242,13 @@
 				60BE21BB2BB2699C003AD4E8 /* AdminCode.swift */,
 				60BE21BD2BB26C91003AD4E8 /* Name.swift */,
 				60BE21CC2BB2713C003AD4E8 /* Direction.swift */,
+				60BE21D02BB29A30003AD4E8 /* Config.swift */,
+				60BE21D42BB2A31F003AD4E8 /* Utility.swift */,
+				60BE21D82BB2ABCE003AD4E8 /* Token.swift */,
+				60BE21DC2BB2B1F8003AD4E8 /* Log.swift */,
+				60BE21E22BB2B9B7003AD4E8 /* Wifi.swift */,
+				60BE21E62BB2BD26003AD4E8 /* Plug.swift */,
+				60BE21EB2BB2BEF0003AD4E8 /* OTA.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -226,6 +261,13 @@
 				60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */,
 				60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */,
 				60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */,
+				60BE21CE2BB298D3003AD4E8 /* Ex+Config.swift */,
+				60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */,
+				60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */,
+				60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */,
+				60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */,
+				60BE21E42BB2BB68003AD4E8 /* Ex+Plug.swift */,
+				60BE21E92BB2BDB0003AD4E8 /* Ex+OTA.swift */,
 			);
 			path = "Extension+BLEService";
 			sourceTree = "<group>";
@@ -384,7 +426,7 @@
 				9992E51C2B6C758000E44AB0 /* N81ResponseModel.swift */,
 				9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */,
 				60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */,
-				60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */,
+				60BE21C82BB26DC9003AD4E8 /* resUseCase.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -479,15 +521,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60BE21CF2BB298D3003AD4E8 /* Ex+Config.swift in Sources */,
 				9992E5012B6B43AE00E44AB0 /* YearDayscheduleStructRequestModel.swift in Sources */,
 				99AEB51A29347D3400CCAC9C /* LogModel.swift in Sources */,
 				9982A20C293DBDBE00874279 /* DeviceStatusModel.swift in Sources */,
 				99AEB51229347CEE00CCAC9C /* UserCodeManageModel.swift in Sources */,
 				9992E4F92B6B397900E44AB0 /* SetupCredentialModel.swift in Sources */,
 				999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */,
+				60BE21D52BB2A31F003AD4E8 /* Utility.swift in Sources */,
 				60BE21B82BB25E70003AD4E8 /* Time.swift in Sources */,
 				99FE39E02B01FA9B00BAA99B /* plugStatusResponseModel.swift in Sources */,
 				995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */,
+				60BE21EA2BB2BDB0003AD4E8 /* Ex+OTA.swift in Sources */,
 				99AEB51429347CFD00CCAC9C /* UserCodeScheduleModel.swift in Sources */,
 				9992E5122B6B836800E44AB0 /* DeviceSetupModelN81.swift in Sources */,
 				9992E50E2B6B819A00E44AB0 /* DeviceSetupModelD5.swift in Sources */,
@@ -505,9 +550,10 @@
 				99CB54482993799300A5C06F /* DelAccessRequestModel.swift in Sources */,
 				9992E4FD2B6B401100E44AB0 /* CredentialStructRequestModel.swift in Sources */,
 				995AD78229922A7000810273 /* Uint8toBit.swift in Sources */,
+				60BE21D32BB29B04003AD4E8 /* Ex+Utility.swift in Sources */,
 				99AEB52629347EC000CCAC9C /* BluetoothToolModel.swift in Sources */,
 				9992E5052B6B455100E44AB0 /* CredentialRequestModel.swift in Sources */,
-				60BE21C92BB26DC9003AD4E8 /* resNameUseCase.swift in Sources */,
+				60BE21C92BB26DC9003AD4E8 /* resUseCase.swift in Sources */,
 				995AD7652990DB1F00810273 /* customEnum.swift in Sources */,
 				99CB543B29932B6B00A5C06F /* AccessDataResponseModel.swift in Sources */,
 				99AEB50629347C8800CCAC9C /* CommandService.swift in Sources */,
@@ -518,28 +564,35 @@
 				9992E5172B6B84E700E44AB0 /* DeviceSetupResultModelD4.swift in Sources */,
 				99AEB50C29347CBD00CCAC9C /* AddTokenModel.swift in Sources */,
 				99CB543E29933EDF00A5C06F /* AccessRequestModel.swift in Sources */,
+				60BE21D72BB2A3E4003AD4E8 /* Ex+Token.swift in Sources */,
 				995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */,
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
 				9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */,
 				9992E5242B6C788C00E44AB0 /* DeviceStatusModelN82.swift in Sources */,
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				9992E4FB2B6B3F9800E44AB0 /* SetupCredentialRequestModel.swift in Sources */,
+				60BE21D12BB29A30003AD4E8 /* Config.swift in Sources */,
 				9992E50B2B6B6FA300E44AB0 /* HashusercredentialModel.swift in Sources */,
 				995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */,
+				60BE21DD2BB2B1F8003AD4E8 /* Log.swift in Sources */,
 				999848BE2B63866700C6C0D2 /* RFMCURequestModel.swift in Sources */,
+				60BE21DB2BB2B111003AD4E8 /* Ex+Log.swift in Sources */,
 				997EA0152B1044D0003F82DB /* Delegate.swift in Sources */,
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
 				9992E51D2B6C758000E44AB0 /* N81ResponseModel.swift in Sources */,
 				9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */,
 				60BE21BE2BB26C91003AD4E8 /* Name.swift in Sources */,
 				60BE21C32BB26D0F003AD4E8 /* Ex+Time.swift in Sources */,
+				60BE21E72BB2BD26003AD4E8 /* Plug.swift in Sources */,
 				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
+				60BE21EC2BB2BEF0003AD4E8 /* OTA.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
 				99ACF2A829343D1B00B35773 /* SunionBluetoothTool.swift in Sources */,
 				9992E51B2B6B852F00E44AB0 /* DeviceSetupResultModelN80.swift in Sources */,
 				9992E5202B6C780200E44AB0 /* DeviceStatusModelD6.swift in Sources */,
 				99AEB50829347C9A00CCAC9C /* EditAdminCodeModel.swift in Sources */,
 				9992E4F32B6A26F000E44AB0 /* CredentialModel.swift in Sources */,
+				60BE21E32BB2B9B7003AD4E8 /* Wifi.swift in Sources */,
 				9992E4F12B69E55D00E44AB0 /* IndexUserCredentialRequestModel.swift in Sources */,
 				60BE21CD2BB2713C003AD4E8 /* Direction.swift in Sources */,
 				60BE21972BB109B9003AD4E8 /* resUserSupportedCountModel.swift in Sources */,
@@ -549,6 +602,7 @@
 				60BE21C72BB26D67003AD4E8 /* Ex+Name.swift in Sources */,
 				60BE21C12BB26CF3003AD4E8 /* Ex+DeviceStatus.swift in Sources */,
 				60BE21CB2BB26F74003AD4E8 /* Ex+Direction.swift in Sources */,
+				60BE21E52BB2BB68003AD4E8 /* Ex+Plug.swift in Sources */,
 				60BE21B22BB2564D003AD4E8 /* UseCase.swift in Sources */,
 				999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */,
 				99AEB50A29347CAA00CCAC9C /* DeviceSetupModel.swift in Sources */,
@@ -561,11 +615,13 @@
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
 				9992E5262B6C8C4C00E44AB0 /* UserableResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,
+				60BE21D92BB2ABCE003AD4E8 /* Token.swift in Sources */,
 				99AEB51E29347D5600CCAC9C /* UserCodeArrayModel.swift in Sources */,
 				9992E4E52B677C3A00E44AB0 /* UserCredentialModel.swift in Sources */,
 				99AEB51629347D1000CCAC9C /* SSIDModel.swift in Sources */,
 				9992E4E72B678E9900E44AB0 /* CredentialStructModel.swift in Sources */,
 				99AEB50E29347CCE00CCAC9C /* EditTokenModel.swift in Sources */,
+				60BE21DF2BB2B24B003AD4E8 /* Ex+Wifi.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

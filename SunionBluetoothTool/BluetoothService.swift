@@ -598,24 +598,7 @@ class BluetoothService: NSObject {
         let command =  CommandService.shared.createAction(with: .setConnection, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
-    
-    func wifiAutoUnlock(identity: String ) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .F1(identity), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func iswifiAutoUnlock(Identity: String) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        let command =  CommandService.shared.createAction(with: .F2(Identity), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
+
     
     // MARK: - OTA {
     func otaStatus(req: OTAStatusRequestModel) {
@@ -1068,6 +1051,9 @@ extension BluetoothService: CBPeripheralDelegate {
             let data = DeviceStatusModel()
             data.AF = model
             self.delegate?.commandState(value: .deviceStatus(data))
+            var res = resUtilityUseCase()
+            res.alert = model
+            self.delegate?.commandState(value: .v3utility(res))
         default:
             break
         }
@@ -1083,7 +1069,7 @@ extension BluetoothService: CBPeripheralDelegate {
             let data = DeviceStatusModel()
             data.D6 = model
             self.delegate?.commandState(value: .deviceStatus(data))
-        case .A2(let model), .F1(let model):
+        case .A2(let model):
             commandType = .A
             // 保留藍芽資料
             self.delegate?.updateData(value: self.data)
@@ -1524,15 +1510,20 @@ extension BluetoothService: CBPeripheralDelegate {
             case .setPassword:
                 self.connectWifi()
             case .setConnection(let bool):
+              
                 self.delegate?.commandState(value: .connectWifi(bool))
             case .setMQTT(let bool):
+           
                 self.delegate?.commandState(value: .connectMQTT(bool))
             case .setCloud(let bool):
+               
                 self.delegate?.commandState(value: .connectClould(bool))
-            case .F2(let bool):
+            case .F4(let bool):
+           
                 self.delegate?.commandState(value: .isWifiAutonunlock(bool))
             case .EF(_):
                 self.delegate?.commandState(value: .connectWifi(nil))
+              
             default:
                 break
             }
@@ -1763,10 +1754,159 @@ extension BluetoothService: CBPeripheralDelegate {
             default:
                 break
             }
-          
+            
+        case .v3Config:
+            switch response {
+            case .N80(let model):
+                let res  = resConfigUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Config(res))
+            case .N81(let model):
+                let res =  resConfigUseCase()
+                res.set = model
+                self.delegate?.commandState(value: .v3Config(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Config(nil))
+            default:
+                break
+            }
+            
+        case .v3utility:
+            
+            switch response {
+            case .C2(let model):
+                let res  = resUtilityUseCase()
+                res.version = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .CE(let model):
+                let res  = resUtilityUseCase()
+                res.factoryReset = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .CF(let model):
+                let res  = resUtilityUseCase()
+                res.factoryReset = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .N87(let model):
+                let res  = resUtilityUseCase()
+                res.matter = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3utility(nil))
+            default:
+                break
+            }
+            
+        case .v3Token:
+            
+            switch response {
+            case .E4(let model):
+                let res  = resTokenUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3Token(res))
+            case .E5(let model):
+                let res  = resTokenUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Token(res))
+            case .E6(let model):
+                let res  = resTokenUseCase()
+                res.isCreate = model.isSuccess
+                self.delegate?.commandState(value: .v3Token(res))
+            case .E7(let model):
+                let res  = resTokenUseCase()
+                res.isEdit = model
+                self.delegate?.commandState(value: .v3Token(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Token(nil))
+            default:
+                break
+            }
+            
+        case .v3Log:
+            switch response {
+            case .E0(let model):
+                let res  = resLogUseCase()
+                res.count = model
+                self.delegate?.commandState(value: .v3Log(res))
+            case .E1(let model):
+                let res  = resLogUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Log(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Log(nil))
+            default:
+                break
+            }
+            
+        case .v3Wifi:
+            switch response {
+            case .setSSID:
+                self.setWifiPassword()
+            case .setPassword:
+                self.connectWifi()
+            case .setConnection(let bool):
+                let res = resWifiUseCase()
+                res.wifi = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+              
+            case .setMQTT(let bool):
+                let res = resWifiUseCase()
+                res.MQTT = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+            
+            case .setCloud(let bool):
+                let res = resWifiUseCase()
+                res.Clould = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+                
+            case .F3(let model):
+                self.delegate?.updateData(value: self.data)
+                let res = resWifiUseCase()
+                res.status = model
+                self.delegate?.commandState(value: .v3Wifi(res))
+           
+            case .F4(let bool):
+                let res = resWifiUseCase()
+                res.autoUnlcok = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+        
+            case .EF(_):
+           
+                self.delegate?.commandState(value: .v3Wifi(nil))
+            default:
+                break
+            }
+            
+        case .v3Plug:
+            switch response {
+            case .B0(let model):
+                self.delegate?.commandState(value: .v3Plug(model))
+            case .B1(let model):
+                self.delegate?.commandState(value: .v3Plug(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Plug(nil))
+            default:
+                break
+            }
+        case .v3OTA:
+            switch response {
+            case .C3(let model):
+                let res = resOTAUseCase()
+                res.status = model
+                self.delegate?.commandState(value: .v3OTA(res))
+            case .C4(let model):
+                let res = resOTAUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3OTA(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3OTA(nil))
+            default:
+                break
+            }
         default:
             break
         }
+        
+    
 
     }
     
