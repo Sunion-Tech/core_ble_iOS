@@ -17,11 +17,12 @@ public class SunionBluetoothTool: NSObject {
     var bluetoothService: BluetoothService?
     public var delegate: SunionBluetoothToolDelegate?
 
- 
     public var status: bluetoothState?
+    
+    public lazy var UseCase: useCase = {
+        return useCase(tool: self)
+    }()
 
-    
-    
    
     // MARK: - QrCode
     public func decodeQrCode(barcodeKey: String, qrCode: String) -> BluetoothToolModel? {
@@ -33,6 +34,11 @@ public class SunionBluetoothTool: NSObject {
         
         return nil
     }
+    
+    func qrCode(value: String) -> String? {
+        return value.count == 16 ? value : nil
+    }
+    
     
     private func fetchPoolConfig(_ jsonConfig:JSON) -> BluetoothToolModel {
         let qrService = QrCodeService(data: jsonConfig)
@@ -59,14 +65,11 @@ public class SunionBluetoothTool: NSObject {
         return model
     }
     
-
- 
-    
-  
     
     // MARK: - BlueTooth
     public func initBluetooth(macAddress: String?, aes1Key: [UInt8], token: [UInt8], v3udid: String?) {
         bluetoothService = BluetoothService(delegate: self, mackAddress: macAddress, aes1Key: aes1Key, token: token, udid: v3udid)
+     
     }
     
     public func connectWithIdentifier(value: String) {
@@ -464,6 +467,16 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.isMatter(value: model)
         case .userSupportedCount(let model):
             delegate?.usersupportedCount(value: model)
+            
+            // MARK: -V3
+        case.v3deviceStatus(let model):
+            delegate?.v3deviceStatus(value: model)
+        case .v3time(let model):
+            delegate?.v3time(vlaue: model)
+        case .v3adminCode(let model):
+            delegate?.v3adminCode(vlaue: model)
+        case .v3Direction(let model):
+            delegate?.v3Direction(valu: model)
         }
     }
     

@@ -802,6 +802,10 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+ 
+    
+        
+    
     
 
 }
@@ -1709,7 +1713,56 @@ extension BluetoothService: CBPeripheralDelegate {
             default:
                 break
             }
-        
+            
+        // MARK: - V3
+        case .v3deviceStatus:
+            switch response {
+            case .N82(let model):
+                self.delegate?.commandState(value: .v3deviceStatus(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3deviceStatus(nil))
+            default:
+                break
+            }
+            
+        case .v3time:
+            
+            switch response {
+            case .D3(let model):
+                self.delegate?.commandState(value: .v3time(model))
+            case .D9(let model):
+                self.delegate?.commandState(value: .v3time(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3time(nil))
+            default:
+                break
+            }
+            
+        case .v3Name:
+            switch response {
+            case .D0(let model):
+                let res = resNameUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Name(res))
+            case .D1(let model):
+                let res = resNameUseCase()
+                res.set = model
+                self.delegate?.commandState(value: .v3Name(res))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Name(nil))
+            default:
+                break
+            }
+            
+        case .v3Direction:
+            switch response {
+            case .N82(let model):
+                self.delegate?.commandState(value: .v3Direction(model))
+            case .EF(_):
+                self.delegate?.commandState(value: .v3Direction(nil))
+            default:
+                break
+            }
           
         default:
             break

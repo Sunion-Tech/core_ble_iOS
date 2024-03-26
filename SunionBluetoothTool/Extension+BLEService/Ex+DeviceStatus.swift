@@ -1,0 +1,22 @@
+//
+//  Ex+DeviceStatus.swift
+//  SunionBluetoothTool
+//
+//  Created by Cthiisway on 2024/3/26.
+//
+
+import Foundation
+
+extension BluetoothService {
+    
+    func V3deviceStatus() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .v3deviceStatus(nil)
+        let command =  CommandService.shared.createAction(with: .N82, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+
+}

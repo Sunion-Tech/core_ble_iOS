@@ -8,8 +8,8 @@
 import Foundation
 
 public protocol SunionBluetoothToolDelegate: AnyObject {
- 
-
+    
+    
     // MARK: - Bluetooth
     func BluetoothState(State: bluetoothState)
     func DeviceStatus(value: DeviceStatusModel?)
@@ -63,7 +63,15 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func userAble(value: UserableResponseModel?)
     func isMatter(value: Bool?)
     func usersupportedCount(value: resUserSupportedCountModel?)
-   
+    
+    // MARK: - V3
+    
+    func v3deviceStatus(value: DeviceStatusModelN82?)
+    func v3time(vlaue: Bool?)
+    func v3adminCode(vlaue: Bool?)
+    func v3Name(value: resNameUseCase?)
+    func v3Direction(valu: DeviceStatusModelN82?)
+    
 }
 
 extension SunionBluetoothToolDelegate {
@@ -121,4 +129,10 @@ extension SunionBluetoothToolDelegate {
     public func userAble(value: UserableResponseModel?) {}
     public func isMatter(value: Bool?) {}
     public func usersupportedCount(value: resUserSupportedCountModel?) {}
+    
+    public func v3deviceStatus(value: DeviceStatusModelN82?) {}
+    public func v3time(vlaue: Bool?) {}
+    public func v3adminCode(vlaue: Bool?) {}
+    public func v3Name(value: resNameUseCase?) {}
+    public func v3Direction(valu: DeviceStatusModelN82?) {}
 }

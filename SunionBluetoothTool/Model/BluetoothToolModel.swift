@@ -22,4 +22,5 @@ public class BluetoothToolModel {
     public var RFVersion: String?
     public var bleName: String?
     public var identifier: String?
+    public var uuid: String?
 }

@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		60BE21972BB109B9003AD4E8 /* resUserSupportedCountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */; };
+		60BE21AD2BB24EA5003AD4E8 /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21AC2BB24EA5003AD4E8 /* DeviceStatus.swift */; };
+		60BE21B22BB2564D003AD4E8 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21B12BB2564D003AD4E8 /* UseCase.swift */; };
+		60BE21B82BB25E70003AD4E8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21B72BB25E70003AD4E8 /* Time.swift */; };
+		60BE21BC2BB2699C003AD4E8 /* AdminCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21BB2BB2699C003AD4E8 /* AdminCode.swift */; };
+		60BE21BE2BB26C91003AD4E8 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21BD2BB26C91003AD4E8 /* Name.swift */; };
+		60BE21C12BB26CF3003AD4E8 /* Ex+DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C02BB26CF3003AD4E8 /* Ex+DeviceStatus.swift */; };
+		60BE21C32BB26D0F003AD4E8 /* Ex+Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C22BB26D0F003AD4E8 /* Ex+Time.swift */; };
+		60BE21C52BB26D3F003AD4E8 /* Ex+AdminCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */; };
+		60BE21C72BB26D67003AD4E8 /* Ex+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */; };
+		60BE21C92BB26DC9003AD4E8 /* resNameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */; };
+		60BE21CB2BB26F74003AD4E8 /* Ex+Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */; };
+		60BE21CD2BB2713C003AD4E8 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21CC2BB2713C003AD4E8 /* Direction.swift */; };
 		995AD7652990DB1F00810273 /* customEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD7642990DB1F00810273 /* customEnum.swift */; };
 		995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */; };
 		995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77E2992270300810273 /* AccessArrayResponseModel.swift */; };
@@ -90,6 +102,18 @@
 
 /* Begin PBXFileReference section */
 		60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resUserSupportedCountModel.swift; sourceTree = "<group>"; };
+		60BE21AC2BB24EA5003AD4E8 /* DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
+		60BE21B12BB2564D003AD4E8 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
+		60BE21B72BB25E70003AD4E8 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		60BE21BB2BB2699C003AD4E8 /* AdminCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCode.swift; sourceTree = "<group>"; };
+		60BE21BD2BB26C91003AD4E8 /* Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Name.swift; sourceTree = "<group>"; };
+		60BE21C02BB26CF3003AD4E8 /* Ex+DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+DeviceStatus.swift"; sourceTree = "<group>"; };
+		60BE21C22BB26D0F003AD4E8 /* Ex+Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Time.swift"; sourceTree = "<group>"; };
+		60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+AdminCode.swift"; sourceTree = "<group>"; };
+		60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Name.swift"; sourceTree = "<group>"; };
+		60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resNameUseCase.swift; sourceTree = "<group>"; };
+		60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Direction.swift"; sourceTree = "<group>"; };
+		60BE21CC2BB2713C003AD4E8 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		995AD7642990DB1F00810273 /* customEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customEnum.swift; sourceTree = "<group>"; };
 		995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportDeviceTypesResponseModel.swift; sourceTree = "<group>"; };
 		995AD77E2992270300810273 /* AccessArrayResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessArrayResponseModel.swift; sourceTree = "<group>"; };
@@ -182,6 +206,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60BE21AE2BB25027003AD4E8 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				60BE21AC2BB24EA5003AD4E8 /* DeviceStatus.swift */,
+				60BE21B72BB25E70003AD4E8 /* Time.swift */,
+				60BE21BB2BB2699C003AD4E8 /* AdminCode.swift */,
+				60BE21BD2BB26C91003AD4E8 /* Name.swift */,
+				60BE21CC2BB2713C003AD4E8 /* Direction.swift */,
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		60BE21BF2BB26CDD003AD4E8 /* Extension+BLEService */ = {
+			isa = PBXGroup;
+			children = (
+				60BE21C02BB26CF3003AD4E8 /* Ex+DeviceStatus.swift */,
+				60BE21C22BB26D0F003AD4E8 /* Ex+Time.swift */,
+				60BE21C42BB26D3F003AD4E8 /* Ex+AdminCode.swift */,
+				60BE21C62BB26D67003AD4E8 /* Ex+Name.swift */,
+				60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */,
+			);
+			path = "Extension+BLEService";
+			sourceTree = "<group>";
+		};
 		995AD78029922A5600810273 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,11 +291,14 @@
 		99ACF28729343BA300B35773 /* SunionBluetoothTool */ = {
 			isa = PBXGroup;
 			children = (
+				60BE21BF2BB26CDD003AD4E8 /* Extension+BLEService */,
 				995AD78029922A5600810273 /* Tools */,
+				60BE21AE2BB25027003AD4E8 /* UseCase */,
 				99AEB50029347C4A00CCAC9C /* Model */,
 				99ACF28829343BA300B35773 /* SunionBluetoothTool.h */,
 				99ACF2A729343D1A00B35773 /* SunionBluetoothTool.swift */,
 				99AEB4FC29347B4900CCAC9C /* BluetoothService.swift */,
+				60BE21B12BB2564D003AD4E8 /* UseCase.swift */,
 				9982A26F294312A500874279 /* QrCodeService.swift */,
 				99AEB52329347D9200CCAC9C /* Extension.swift */,
 				9982A20329398C8D00874279 /* Enum.swift */,
@@ -333,6 +384,7 @@
 				9992E51C2B6C758000E44AB0 /* N81ResponseModel.swift */,
 				9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */,
 				60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */,
+				60BE21C82BB26DC9003AD4E8 /* resNameUseCase.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -433,6 +485,7 @@
 				99AEB51229347CEE00CCAC9C /* UserCodeManageModel.swift in Sources */,
 				9992E4F92B6B397900E44AB0 /* SetupCredentialModel.swift in Sources */,
 				999C953B2AD638380063BD1F /* OTAResponseModel.swift in Sources */,
+				60BE21B82BB25E70003AD4E8 /* Time.swift in Sources */,
 				99FE39E02B01FA9B00BAA99B /* plugStatusResponseModel.swift in Sources */,
 				995AD78429923BF600810273 /* SearchAccessRequestModel.swift in Sources */,
 				99AEB51429347CFD00CCAC9C /* UserCodeScheduleModel.swift in Sources */,
@@ -440,18 +493,21 @@
 				9992E50E2B6B819A00E44AB0 /* DeviceSetupModelD5.swift in Sources */,
 				99AEB51C29347D4500CCAC9C /* AddTokenResult.swift in Sources */,
 				9992E4F72B6B26F300E44AB0 /* SearchCredentialRequestModel.swift in Sources */,
+				60BE21BC2BB2699C003AD4E8 /* AdminCode.swift in Sources */,
 				9992E5092B6B6F3300E44AB0 /* HashusercredentialRequestModel.swift in Sources */,
 				99AEB50429347C7600CCAC9C /* AESModel.swift in Sources */,
 				99CB54442993742700A5C06F /* SetupAccessRequestModel.swift in Sources */,
 				9992E4F52B6A334700E44AB0 /* CredentialDetailStructModel.swift in Sources */,
 				99CB544A29937A1600A5C06F /* DelAccessResponseModel.swift in Sources */,
 				99AEB51029347CDE00CCAC9C /* TokenModel.swift in Sources */,
+				60BE21C52BB26D3F003AD4E8 /* Ex+AdminCode.swift in Sources */,
 				9992E5072B6B45E100E44AB0 /* CredentialDetailStructRequestModel.swift in Sources */,
 				99CB54482993799300A5C06F /* DelAccessRequestModel.swift in Sources */,
 				9992E4FD2B6B401100E44AB0 /* CredentialStructRequestModel.swift in Sources */,
 				995AD78229922A7000810273 /* Uint8toBit.swift in Sources */,
 				99AEB52629347EC000CCAC9C /* BluetoothToolModel.swift in Sources */,
 				9992E5052B6B455100E44AB0 /* CredentialRequestModel.swift in Sources */,
+				60BE21C92BB26DC9003AD4E8 /* resNameUseCase.swift in Sources */,
 				995AD7652990DB1F00810273 /* customEnum.swift in Sources */,
 				99CB543B29932B6B00A5C06F /* AccessDataResponseModel.swift in Sources */,
 				99AEB50629347C8800CCAC9C /* CommandService.swift in Sources */,
@@ -475,6 +531,8 @@
 				9982A20429398C8D00874279 /* Enum.swift in Sources */,
 				9992E51D2B6C758000E44AB0 /* N81ResponseModel.swift in Sources */,
 				9992E4EB2B6797D900E44AB0 /* YearDayscheduleStructModel.swift in Sources */,
+				60BE21BE2BB26C91003AD4E8 /* Name.swift in Sources */,
+				60BE21C32BB26D0F003AD4E8 /* Ex+Time.swift in Sources */,
 				999C953D2AD641B60063BD1F /* OTADataRequsetModel.swift in Sources */,
 				99AEB52029347D6C00CCAC9C /* UserCodeModelResult.swift in Sources */,
 				99ACF2A829343D1B00B35773 /* SunionBluetoothTool.swift in Sources */,
@@ -483,15 +541,21 @@
 				99AEB50829347C9A00CCAC9C /* EditAdminCodeModel.swift in Sources */,
 				9992E4F32B6A26F000E44AB0 /* CredentialModel.swift in Sources */,
 				9992E4F12B69E55D00E44AB0 /* IndexUserCredentialRequestModel.swift in Sources */,
+				60BE21CD2BB2713C003AD4E8 /* Direction.swift in Sources */,
 				60BE21972BB109B9003AD4E8 /* resUserSupportedCountModel.swift in Sources */,
 				9992E4E92B67933000E44AB0 /* WeekDayscheduleStructModel.swift in Sources */,
 				99AEB52429347D9200CCAC9C /* Extension.swift in Sources */,
 				99AEB52229347D7C00CCAC9C /* apiResDeivceAccessCodeListAccessCode.swift in Sources */,
+				60BE21C72BB26D67003AD4E8 /* Ex+Name.swift in Sources */,
+				60BE21C12BB26CF3003AD4E8 /* Ex+DeviceStatus.swift in Sources */,
+				60BE21CB2BB26F74003AD4E8 /* Ex+Direction.swift in Sources */,
+				60BE21B22BB2564D003AD4E8 /* UseCase.swift in Sources */,
 				999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */,
 				99AEB50A29347CAA00CCAC9C /* DeviceSetupModel.swift in Sources */,
 				999C953F2AD643750063BD1F /* OTADataResponseModel.swift in Sources */,
 				9982A270294312A500874279 /* QrCodeService.swift in Sources */,
 				9992E5102B6B826200E44AB0 /* DeviceSetupModelA1.swift in Sources */,
+				60BE21AD2BB24EA5003AD4E8 /* DeviceStatus.swift in Sources */,
 				9992E5192B6B850200E44AB0 /* DeviceSetupResultModelA0.swift in Sources */,
 				9992E4FF2B6B430B00E44AB0 /* WeekDayscheduleStructRequestModel.swift in Sources */,
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
