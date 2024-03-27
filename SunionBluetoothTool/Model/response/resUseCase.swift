@@ -7,19 +7,31 @@
 
 import Foundation
 
+public class resTimeUseCase {
+    public var isSavedTime: Bool?
+    public var isSavedTimeZone: Bool?
+}
+
+public class resAdminCodeUseCase {
+    public var isCreated: Bool?
+    public var isEdited: Bool?
+    public var isExisted: Bool?
+}
+
 public class resNameUseCase {
-    public var set: Bool?
+    public var isConfigured: Bool?
     public var data: String?
 }
 
 public class resConfigUseCase {
-    public var set: N81ResponseModel?
+    public var isConfigured: Bool?
     public var data: DeviceSetupResultModelN80?
 }
 
 public class resUtilityUseCase {
     public var version: RFMCUversionModel?
-    public var factoryReset: Bool?
+    public var isFactoryReset: Bool?
+    public var isPlugFactoryReset: Bool?
     public var isMatter: Bool?
     public var alert: AlertResponseModel?
 }
@@ -27,8 +39,9 @@ public class resUtilityUseCase {
 public class resTokenUseCase {
     public var array: [Int]?
     public var data: TokenModel?
-    public var isCreated: Bool?
+    public var created: AddTokenResult?
     public var isEdited: Bool?
+    public var isDeleted: Bool?
 }
 
 public class resLogUseCase {
@@ -39,10 +52,10 @@ public class resLogUseCase {
 public class resWifiUseCase {
     public var list: SSIDModel?
     public var status: DeviceStatusModelN82?
-    public var wifi: Bool?
-    public var MQTT: Bool?
-    public var clould: Bool?
-    public var autoUnlcok: Bool?
+    public var isWifi: Bool?
+    public var isMQTT: Bool?
+    public var isClould: Bool?
+    public var isAutoUnlcok: Bool?
 }
 
 public class resOTAUseCase {

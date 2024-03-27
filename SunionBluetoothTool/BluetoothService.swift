@@ -1704,7 +1704,11 @@ extension BluetoothService: CBPeripheralDelegate {
             default:
                 break
             }
-            
+
+        default:
+            break
+        }
+        
         // MARK: - V3
             
             switch response {
@@ -1713,9 +1717,26 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3deviceStatus(model))
                 // time
             case .D3(let model):
-                self.delegate?.commandState(value: .v3time(model))
+                let res = resTimeUseCase()
+                res.isSavedTime = model
+                self.delegate?.commandState(value: .v3time(res))
             case .D9(let model):
-                self.delegate?.commandState(value: .v3time(model))
+                let res = resTimeUseCase()
+                res.isSavedTimeZone = model
+                self.delegate?.commandState(value: .v3time(res))
+                // admincode
+            case .C7(let model):
+                let res = resAdminCodeUseCase()
+                res.isCreated = model
+                self.delegate?.commandState(value: .v3adminCode(res))
+            case .C8(let model):
+                let res = resAdminCodeUseCase()
+                res.isEdited = model
+                self.delegate?.commandState(value: .v3adminCode(res))
+            case .EF(let model):
+                let res = resAdminCodeUseCase()
+                res.isExisted = model == .setupSuccess
+                self.delegate?.commandState(value: .v3adminCode(res))
                 // name
             case .D0(let model):
                 let res = resNameUseCase()
@@ -1723,7 +1744,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Name(res))
             case .D1(let model):
                 let res = resNameUseCase()
-                res.set = model
+                res.isConfigured = model
                 self.delegate?.commandState(value: .v3Name(res))
                 // config
             case .N80(let model):
@@ -1732,7 +1753,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Config(res))
             case .N81(let model):
                 let res =  resConfigUseCase()
-                res.set = model
+                res.isConfigured = model.isSuccess
                 self.delegate?.commandState(value: .v3Config(res))
                 // utility
             case .C2(let model):
@@ -1741,11 +1762,11 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3utility(res))
             case .CE(let model):
                 let res  = resUtilityUseCase()
-                res.factoryReset = model
+                res.isFactoryReset = model
                 self.delegate?.commandState(value: .v3utility(res))
             case .CF(let model):
                 let res  = resUtilityUseCase()
-                res.factoryReset = model
+                res.isPlugFactoryReset = model
                 self.delegate?.commandState(value: .v3utility(res))
             case .N87(let model):
                 let res  = resUtilityUseCase()
@@ -1762,11 +1783,15 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Token(res))
             case .E6(let model):
                 let res  = resTokenUseCase()
-                res.isCreated = model.isSuccess
+                res.created = model
                 self.delegate?.commandState(value: .v3Token(res))
             case .E7(let model):
                 let res  = resTokenUseCase()
                 res.isEdited = model
+                self.delegate?.commandState(value: .v3Token(res))
+            case .E8(let model):
+                let res = resTokenUseCase()
+                res.isDeleted = model
                 self.delegate?.commandState(value: .v3Token(res))
                 // log
             case .E0(let model):
@@ -1784,15 +1809,15 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.connectWifi()
             case .setConnection(let bool):
                 let res = resWifiUseCase()
-                res.wifi = bool
+                res.isWifi = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
             case .setMQTT(let bool):
                 let res = resWifiUseCase()
-                res.MQTT = bool
+                res.isMQTT = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
             case .setCloud(let bool):
                 let res = resWifiUseCase()
-                res.clould = bool
+                res.isClould = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
             case .F3(let model):
                 self.delegate?.updateData(value: self.data)
@@ -1801,7 +1826,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Wifi(res))
             case .F4(let bool):
                 let res = resWifiUseCase()
-                res.autoUnlcok = bool
+                res.isAutoUnlcok = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
                 // plug
             case .B0(let model):
@@ -1842,18 +1867,26 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resUserUseCase()
                 res.isDeleted = model.isSuccess
                 self.delegate?.commandState(value: .v3User(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3utility(nil))
+            case .N94(let model):
+                let res = resCredentialUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N95(let model):
+                let res = resCredentialUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N96(let model):
+                let res = resCredentialUseCase()
+                res.isCreatedorEdited = model.isSuccess
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N98(let model):
+                let res = resCredentialUseCase()
+                res.isDeleted = model.isSuccess
+                self.delegate?.commandState(value: .v3Credential(res))
+          
             default:
                 break
             }
-            
-      
-        default:
-            break
-        }
-        
-    
 
     }
     

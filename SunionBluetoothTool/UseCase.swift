@@ -31,6 +31,10 @@ public class useCase  {
         return Name(tool: self)
     }()
     
+    public lazy var direction: Direction = {
+        return Direction(tool: self)
+    }()
+
     public lazy var config: Config = {
         return Config(tool: self)
     }()

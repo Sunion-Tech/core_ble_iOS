@@ -41,4 +41,16 @@ extension BluetoothService {
         let command =  CommandService.shared.createAction(with: .E7(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+    func V3delToken(model: TokenModel, ownerPinCode: String? = nil) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        var digit: [UInt8]?
+        if let ownerPinCode = ownerPinCode {
+            digit = ownerPinCode.compactMap{Int(String($0))}.map{UInt8($0)}
+        }
+        let command =  CommandService.shared.createAction(with: .E8(model, digit), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
 }

@@ -67,8 +67,8 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     // MARK: - V3
     
     func v3deviceStatus(value: DeviceStatusModelN82?)
-    func v3time(vlaue: Bool?)
-    func v3adminCode(vlaue: Bool?)
+    func v3time(value: resTimeUseCase?)
+    func v3adminCode(value: resAdminCodeUseCase?)
     func v3Name(value: resNameUseCase?)
     func v3Config(value: resConfigUseCase?)
     func v3utility(value: resUtilityUseCase?)
@@ -139,8 +139,8 @@ extension SunionBluetoothToolDelegate {
     public func usersupportedCount(value: resUserSupportedCountModel?) {}
     
     public func v3deviceStatus(value: DeviceStatusModelN82?) {}
-    public func v3time(vlaue: Bool?) {}
-    public func v3adminCode(vlaue: Bool?) {}
+    public func v3time(value: resTimeUseCase?) {}
+    public func v3adminCode(value: resAdminCodeUseCase?) {}
     public func v3Name(value: resNameUseCase?) {}
     public func v3Config(value: resConfigUseCase?) {}
     public func v3utility(value: resUtilityUseCase?) {}

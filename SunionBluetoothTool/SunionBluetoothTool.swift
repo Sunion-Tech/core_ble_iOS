@@ -466,9 +466,9 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
         case.v3deviceStatus(let model):
             delegate?.v3deviceStatus(value: model)
         case .v3time(let model):
-            delegate?.v3time(vlaue: model)
+            delegate?.v3time(value: model)
         case .v3adminCode(let model):
-            delegate?.v3adminCode(vlaue: model)
+            delegate?.v3adminCode(value: model)
         case .v3Config(let model):
             delegate?.v3Config(value: model)
         case .v3utility(let model):

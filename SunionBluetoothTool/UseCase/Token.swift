@@ -32,5 +32,9 @@ public class Token  {
     public func edit(model: EditTokenModel) {
         tool?.tool?.bluetoothService?.V3editToken(model: model)
     }
+    
+    public func delete(model: TokenModel) {
+        tool?.tool?.bluetoothService?.V3delToken(model: model)
+    }
 
 }

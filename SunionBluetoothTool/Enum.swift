@@ -81,8 +81,8 @@ public enum commandState {
     // v3
     
     case v3deviceStatus(DeviceStatusModelN82?)
-    case v3time(Bool?)
-    case v3adminCode(Bool?)
+    case v3time(resTimeUseCase?)
+    case v3adminCode(resAdminCodeUseCase?)
     case v3Name(resNameUseCase?)
     case v3Config(resConfigUseCase?)
     case v3utility(resUtilityUseCase?)
