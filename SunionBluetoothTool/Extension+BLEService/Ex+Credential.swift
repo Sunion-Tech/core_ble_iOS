@@ -1,44 +1,45 @@
 //
-//  Ex+Token.swift
+//  Ex+Credential.swift
 //  SunionBluetoothTool
 //
-//  Created by Cthiisway on 2024/3/26.
+//  Created by Cthiisway on 2024/3/27.
 //
 
 import Foundation
 
 extension BluetoothService {
     
-    func V3getTokenArray() {
+    func V3getCredientialArray() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .E4, key: aes2key!)
+        let command =  CommandService.shared.createAction(with: .N94, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-
-    func V3getToken(position: Int) {
+    func V3searchCredential(model: SearchCredentialRequestModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .E5(position), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-
-    func V3createToken(model: AddTokenModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        let command =  CommandService.shared.createAction(with: .E6(model), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: .N95(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func V3editToken(model: EditTokenModel) {
+    func V3credentialAction(model: CredentialRequestModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .E7(model), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: .N96(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+    func V3delCredential(position: Int) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        let model = IndexUserCredentialRequestModel(index: position)
+        let command =  CommandService.shared.createAction(with: .N98(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
 }

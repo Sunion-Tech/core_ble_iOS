@@ -13,7 +13,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3OTA(nil)
         let command =  CommandService.shared.createAction(with: .C3(req), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -22,7 +21,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3OTA(nil)
         let command =  CommandService.shared.createAction(with: .C4(req), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }

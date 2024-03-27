@@ -1706,31 +1706,17 @@ extension BluetoothService: CBPeripheralDelegate {
             }
             
         // MARK: - V3
-        case .v3deviceStatus:
+            
             switch response {
+                // deviceStatus\direction
             case .N82(let model):
                 self.delegate?.commandState(value: .v3deviceStatus(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3deviceStatus(nil))
-            default:
-                break
-            }
-            
-        case .v3time:
-            
-            switch response {
+                // time
             case .D3(let model):
                 self.delegate?.commandState(value: .v3time(model))
             case .D9(let model):
                 self.delegate?.commandState(value: .v3time(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3time(nil))
-            default:
-                break
-            }
-            
-        case .v3Name:
-            switch response {
+                // name
             case .D0(let model):
                 let res = resNameUseCase()
                 res.data = model
@@ -1739,24 +1725,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resNameUseCase()
                 res.set = model
                 self.delegate?.commandState(value: .v3Name(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Name(nil))
-            default:
-                break
-            }
-            
-        case .v3Direction:
-            switch response {
-            case .N82(let model):
-                self.delegate?.commandState(value: .v3Direction(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Direction(nil))
-            default:
-                break
-            }
-            
-        case .v3Config:
-            switch response {
+                // config
             case .N80(let model):
                 let res  = resConfigUseCase()
                 res.data = model
@@ -1765,15 +1734,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res =  resConfigUseCase()
                 res.set = model
                 self.delegate?.commandState(value: .v3Config(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Config(nil))
-            default:
-                break
-            }
-            
-        case .v3utility:
-            
-            switch response {
+                // utility
             case .C2(let model):
                 let res  = resUtilityUseCase()
                 res.version = model
@@ -1788,17 +1749,9 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3utility(res))
             case .N87(let model):
                 let res  = resUtilityUseCase()
-                res.matter = model
+                res.isMatter = model
                 self.delegate?.commandState(value: .v3utility(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3utility(nil))
-            default:
-                break
-            }
-            
-        case .v3Token:
-            
-            switch response {
+                // token
             case .E4(let model):
                 let res  = resTokenUseCase()
                 res.array = model
@@ -1809,20 +1762,13 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Token(res))
             case .E6(let model):
                 let res  = resTokenUseCase()
-                res.isCreate = model.isSuccess
+                res.isCreated = model.isSuccess
                 self.delegate?.commandState(value: .v3Token(res))
             case .E7(let model):
                 let res  = resTokenUseCase()
-                res.isEdit = model
+                res.isEdited = model
                 self.delegate?.commandState(value: .v3Token(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Token(nil))
-            default:
-                break
-            }
-            
-        case .v3Log:
-            switch response {
+                // log
             case .E0(let model):
                 let res  = resLogUseCase()
                 res.count = model
@@ -1831,14 +1777,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res  = resLogUseCase()
                 res.data = model
                 self.delegate?.commandState(value: .v3Log(res))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Log(nil))
-            default:
-                break
-            }
-            
-        case .v3Wifi:
-            switch response {
+                // wifi
             case .setSSID:
                 self.setWifiPassword()
             case .setPassword:
@@ -1847,48 +1786,29 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resWifiUseCase()
                 res.wifi = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
-              
             case .setMQTT(let bool):
                 let res = resWifiUseCase()
                 res.MQTT = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
-            
             case .setCloud(let bool):
                 let res = resWifiUseCase()
-                res.Clould = bool
+                res.clould = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
-                
             case .F3(let model):
                 self.delegate?.updateData(value: self.data)
                 let res = resWifiUseCase()
                 res.status = model
                 self.delegate?.commandState(value: .v3Wifi(res))
-           
             case .F4(let bool):
                 let res = resWifiUseCase()
                 res.autoUnlcok = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
-        
-            case .EF(_):
-           
-                self.delegate?.commandState(value: .v3Wifi(nil))
-            default:
-                break
-            }
-            
-        case .v3Plug:
-            switch response {
+                // plug
             case .B0(let model):
                 self.delegate?.commandState(value: .v3Plug(model))
             case .B1(let model):
                 self.delegate?.commandState(value: .v3Plug(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .v3Plug(nil))
-            default:
-                break
-            }
-        case .v3OTA:
-            switch response {
+                // ota
             case .C3(let model):
                 let res = resOTAUseCase()
                 res.status = model
@@ -1897,11 +1817,38 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resOTAUseCase()
                 res.data = model
                 self.delegate?.commandState(value: .v3OTA(res))
+                // user
+            case .N85(let model):
+                let res = resUserUseCase()
+                res.able = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N86(let model):
+                let res = resUserUseCase()
+                res.supportedCounts = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N90(let model):
+                let res = resUserUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N91(let model):
+                let res = resUserUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N92(let model):
+                let res = resUserUseCase()
+                res.isCreatedorEdited = model.isSuccess
+                self.delegate?.commandState(value: .v3User(res))
+            case .N93(let model):
+                let res = resUserUseCase()
+                res.isDeleted = model.isSuccess
+                self.delegate?.commandState(value: .v3User(res))
             case .EF(_):
-                self.delegate?.commandState(value: .v3OTA(nil))
+                self.delegate?.commandState(value: .v3utility(nil))
             default:
                 break
             }
+            
+      
         default:
             break
         }

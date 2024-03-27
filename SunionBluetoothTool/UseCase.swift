@@ -59,4 +59,12 @@ public class useCase  {
         return OTA(tool: self)
     }()
     
+    public lazy var user: User = {
+        return User(tool: self)
+    }()
+    
+    public lazy var credential: Credential = {
+        return Credential(tool: self)
+    }()
+    
 }

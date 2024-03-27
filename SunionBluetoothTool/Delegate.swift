@@ -70,7 +70,6 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func v3time(vlaue: Bool?)
     func v3adminCode(vlaue: Bool?)
     func v3Name(value: resNameUseCase?)
-    func v3Direction(value: DeviceStatusModelN82?)
     func v3Config(value: resConfigUseCase?)
     func v3utility(value: resUtilityUseCase?)
     func v3Token(value: resTokenUseCase?)
@@ -78,6 +77,8 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func v3Wifi(value: resWifiUseCase?)
     func v3Plug(value: plugStatusResponseModel?)
     func v3OTA(value: resOTAUseCase?)
+    func v3User(value: resUserUseCase?)
+    func v3Credential(value: resCredentialUseCase?)
 }
 
 
@@ -141,7 +142,6 @@ extension SunionBluetoothToolDelegate {
     public func v3time(vlaue: Bool?) {}
     public func v3adminCode(vlaue: Bool?) {}
     public func v3Name(value: resNameUseCase?) {}
-    public func v3Direction(value: DeviceStatusModelN82?) {}
     public func v3Config(value: resConfigUseCase?) {}
     public func v3utility(value: resUtilityUseCase?) {}
     public func v3Token(value: resTokenUseCase?) {}
@@ -149,4 +149,6 @@ extension SunionBluetoothToolDelegate {
     public func v3Wifi(value: resWifiUseCase?) {}
     public func v3Plug(value: plugStatusResponseModel?) {}
     public func v3OTA(value: resOTAUseCase?) {}
+    public func v3User(value: resUserUseCase?) {}
+    public func v3Credential(value: resCredentialUseCase?) {}
 }

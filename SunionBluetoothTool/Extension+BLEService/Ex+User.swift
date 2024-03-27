@@ -1,62 +1,64 @@
 //
-//  Ex+Wifi.swift
+//  Ex+User.swift
 //  SunionBluetoothTool
 //
-//  Created by Cthiisway on 2024/3/26.
+//  Created by Cthiisway on 2024/3/27.
 //
 
 import Foundation
 
+
 extension BluetoothService {
     
-    func V3wifiList() {
+    func V3userAble() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .getWifiList, key: aes2key!)
+        let command =  CommandService.shared.createAction(with:  .N85, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func V3setSSID(SSIDName: String, password: String) {
+    func V3getUserSupportedCount() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        wifiPassword = password
-        let command =  CommandService.shared.createAction(with: .setSSID(SSIDName), key: aes2key!)
+        let command =  CommandService.shared.createAction(with:  .N86, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func V3setWifiPassword() {
+    func V3getUserArray() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .setPassword(wifiPassword), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func V3connectWifi() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        let command =  CommandService.shared.createAction(with: .setConnection, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func V3autoUnlockForWiFi(identity: String ) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        let command =  CommandService.shared.createAction(with: .F3(identity), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func V3waitForButtonThenAutoUnlockWiFi(Identity: String) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        let command =  CommandService.shared.createAction(with: .F4(Identity), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: .N90, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
     
+    func V3getUserData(position: Int) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        let model = IndexUserCredentialRequestModel(index: position)
+        let command =  CommandService.shared.createAction(with: .N91(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func V3userAction(model: UserCredentialRequestModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        let command =  CommandService.shared.createAction(with: .N92(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
+    func V3delUserAction(position: Int) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        
+        let model = IndexUserCredentialRequestModel(index: position)
+        let command =  CommandService.shared.createAction(with: .N93(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
 }

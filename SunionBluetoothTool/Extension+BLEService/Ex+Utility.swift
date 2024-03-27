@@ -13,7 +13,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3utility(nil)
         let type: RFMCURequestModel = RFMCURequestModel(type: type)
         
         let command =  CommandService.shared.createAction(with: .C2(type), key: aes2key!)
@@ -24,7 +23,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3utility(nil)
         let command =  CommandService.shared.createAction(with: .CE(adminCode), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -33,7 +31,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3utility(nil)
         let command =  CommandService.shared.createAction(with: .CF, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -42,8 +39,6 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .isMatter(nil)
-        
         let command =  CommandService.shared.createAction(with:  .N87, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }

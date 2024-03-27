@@ -84,7 +84,6 @@ public enum commandState {
     case v3time(Bool?)
     case v3adminCode(Bool?)
     case v3Name(resNameUseCase?)
-    case v3Direction(DeviceStatusModelN82?)
     case v3Config(resConfigUseCase?)
     case v3utility(resUtilityUseCase?)
     case v3Token(resTokenUseCase?)
@@ -92,4 +91,6 @@ public enum commandState {
     case v3Wifi(resWifiUseCase?)
     case v3Plug(plugStatusResponseModel?)
     case v3OTA(resOTAUseCase?)
+    case v3User(resUserUseCase?)
+    case v3Credential(resCredentialUseCase?)
 }
