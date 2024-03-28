@@ -12,10 +12,6 @@ import SwiftUI
 public class DeviceSetupModel {
     public var D5: DeviceSetupModelD5?
     public var A1: DeviceSetupModelA1?
-    public var N81: DeviceSetupModelN81?
-    public init() {
-        
-    }
 }
 
 

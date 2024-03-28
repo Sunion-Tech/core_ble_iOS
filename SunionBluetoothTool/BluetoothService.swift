@@ -299,7 +299,7 @@ class BluetoothService: NSObject {
         
         action = .config(nil)
         
-        let command =  CommandService.shared.createAction(with: commandType == .D ? .D5(model.D5!) : commandType == .A ? .A1(model.A1!) : .N81(model.N81!), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: commandType == .D ? .D5(model.D5!) :  .A1(model.A1!), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
 
@@ -1050,11 +1050,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = DeviceSetupResultModel()
                 res.A0 = model
                 self.delegate?.commandState(value: .deviceSetting(res))
-            
-            case .N80(let model):
-                let res = DeviceSetupResultModel()
-                res.N80 = model
-                self.delegate?.commandState(value: .deviceSetting(res))
+     
             case .EF( _):
                 self.delegate?.commandState(value: .deviceSetting(nil))
             default: break
