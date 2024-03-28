@@ -13,7 +13,6 @@ protocol BluetoothServiceDelegate: AnyObject {
     func bluetoothState(State: bluetoothState)
     func commandState(value: commandState)
     func updateData(value: BluetoothToolModel)
-    func debug(value: String)
 }
 
 
@@ -112,15 +111,15 @@ class BluetoothService: NSObject {
         delegate?.bluetoothState(State: .connecting)
       
         if let uid = UUID(uuidString: value) {
-            delegate?.debug(value: "retrievePeripherals")
+           
             let cbs = centralManager.retrievePeripherals(withIdentifiers: [uid])
 
             if let first = cbs.first {
               
-                delegate?.debug(value: "cbs first")
+              
                 self.autoStartTime = Date().timeIntervalSince1970
                 self.connectedPeripheral = first
-                delegate?.debug(value: ".connect")
+         
                 DispatchQueue.global().async {
                     self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
@@ -560,236 +559,6 @@ class BluetoothService: NSObject {
         let command =  CommandService.shared.createAction(with: .AA(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
-    
-    // MARK: - Wifi
-    func wifiList() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .wifiList(nil)
-        let command =  CommandService.shared.createAction(with: .getWifiList, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func setSSID(SSIDName: String, password: String) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        wifiPassword = password
-        let command =  CommandService.shared.createAction(with: .setSSID(SSIDName), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func setWifiPassword() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        let command =  CommandService.shared.createAction(with: .setPassword(wifiPassword), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func connectWifi() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        let command =  CommandService.shared.createAction(with: .setConnection, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-
-    
-    // MARK: - OTA {
-    func otaStatus(req: OTAStatusRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .OTAStatus(nil)
-        let command =  CommandService.shared.createAction(with: .C3(req), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func otaData(req: OTADataRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .OTAData(nil)
-        let command =  CommandService.shared.createAction(with: .C4(req), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-
-    
-    // MARK: - 3.0
-    public func getRFVersion() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .config(nil)
-        let type: RFMCURequestModel = RFMCURequestModel(type: .RF)
-        
-        let command =  CommandService.shared.createAction(with: .C2(type), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    // MARK: -  UserCredential
-    
-    func getUserCredentialArray() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .getUserCredentialArray(nil)
-        let command =  CommandService.shared.createAction(with: .N90, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    
-    func getUserCredential(position: Int) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .getUserCredential(nil)
-        let model = IndexUserCredentialRequestModel(index: position)
-        let command =  CommandService.shared.createAction(with: .N91(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func userCredentialAction(model: UserCredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .userCredentialAction(nil)
-        let command =  CommandService.shared.createAction(with: .N92(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func delUserCredentialAction(model: IndexUserCredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .getUserCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N93(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func getCredientialArray() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .getCredientialArray(nil)
-        let command =  CommandService.shared.createAction(with: .N94, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func searchCredential(model: SearchCredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .searchCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N95(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func credentialAction(model: CredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .credentialAction(nil)
-        let command =  CommandService.shared.createAction(with: .N96(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func setupCrential(model: SetupCredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .setupCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N97(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func delCredential(model: IndexUserCredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .delCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N98(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func hashUserCredential(model: HashusercredentialRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .hashUserCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N99(model), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func syncUserCredential() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .syncUserCredential(nil)
-        let command =  CommandService.shared.createAction(with: .N9A, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func finishSyncData() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .finishSyncData(nil)
-        let command =  CommandService.shared.createAction(with: .N9D, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func isAutoUnlock() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .isAutoUnLock(nil)
-        
-        let command =  CommandService.shared.createAction(with:  .N84(.lockstate, CommandService.DeviceMode.unlock, nil), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func userAble() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .userAble(nil)
-        
-        let command =  CommandService.shared.createAction(with:  .N85, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func isMatter() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .isMatter(nil)
-        
-        let command =  CommandService.shared.createAction(with:  .N87, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func getUserSupportedCount() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .userSupportedCount(nil)
-        
-        let command =  CommandService.shared.createAction(with:  .N86, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
- 
-    
-        
-    
-    
 
 }
 
@@ -891,7 +660,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        delegate?.debug(value: "didDisconnectPeripheral")
+      
         print("🔧🔧🔧didDisconnectPeripheral error🔧🔧🔧\n \(error.debugDescription) \n🔧🔧🔧🔧🔧🔧")
         if error != nil  {
             delegate?.bluetoothState(State: .disconnect(.fail))
@@ -1077,13 +846,6 @@ extension BluetoothService: CBPeripheralDelegate {
             data.A2 = model
             self.delegate?.commandState(value: .deviceStatus(data))
             
-        case .N82(let model):
-            commandType = .N8
-            self.delegate?.updateData(value: self.data)
-            let data = DeviceStatusModel()
-            data.N82 = model
-            self.delegate?.commandState(value: .deviceStatus(data))
-            
         default:
             break
         }
@@ -1154,12 +916,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.data.permission = tokenModel.tokenPermission
 
       
-            case .B0(let model):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.B0 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+         
   
             case .EF( _):
                 self.delegate?.commandState(value: .deviceStatus(nil))
@@ -1494,216 +1251,6 @@ extension BluetoothService: CBPeripheralDelegate {
             default: break
             }
             
-        case .wifiList:
-            switch response {
-            case .getWifiList(let model):
-                self.delegate?.commandState(value: .wifiList(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .wifiList(nil))
-            default:
-                break
-            }
-        case .connectWifi:
-            switch response {
-            case .setSSID:
-                self.setWifiPassword()
-            case .setPassword:
-                self.connectWifi()
-            case .setConnection(let bool):
-              
-                self.delegate?.commandState(value: .connectWifi(bool))
-            case .setMQTT(let bool):
-           
-                self.delegate?.commandState(value: .connectMQTT(bool))
-            case .setCloud(let bool):
-               
-                self.delegate?.commandState(value: .connectClould(bool))
-            case .F4(let bool):
-           
-                self.delegate?.commandState(value: .isWifiAutonunlock(bool))
-            case .EF(_):
-                self.delegate?.commandState(value: .connectWifi(nil))
-              
-            default:
-                break
-            }
-
-        case .OTAStatus:
-            switch response {
-            case .C3(let model):
-                self.delegate?.commandState(value: .OTAStatus(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .OTAStatus(nil))
-            default:
-                break
-            }
-        
-            
-        case .OTAData:
-            switch response {
-            case .C4(let model):
-                self.delegate?.commandState(value: .OTAData(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .OTAData(nil))
-            default:
-                break
-            }
-        case .getUserCredentialArray:
-            switch response {
-            case .N90(let model):
-                self.delegate?.commandState(value: .getUserCredentialArray(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .getUserCredentialArray(nil))
-            default:
-                break
-            }
-            
-        case .getUserCredential:
-            
-            switch response {
-            case .N91(let model):
-                self.delegate?.commandState(value: .getUserCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .getUserCredential(nil))
-            default:
-                break
-            }
-            
-        case .userCredentialAction:
-            switch response {
-            case .N92(let model):
-                self.delegate?.commandState(value: .userCredentialAction(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .userCredentialAction(nil))
-            default:
-                break
-            }
-            
-        case .delUserCredential:
-            switch response {
-            case .N93(let model):
-                self.delegate?.commandState(value: .delUserCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .delUserCredential(nil))
-            default:
-                break
-            }
-            
-        case .getCredientialArray:
-            switch response {
-            case .N94(let model):
-                self.delegate?.commandState(value: .getCredientialArray(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .getCredientialArray(nil))
-            default:
-                break
-            }
-            
-        case .searchCredential:
-            switch response {
-            case .N95(let model):
-                self.delegate?.commandState(value: .searchCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .searchCredential(nil))
-            default:
-                break
-            }
-            
-        case .credentialAction:
-            switch response {
-            case .N96(let model):
-                self.delegate?.commandState(value: .credentialAction(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .credentialAction(nil))
-            default:
-                break
-            }
-        case .setupCredential:
-            switch response {
-            case .N97(let model):
-                self.delegate?.commandState(value: .setupCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .setupCredential(nil))
-            default:
-                break
-            }
-            
-        case .delCredential:
-            switch response {
-            case .N98(let model):
-                self.delegate?.commandState(value: .delCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .delCredential(nil))
-            default:
-                break
-            }
-            
-        case .hashUserCredential:
-            switch response {
-            case .N99(let model):
-                self.delegate?.commandState(value: .hashUserCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .hashUserCredential(nil))
-            default:
-                break
-            }
-            
-        case .syncUserCredential:
-            switch response {
-            case .N9A(let model):
-                self.delegate?.commandState(value: .syncUserCredential(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .syncUserCredential(nil))
-            default:
-                break
-            }
-        case .finishSyncData:
-            switch response {
-            case .N9D(let model):
-                self.delegate?.commandState(value: .finishSyncData(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .finishSyncData(nil))
-            default:
-                break
-            }
-            
-        case .isAutoUnLock:
-            switch response {
-            case .N84(let model):
-                self.delegate?.commandState(value: .isAutoUnLock(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .isAutoUnLock(nil))
-            default:
-                break
-            }
-        case .userAble:
-            switch response {
-            case .N85(let model):
-                self.delegate?.commandState(value: .userAble(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .userAble(nil))
-            default:
-                break
-            }
-            
-        case .isMatter:
-            switch response {
-            case .N87(let model):
-                self.delegate?.commandState(value: .isMatter(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .isMatter(nil))
-            default:
-                break
-            }
-        case .userSupportedCount:
-            switch response {
-            case .N86(let model):
-                self.delegate?.commandState(value: .userSupportedCount(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .userSupportedCount(nil))
-            default:
-                break
-            }
 
         default:
             break
@@ -1714,6 +1261,8 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
                 // deviceStatus\direction
             case .N82(let model):
+                // 保留藍芽資料
+                self.delegate?.updateData(value: self.data)
                 self.delegate?.commandState(value: .v3deviceStatus(model))
                 // time
             case .D3(let model):
@@ -1804,9 +1353,9 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Log(res))
                 // wifi
             case .setSSID:
-                self.setWifiPassword()
+                self.V3setWifiPassword()
             case .setPassword:
-                self.connectWifi()
+                self.V3connectWifi()
             case .setConnection(let bool):
                 let res = resWifiUseCase()
                 res.isWifi = bool
@@ -1830,6 +1379,8 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Wifi(res))
                 // plug
             case .B0(let model):
+                // 保留藍芽資料
+                self.delegate?.updateData(value: self.data)
                 self.delegate?.commandState(value: .v3Plug(model))
             case .B1(let model):
                 self.delegate?.commandState(value: .v3Plug(model))

@@ -39,30 +39,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func AccessAction(value: AccessResponseModel?)
     func SetupAccess(value: SetupAccessResponseModel?)
     func DelAccess(value: DelAccessResponseModel?)
-    func wifiList(value: SSIDModel?)
-    func connectWifi(bool: Bool?)
-    func connectMQTT(bool: Bool?)
-    func connectClould(bool: Bool?)
-    func debug(value: String)
-    func OTAStatus(value: OTAResponseModel?)
-    func OTAData(value: OTADataResponseModel?)
-    func isWifAutounlock( bool: Bool?)
-    func userCredentialArray(value: [Int]?)
-    func userCredentialData(value: UserCredentialModel?)
-    func userCredentialAction(value: N9ResponseModel?)
-    func delUserCredentialAction(value: N9ResponseModel?)
-    func getCredentialArray(value: [Int]?)
-    func searchCredential(value: CredentialModel?)
-    func credentialAction(value: N9ResponseModel?)
-    func setupCredential(value: SetupCredentialModel?)
-    func delCredential(value: N9ResponseModel?)
-    func hashUserCredential(value: HashusercredentialModel?)
-    func syncUserCredential(value: Bool?)
-    func finishSyncData(value: Bool?)
-    func isAutoUnLock(value: Bool?)
-    func userAble(value: UserableResponseModel?)
-    func isMatter(value: Bool?)
-    func usersupportedCount(value: resUserSupportedCountModel?)
+  
     
     // MARK: - V3
     
@@ -113,30 +90,7 @@ extension SunionBluetoothToolDelegate {
     public func AccessAction(value: AccessResponseModel?) {}
     public func SetupAccess(value: SetupAccessResponseModel?) {}
     public func DelAccess(value: DelAccessResponseModel?) {}
-    public func wifiList(value: SSIDModel?) {}
-    public func connectWifi(bool: Bool?) {}
-    public func debug(value: String) {}
-    public func connectMQTT(bool: Bool?) {}
-    public func connectClould(bool: Bool?) {}
-    public func OTAStatus(value: OTAResponseModel?) {}
-    public func OTAData(value: OTADataResponseModel?) {}
-    public func isWifAutounlock( bool: Bool?) {}
-    public func userCredentialArray(value: [Int]?) {}
-    public func userCredentialData(value: UserCredentialModel?) {}
-    public func userCredentialAction(value: N9ResponseModel?) {}
-    public func delUserCredentialAction(value: N9ResponseModel?) {}
-    public func getCredentialArray(value: [Int]?) {}
-    public func searchCredential(value: CredentialModel?) {}
-    public func credentialAction(value: N9ResponseModel?) {}
-    public func setupCredential(value: SetupCredentialModel?) {}
-    public func delCredential(value: N9ResponseModel?) {}
-    public func hashUserCredential(value: HashusercredentialModel?) {}
-    public func syncUserCredential(value: Bool?) {}
-    public func finishSyncData(value: Bool?) {}
-    public func isAutoUnLock(value: Bool?) {}
-    public func userAble(value: UserableResponseModel?) {}
-    public func isMatter(value: Bool?) {}
-    public func usersupportedCount(value: resUserSupportedCountModel?) {}
+  
     
     public func v3deviceStatus(value: DeviceStatusModelN82?) {}
     public func v3time(value: resTimeUseCase?) {}

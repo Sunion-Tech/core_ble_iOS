@@ -236,96 +236,6 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.delAccess(model: model)
     }
     
-    // MARK: - wifi
-    public func wifiList() {
-        bluetoothService?.wifiList()
-    }
-    
-    public func connectWifi(SSIDName: String, passwrod: String) {
-        bluetoothService?.setSSID(SSIDName: SSIDName, password: passwrod)
-    }
-    
-    public func otaStatus(req: OTAStatusRequestModel) {
-        bluetoothService?.otaStatus(req: req)
-    }
-    
-    public func otaData(req: OTADataRequestModel) {
-        bluetoothService?.otaData(req: req)
-    }
-    
-
-    
-    // MARK: - 3.0
-    public func getRFVersion() {
-        bluetoothService?.getRFVersion()
-    }
-    
-    public func getUserCredentialArray() {
-        bluetoothService?.getUserCredentialArray()
-    }
-    
-    public func getUserCredential(position: Int) {
-        bluetoothService?.getUserCredential(position: position)
-    }
-    
-    public func userCredentialAction(model: UserCredentialRequestModel) {
-        bluetoothService?.userCredentialAction(model: model)
-    }
-    
-    public func delUserCredentialAction(position: Int) {
-        let model = IndexUserCredentialRequestModel(index: position)
-        bluetoothService?.delUserCredentialAction(model: model)
-    }
-    
-    public func getCredentialArray() {
-        bluetoothService?.getCredientialArray()
-    }
-    
-    public func searchCredential(model: SearchCredentialRequestModel) {
-        bluetoothService?.searchCredential(model: model)
-    }
-    
-    public func credentialAction(model: CredentialRequestModel) {
-        bluetoothService?.credentialAction(model: model)
-    }
-    
-    public func setupCredential(model: SetupCredentialRequestModel) {
-        bluetoothService?.setupCrential(model: model)
-    }
-    
-    public func delCredential(position: Int) {
-        let model = IndexUserCredentialRequestModel(index: position)
-        bluetoothService?.delCredential(model: model)
-    }
-    
-    public func hashUserCredential(model: HashusercredentialRequestModel) {
-        bluetoothService?.hashUserCredential(model: model)
-    }
-    
-    public func syncUserCredential() {
-        bluetoothService?.syncUserCredential()
-    }
-    
-    public func finishSyncData() {
-        bluetoothService?.finishSyncData()
-    }
-    
-    public func isAutoUnLock() {
-        bluetoothService?.isAutoUnlock()
-    }
-    
-    public func userAble() {
-        bluetoothService?.userAble()
-    }
-    
-    public func isMatter() {
-        bluetoothService?.isMatter()
-    }
-    
-    public func getUserSupportedCount() {
-        bluetoothService?.getUserSupportedCount()
-    }
-    
 }
 
 
@@ -415,52 +325,7 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.SetupAccess(value: value)
         case .delAccess(let value):
             delegate?.DelAccess(value: value)
-        case .wifiList(let value):
-            delegate?.wifiList(value: value)
-        case .connectWifi(let bool):
-            delegate?.connectWifi(bool: bool)
-        case .connectMQTT(let bool):
-            delegate?.connectMQTT(bool: bool)
-        case .connectClould(let bool):
-            delegate?.connectClould(bool: bool)
-        case .OTAData(let model):
-            delegate?.OTAData(value: model)
-        case .OTAStatus(let model):
-            delegate?.OTAStatus(value: model)
-        case .isWifiAutonunlock(let bool):
-            delegate?.isWifAutounlock(bool: bool)
-        case .getUserCredentialArray(let indexs):
-            delegate?.userCredentialArray(value: indexs)
-        case .getUserCredential(let model):
-            delegate?.userCredentialData(value: model)
-        case .userCredentialAction(let model):
-            delegate?.userCredentialAction(value: model)
-        case .getCredientialArray(let model):
-            delegate?.getCredentialArray(value: model)
-        case .searchCredential(let model):
-            delegate?.searchCredential(value: model)
-        case .delUserCredential(let model):
-            delegate?.delUserCredentialAction(value: model)
-        case .credentialAction(let model):
-            delegate?.credentialAction(value: model)
-        case .setupCredential(let model):
-            delegate?.setupCredential(value: model)
-        case .delCredential(let model):
-            delegate?.delCredential(value: model)
-        case .hashUserCredential(let model):
-            delegate?.hashUserCredential(value: model)
-        case .syncUserCredential(let model):
-            delegate?.syncUserCredential(value: model)
-        case .finishSyncData(let model):
-            delegate?.finishSyncData(value: model)
-        case .isAutoUnLock(let model):
-            delegate?.isAutoUnLock(value: model)
-        case .userAble(let model):
-            delegate?.userAble(value: model)
-        case .isMatter(let model):
-            delegate?.isMatter(value: model)
-        case .userSupportedCount(let model):
-            delegate?.usersupportedCount(value: model)
+      
             
             // MARK: -V3
         case.v3deviceStatus(let model):
@@ -499,8 +364,5 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
         self.status = State
     }
     
-    func debug(value: String) {
-        delegate?.debug(value: value)
-    }
-    
+
 }
