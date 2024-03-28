@@ -20,41 +20,34 @@ public class AccessArrayResponseModel {
     private var datalen: Int? {
         self.getDatalen()
     }
-
-
+    
+    
     
     private var response: [UInt8]
     
     init(data: [UInt8]) {
         self.response = data
         
-
-        if data.count - 1 >= 2 {
-            let stringData = Array(data[3...datalen!])
-      
-            for (location, element) in stringData.enumerated() {
         
-                var count  = 0
-                let val = element.bits.map{Int($0)}
-                
-      
-                for el in val {
-                
-                    if el == 1 {
-                   
-                        let index = (location * 8) + count
-                        if index < 199 {
-                          hasDataAIndex.append(index)
-                        }
-                       
+        if data.count - 1 >= 2 {
+            
+            let stringData = Array(data[3...datalen!])
+            
+            // 遍历Data中的每个字节
+            for (byteIndex, byte) in stringData.enumerated() {
+                // 遍历字节的每一位
+                for bitIndex in 0..<8 {
+                    // 检查特定位是否被设置（即是否为1）
+                    if (byte & (1 << bitIndex)) != 0 {
+                        // 计算并记录全局位置
+                        let position = byteIndex * 8 + bitIndex
+                        hasDataAIndex.append(position)
                     }
-                    count = count + 1
                 }
-           
             }
-           
+            
         }
-  
+        
     }
     
     private func getDatalen() -> Int {
@@ -77,7 +70,7 @@ public class AccessArrayResponseModel {
             return .error
             
         }
-      
+        
     }
     
     private func getFinish() -> Bool? {
@@ -93,6 +86,6 @@ public class AccessArrayResponseModel {
         }
     }
     
-
+    
     
 }

@@ -1318,36 +1318,26 @@ public class CommandService {
             return .N87(isSuccess)
         case 0x90:
             
-            var hasDataAIndex: [Int] = []
+     
             
-          
-                let stringData = Array(data[1...data.count - 1])
-              
-          
-                for (location, element) in stringData.enumerated() {
             
-                    var count  = 0
-                    let val = element.bits.map{Int($0)}
-                    
-          
-                    for el in val {
-                    
-                        if el == 1 {
-                       
-                            let index = (location * 8) + count
-                            if index < 199 {
-                              hasDataAIndex.append(index)
-                            }
-                           
-                        }
-                        count = count + 1
-                    }
-               
-                }
-               
+            let stringData = Array(data[1...data.count - 1])
+            var passwordPositions: [Int] = []
+
+              // 遍历Data中的每个字节
+              for (byteIndex, byte) in stringData.enumerated() {
+                  // 遍历字节的每一位
+                  for bitIndex in 0..<8 {
+                      // 检查特定位是否被设置（即是否为1）
+                      if (byte & (1 << bitIndex)) != 0 {
+                          // 计算并记录全局位置
+                          let position = byteIndex * 8 + bitIndex
+                          passwordPositions.append(position)
+                      }
+                  }
+              }
             
-          
-            return .N90(hasDataAIndex)
+            return .N90(passwordPositions)
         case 0x91:
             let model = UserCredentialModel(response: data)
             return .N91(model)
@@ -1359,34 +1349,24 @@ public class CommandService {
             return .N93(model)
         case 0x94:
             
-            var hasDataAIndex: [Int] = []
+            let stringData = Array(data[1...data.count - 1])
             
-          
-                let stringData = Array(data[1...data.count - 1])
-              
-          
-                for (location, element) in stringData.enumerated() {
+            var passwordPositions: [Int] = []
             
-                    var count  = 0
-                    let val = element.bits.map{Int($0)}
-                    
-          
-                    for el in val {
-                    
-                        if el == 1 {
-                       
-                            let index = (location * 8) + count
-                            if index < 199 {
-                              hasDataAIndex.append(index)
-                            }
-                           
-                        }
-                        count = count + 1
+            // 遍历Data中的每个字节
+            for (byteIndex, byte) in stringData.enumerated() {
+                // 遍历字节的每一位
+                for bitIndex in 0..<8 {
+                    // 检查特定位是否被设置（即是否为1）
+                    if (byte & (1 << bitIndex)) != 0 {
+                        // 计算并记录全局位置
+                        let position = byteIndex * 8 + bitIndex
+                        passwordPositions.append(position)
                     }
-               
                 }
+            }
    
-            return .N94(hasDataAIndex)
+            return .N94(passwordPositions)
         case 0x95:
             let model = CredentialModel(response: data)
             return .N95(model)
