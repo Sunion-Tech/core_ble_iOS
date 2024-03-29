@@ -106,8 +106,8 @@ public class CredentialModel {
             return Int(intValue)
             
         } else {
-            guard let five = response[safe: 5],
-                  let sex = response[safe: 6] else {
+            guard let five = response[safe: 3],
+                  let sex = response[safe: 4] else {
                 return nil
             }
             
@@ -121,7 +121,7 @@ public class CredentialModel {
     }
 
     private func getStatus() -> UserCredentialModel.UserStatusEnum {
-        guard  let status = response[safe: 3]  else { return .unknownEnumValue }
+        guard  let status = response[safe: 5]  else { return .unknownEnumValue }
         
         switch status {
         case 0x00:
@@ -137,7 +137,7 @@ public class CredentialModel {
 
 
     private func getCredentialTypeEnum() -> CredentialStructModel.CredentialTypeEnum {
-        guard  let status = response[safe: 4]  else { return .unknownEnumValue }
+        guard  let status = response[safe: 6]  else { return .unknownEnumValue }
         
         switch status {
         case 0x00:

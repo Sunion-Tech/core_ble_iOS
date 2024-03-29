@@ -14,13 +14,7 @@ public class CredentialRequestModel {
     
     public var userIndex: Int
     
-    public var status: UserCredentialModel.UserStatusEnum
-    
-    public var type: CredentialStructModel.CredentialTypeEnum
-    
-    public var credentialData: String
-    
-
+    public var credentialData: CredentialDetailStructRequestModel
     
     public var isCreate: Bool
     
@@ -28,11 +22,10 @@ public class CredentialRequestModel {
         self.getCommand()
     }
     
-    public init(credientialIndex: Int, userIndex: Int, status: UserCredentialModel.UserStatusEnum, type: CredentialStructModel.CredentialTypeEnum, credentialData: String, isCreate: Bool) {
+    public init(credientialIndex: Int, userIndex: Int, credentialData: CredentialDetailStructRequestModel, isCreate: Bool) {
         self.credientialIndex = credientialIndex
         self.userIndex = userIndex
-        self.status = status
-        self.type = type
+    
         self.credentialData = credentialData
         self.isCreate = isCreate
     }
@@ -62,11 +55,6 @@ public class CredentialRequestModel {
         // remove last two byte
         byteArray.removeLast(2)
         
-        byteArray.append(self.status.rawValue)
-        
-        byteArray.append(self.type.rawValue)
-        
-
         
         let index2 = Int32(userIndex)
         withUnsafeBytes(of: index2) { bytes in
@@ -82,17 +70,9 @@ public class CredentialRequestModel {
         // remove last two byte
         byteArray.removeLast(2)
         
-        if let data = self.credentialData.data(using: .utf8) {
-            let bytes = [UInt8](data)
-            byteArray.append(contentsOf: bytes)
-            
-            // 如果bytes的长度不足8位，补足0x00直到长度为8
-            if bytes.count < 8 {
-                let padding = [UInt8](repeating: 0x00, count: 8 - bytes.count)
-                byteArray.append(contentsOf: padding)
-            }
+        credentialData.command.forEach { el in
+            byteArray.append(el)
         }
-        
     
         return byteArray
     }

@@ -13,11 +13,15 @@ public class CredentialDetailStructModel: NSObject {
     private var response:[UInt8]
     
     init(response:[UInt8]) {
+        print("CredentialDetailStructModel init: \(response.toHexString())")
         self.response = response
     }
     
-
+    public var credentialIndex: Int? {
+        self.getcredentialIndex()
+    }
     
+
     public var status: UserCredentialModel.UserStatusEnum {
         self.getStatus()
     }
@@ -30,9 +34,43 @@ public class CredentialDetailStructModel: NSObject {
         self.getcredentialData()
     }
     
+    private func getcredentialIndex() -> Int? {
+     
+            guard  let firstByte = response[safe: 0],
+                   let secondByte = response[safe: 1] else {
+                return nil
+            }
+            
+            
+            let data = Data([firstByte, secondByte])
+            let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+            let intValue = Int32(bitPattern: UInt32(uint32))
+            return Int(intValue)
+            
+            
+            
+            
+        
+    }
+    
+    private func getStatus() -> UserCredentialModel.UserStatusEnum {
+        guard  let status = response[safe: 2]  else { return .unknownEnumValue }
+        
+        switch status {
+        case 0x00:
+            return .available
+        case 0x01:
+            return .occupiedEnabled
+        case 0x03:
+            return .occupiedDisabled
+        default:
+            return .unknownEnumValue
+        }
+    }
+    
     
     private func getCredentialTypeEnum() -> CredentialStructModel.CredentialTypeEnum {
-        guard  let status = response[safe: 0]  else { return .unknownEnumValue }
+        guard  let status = response[safe: 3]  else { return .unknownEnumValue }
         
         switch status {
         case 0x00:
@@ -52,25 +90,12 @@ public class CredentialDetailStructModel: NSObject {
         }
     }
     
-    private func getStatus() -> UserCredentialModel.UserStatusEnum {
-        guard  let status = response[safe: 1]  else { return .unknownEnumValue }
-        
-        switch status {
-        case 0x00:
-            return .available
-        case 0x01:
-            return .occupiedEnabled
-        case 0x03:
-            return .occupiedDisabled
-        default:
-            return .unknownEnumValue
-        }
-    }
+
     
     private func getcredentialData() -> String? {
-        guard  response[safe: 2] != nil  else { return nil }
+        guard  response[safe: 4] != nil  else { return nil }
         
-        let data = self.response[2...self.response.count-1]
+        let data = self.response[4...self.response.count-1]
         
         if type == .pin {
             let filteredData = data.filter { $0 >= 0x30 && $0 <= 0x39 }
