@@ -8,6 +8,8 @@
 import Foundation
 public class CredentialDetailStructRequestModel {
     
+    public var credientialIndex: Int
+    
     public var status: UserCredentialModel.UserStatusEnum
     
     public var type: CredentialStructModel.CredentialTypeEnum
@@ -18,7 +20,8 @@ public class CredentialDetailStructRequestModel {
         self.getCommand()
     }
     
-    public init(status: UserCredentialModel.UserStatusEnum, type: CredentialStructModel.CredentialTypeEnum, data: String) {
+    public init(credientialIndex: Int,status: UserCredentialModel.UserStatusEnum, type: CredentialStructModel.CredentialTypeEnum, data: String) {
+        self.credientialIndex = credientialIndex
         self.status = status
         self.type = type
         self.data = data
@@ -26,6 +29,22 @@ public class CredentialDetailStructRequestModel {
     
     private func getCommand()-> [UInt8] {
         var byteArray:[UInt8] = []
+        
+        
+        // credientialIndex
+        let index1 = Int32(credientialIndex)
+        withUnsafeBytes(of: index1) { bytes in
+       
+            for byte in bytes {
+                let stringHex = String(format: "%02x", byte)
+                let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
+              
+                byteArray.append(uint8)
+            }
+        }
+        // index has 4 byte command just need 2 byte
+        // remove last two byte
+        byteArray.removeLast(2)
         
         byteArray.append(self.status.rawValue)
         

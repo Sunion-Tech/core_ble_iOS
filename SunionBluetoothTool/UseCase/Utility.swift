@@ -20,7 +20,8 @@ public class Utility  {
         tool?.tool?.bluetoothService?.V3getVersion(type: type)
     }
     
-    public func factoryResetDevice(adminCode: [Int]) {
+    public func factoryResetDevice(adminCode: String) {
+   
         tool?.tool?.bluetoothService?.V3factoryReset(adminCode: adminCode)
     }
     

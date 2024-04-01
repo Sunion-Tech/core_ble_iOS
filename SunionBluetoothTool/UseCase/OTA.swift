@@ -16,11 +16,11 @@ public class OTA  {
     }
     
     
-    public func status(model: OTAStatusRequestModel) {
+    public func responseStatus(model: OTAStatusRequestModel) {
         tool?.tool?.bluetoothService?.V3otaStatus(req: model)
     }
     
-    public func data(model: OTADataRequestModel) {
+    public func update(model: OTADataRequestModel) {
         tool?.tool?.bluetoothService?.V3otaData(req: model)
     }
     

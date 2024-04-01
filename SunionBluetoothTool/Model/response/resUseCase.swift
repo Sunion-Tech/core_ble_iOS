@@ -55,7 +55,7 @@ public class resWifiUseCase {
     public var isWifi: Bool?
     public var isMQTT: Bool?
     public var isClould: Bool?
-    public var isAutoUnlcok: Bool?
+    public var isAutoUnlock: Bool?
 }
 
 public class resOTAUseCase {

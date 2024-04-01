@@ -1371,7 +1371,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.delegate?.commandState(value: .v3Wifi(res))
             case .F4(let bool):
                 let res = resWifiUseCase()
-                res.isAutoUnlcok = bool
+                res.isAutoUnlock = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
                 // plug
             case .B0(let model):

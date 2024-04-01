@@ -21,23 +21,15 @@ public class Wifi  {
     }
     
     
-    public func setSSID(SSIDName: String, password: String) {
+    public func configureWiFi(SSIDName: String, password: String) {
         tool?.tool?.bluetoothService?.V3setSSID(SSIDName: SSIDName, password: password)
-    }
-    
-    public func setWifiPassword() {
-        tool?.tool?.bluetoothService?.V3setWifiPassword()
-    }
-    
-    public func connectToWifi() {
-        tool?.tool?.bluetoothService?.V3connectWifi()
     }
     
     public func autoUnlockForWiFi(identity: String) {
         tool?.tool?.bluetoothService?.V3autoUnlockForWiFi(identity: identity)
     }
     
-    public func V3waitForButtonThenAutoUnlockWiFi(identity: String) {
+    public func waitForButtonThenAutoUnlockWiFi(identity: String) {
         tool?.tool?.bluetoothService?.V3waitForButtonThenAutoUnlockWiFi(Identity: identity)
     }
 

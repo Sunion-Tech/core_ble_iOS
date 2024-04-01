@@ -19,11 +19,12 @@ extension BluetoothService {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func V3factoryReset(adminCode: [Int]) {
+    func V3factoryReset(adminCode: String) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        let command =  CommandService.shared.createAction(with: .CE(adminCode), key: aes2key!)
+        let code = adminCode.compactMap{Int(String($0))}
+        let command =  CommandService.shared.createAction(with: .CE(code), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
