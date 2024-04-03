@@ -21,6 +21,14 @@
 ```
 SunionBluetoothTool.shared.Usecase.deviceStatus.data()
 ```
+### Toggle lock
+```
+SunionBluetoothTool.shared.Usecase.deviceStatus.lockorUnlock(value: CommandService.DeviceMode)
+```
+#### Parameters
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| value     | CommandService.DeviceMode     | lock<br>unlock|
 ### Delegate function
 ```
  public func v3deviceStatus(value: DeviceStatusModelN82?) {
@@ -166,14 +174,7 @@ func v3Name(value: resNameUseCase?) {
 ---
 
 ## direction
-### Toggle lock
-```
-SunionBluetoothTool.shared.Usecase.direction.lockorUnlock(value: CommandService.DeviceMode)
-```
-#### Parameters
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-| value     | CommandService.DeviceMode     | lock<br>unlock|
+
 ### Door direction judgment
 ```
 SunionBluetoothTool.shared.Usecase.direction.checkDoorDirection()

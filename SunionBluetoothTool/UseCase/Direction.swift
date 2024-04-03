@@ -16,9 +16,7 @@ public class Direction  {
     }
     
     
-    public func lockorUnlock(value: CommandService.DeviceMode) {
-        tool?.tool?.bluetoothService?.V3lockorUnLock(mode: value)
-    }
+
     
     public func checkDoorDirection() {
         tool?.tool?.bluetoothService?.V3checkDoorDirection()

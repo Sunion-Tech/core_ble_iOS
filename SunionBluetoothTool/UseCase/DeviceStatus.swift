@@ -18,5 +18,9 @@ public class DeviceStatus  {
     public func data() {
         tool?.tool?.bluetoothService?.V3deviceStatus()
     }
+    
+    public func lockorUnlock(value: CommandService.DeviceMode) {
+        tool?.tool?.bluetoothService?.V3lockorUnLock(mode: value)
+    }
 
 }
