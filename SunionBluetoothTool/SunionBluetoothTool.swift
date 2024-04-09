@@ -35,7 +35,8 @@ public class SunionBluetoothTool: NSObject {
         return nil
     }
     
-    func qrCode(value: String) -> String? {
+    public func qrCode(value: String) -> String? {
+        self.data?.uuid = value
         return value.count == 16 ? value : nil
     }
     

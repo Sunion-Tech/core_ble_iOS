@@ -13,6 +13,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E4, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -22,6 +23,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E5(position), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -30,6 +32,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E6(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -38,6 +41,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E7(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -46,6 +50,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         var digit: [UInt8]?
         if let ownerPinCode = ownerPinCode {
             digit = ownerPinCode.compactMap{Int(String($0))}.map{UInt8($0)}

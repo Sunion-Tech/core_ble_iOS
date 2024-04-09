@@ -13,15 +13,17 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E0, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
 
-    // data
+
     func V3getLog(position: Int) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command =  CommandService.shared.createAction(with: .E1(position), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }

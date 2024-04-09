@@ -13,6 +13,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let adminCode = Code.compactMap{Int(String($0))}
         let command = CommandService.shared.createAction(with: .C7(adminCode), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
@@ -22,6 +23,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let oldDigits = oldCode.compactMap{Int(String($0))}
         let newDigits = newCode.compactMap{Int(String($0))}
         let model = EditAdminCodeModel(oldCode: oldDigits, newCode: newDigits)
@@ -33,6 +35,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
+        action = .none
         let command = CommandService.shared.createAction(with: .EF, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }

@@ -915,11 +915,6 @@ extension BluetoothService: CBPeripheralDelegate {
    
                 self.data.permission = tokenModel.tokenPermission
 
-      
-         
-  
-            case .EF( _):
-                self.delegate?.commandState(value: .deviceStatus(nil))
             default:
                 break
                 
