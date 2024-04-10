@@ -61,6 +61,7 @@ public class SunionBluetoothTool: NSObject {
         print("qrCodeDisplayName: \(model.qrCodeDisplayName)")
         print("qrCodeSerialNumber: \(model.qrCodeSerialNumber)")
         print("modelName: \(model.modelName)")
+        print("uuid: \(model.uuid)")
         print("🔧🔧🔧🔧🔧🔧")
         self.data = model
         return model
@@ -181,8 +182,8 @@ public class SunionBluetoothTool: NSObject {
         bluetoothService?.delToken(model: model, ownerPinCode: ownerPinCode)
     }
     
-    public func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String) {
-        bluetoothService?.getTokenQrCode(barcodeKey: barcodeKey, tokenIndex: tokenIndex, aes1Key: aes1Key, macAddress: macAddress, userName: userName, modelName: modelName, deviceName: deviceName)
+    public func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String?,uuid: String?, userName: String, modelName: String, deviceName: String) {
+        bluetoothService?.getTokenQrCode(barcodeKey: barcodeKey, tokenIndex: tokenIndex, aes1Key: aes1Key, macAddress: macAddress,uuid: uuid, userName: userName, modelName: modelName, deviceName: deviceName)
     }
     
     public func getPinCodeArray() {
@@ -355,6 +356,8 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.v3User(value: model)
         case .v3Credential(let model):
             delegate?.v3Credential(value: model)
+        case .v3:
+            break
         }
     }
     

@@ -62,6 +62,7 @@ class BluetoothService: NSObject {
     var qrcodeModelName: String = ""
     var qrcodeDeviceName: String = ""
     var qrcodeMacAddress: String = ""
+    var qrcodeuuid: String = ""
     
     var barcodeKey: String = ""
 
@@ -427,7 +428,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     // qrcode
-    func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String) {
+    func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String?, uuid: String?, userName: String, modelName: String, deviceName: String) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
@@ -436,7 +437,8 @@ class BluetoothService: NSObject {
         qrcodeUserName = userName
         qrcodeModelName = modelName
         qrcodeDeviceName = deviceName
-        qrcodeMacAddress = macAddress
+        qrcodeMacAddress = macAddress ?? ""
+        qrcodeuuid = uuid ?? ""
         self.barcodeKey = barcodeKey
         let command =  CommandService.shared.createAction(with: .E5(tokenIndex), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
@@ -845,7 +847,20 @@ extension BluetoothService: CBPeripheralDelegate {
             let data = DeviceStatusModel()
             data.A2 = model
             self.delegate?.commandState(value: .deviceStatus(data))
-            
+            // deviceStatus\direction
+        case .N82(let model):
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            self.delegate?.commandState(value: .v3deviceStatus(model))
+            // time
+        case .D3(let model):
+            let res = resTimeUseCase()
+            res.isSavedTime = model
+            self.delegate?.commandState(value: .v3time(res))
+        case .D9(let model):
+            let res = resTimeUseCase()
+            res.isSavedTimeZone = model
+            self.delegate?.commandState(value: .v3time(res))
         default:
             break
         }
@@ -1113,7 +1128,7 @@ extension BluetoothService: CBPeripheralDelegate {
             switch response {
             case .E5(let model):
                 let token = model.token?.toHexString() ?? ""
-                let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName]
+                let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName, "U": qrcodeuuid]
                 let json = JSON(dic).rawString() ?? ""
                 let value = AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey) ?? ""
                 self.delegate?.commandState(value: .getTokenQrCode(value))
@@ -1248,22 +1263,11 @@ extension BluetoothService: CBPeripheralDelegate {
         }
         
         // MARK: - V3
+        switch action {
+        case .v3:
             
             switch response {
-                // deviceStatus\direction
-            case .N82(let model):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                self.delegate?.commandState(value: .v3deviceStatus(model))
-                // time
-            case .D3(let model):
-                let res = resTimeUseCase()
-                res.isSavedTime = model
-                self.delegate?.commandState(value: .v3time(res))
-            case .D9(let model):
-                let res = resTimeUseCase()
-                res.isSavedTimeZone = model
-                self.delegate?.commandState(value: .v3time(res))
+   
                 // admincode
             case .C7(let model):
                 let res = resAdminCodeUseCase()
@@ -1429,6 +1433,9 @@ extension BluetoothService: CBPeripheralDelegate {
             default:
                 break
             }
+        default:
+            break
+        }
 
     }
     

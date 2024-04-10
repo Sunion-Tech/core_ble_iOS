@@ -25,6 +25,7 @@ public enum disconnectState {
 }
 
 public enum commandState {
+
     case none
     case deviceStatus(DeviceStatusModel?)
     case config(Bool?)
@@ -57,7 +58,7 @@ public enum commandState {
 
    
     // v3
-    
+    case v3
     case v3deviceStatus(DeviceStatusModelN82?)
     case v3time(resTimeUseCase?)
     case v3adminCode(resAdminCodeUseCase?)

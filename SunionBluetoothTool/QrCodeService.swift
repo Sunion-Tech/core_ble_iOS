@@ -24,7 +24,7 @@ class QrCodeService: NSObject {
     }
     
     var mac: String {
-        return data!["A"].stringValue
+        return data?["A"].stringValue ?? ""
     }
     
     var modelName: String {
@@ -41,6 +41,10 @@ class QrCodeService: NSObject {
     
     var displayName: String {
         return data?["L"].stringValue ?? ""
+    }
+    
+    var uuid: String {
+        return data?["U"].stringValue ?? ""
     }
     
 

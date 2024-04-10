@@ -14,7 +14,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let command =  CommandService.shared.createAction(with:  .N85, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -23,7 +23,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let command =  CommandService.shared.createAction(with:  .N86, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -32,7 +32,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let command =  CommandService.shared.createAction(with: .N90, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -42,7 +42,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let model = IndexUserCredentialRequestModel(index: position)
         let command =  CommandService.shared.createAction(with: .N91(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
@@ -52,7 +52,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let command =  CommandService.shared.createAction(with: .N92(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -61,7 +61,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .none
+        action = .v3
         let model = IndexUserCredentialRequestModel(index: position)
         let command =  CommandService.shared.createAction(with: .N93(model), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
