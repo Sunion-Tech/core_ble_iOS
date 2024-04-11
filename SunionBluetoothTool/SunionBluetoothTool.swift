@@ -52,6 +52,7 @@ public class SunionBluetoothTool: NSObject {
         model.qrCodeDisplayName = qrService.displayName
         model.qrCodeSerialNumber = qrService.serialNumber
         model.modelName = qrService.modelName
+        model.uuid = qrService.uuid
         
         print("🔧🔧🔧decodeQrCode🔧🔧🔧")
         print("token: \(model.token?.toHexString())")

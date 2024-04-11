@@ -584,7 +584,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
  
-        if let mac = mackAddress {
+        if let mac = mackAddress, mac != "" {
             guard let name = peripheral.name else { return }
             
             let macAddressSuffix = mac.subString(start: 6, end: 11).uppercased()
