@@ -52,6 +52,12 @@ public enum CodeStatus: String {
     case error
 }
 
+public enum LanguageStatus: UInt8 {
+    case en
+    case unsupport
+
+}
+
 public enum DeadboltStatus: String {
     case protrude
     case retract

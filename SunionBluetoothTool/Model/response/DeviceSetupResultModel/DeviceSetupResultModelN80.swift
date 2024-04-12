@@ -97,6 +97,14 @@ public class DeviceSetupResultModelN80 {
         self.getsabbathMode()
     }
     
+    public var language: LanguageStatus {
+        self.getLanguage()
+    }
+    
+    public var supportLanguages: [LanguageStatus] {
+        self.getSupportLanguages()
+    }
+    
     private func getmainVersion() -> Int? {
         guard let index5 = response[safe: 0] else { return nil }
         return index5.toInt
@@ -413,6 +421,68 @@ public class DeviceSetupResultModelN80 {
         
     }
     
+
+    private func getLanguage() -> LanguageStatus {
+        guard let index5 = response[safe: 40] else { return .unsupport }
+        
+        if index5 == 0xFF {
+            return .unsupport
+        }
+        
+        
+        guard let supports = response[safe: 41] else { return .unsupport }
+        
+        let bits = supports.bits.map{Int($0)}
+        
+        print("langeage: \(bits)")
+        
+        let indexofLanguage = findIndicesOfOnesFromRight(in: bits)
+        
+        
+        let nowLanguage = index5.toInt
+        
+        if indexofLanguage.contains(where: { val in
+            return val == nowLanguage
+        }) {
+            switch index5 {
+            case 0x00:
+                return .en
+            default:
+                return .unsupport
+            }
+        }
+        
+        return .unsupport
+     
+    }
+    
+    func findIndicesOfOnesFromRight(in bits: [Int]) -> [Int] {
+        let indicesOfOnes = bits.enumerated().compactMap { index, bit -> Int? in
+            bit == 1 ? (bits.count - 1 - index) : nil
+        }
+        return indicesOfOnes.sorted()  // 确保输出索引是从小到大排序
+    }
+    
+    private func getSupportLanguages() -> [LanguageStatus] {
+        guard let supports = response[safe: 41] else { return [.unsupport] }
+        let bits = supports.bits.map{Int($0)}
+        
+        let indexofLanguage = findIndicesOfOnesFromRight(in: bits)
+        var value: [LanguageStatus] = []
+        indexofLanguage.forEach { val in
+            switch val {
+            case 0:
+                value.append(.en)
+            default:
+                break
+            }
+        }
+        
+        
+        
+        print("langeage: \(bits), \(value)")
+        return value
+    }
     
     
 }
