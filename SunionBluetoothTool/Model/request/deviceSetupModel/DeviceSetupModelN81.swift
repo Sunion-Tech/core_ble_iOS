@@ -22,13 +22,15 @@ public class DeviceSetupModelN81 {
     public var voiceValue: VoiceValue
     public var direction: LockDirectionOption
     public var sabbathMode: CodeStatus
+    public var language: LanguageStatus
+ 
    
 
     var command:[UInt8] {
         self.getCommand()
     }
     
-    public init(latitude: Double, longitude: Double, guidingCode: CodeStatus, virtualCode: CodeStatus, twoFA: CodeStatus, vacationModeOn: CodeStatus, autoLockOn: CodeStatus, autoLockTime: Int, soundOn: CodeStatus, fastMode: CodeStatus, voiceValue: VoiceValue, direction: LockDirectionOption, sabbathMode: CodeStatus) {
+    public init(latitude: Double, longitude: Double, guidingCode: CodeStatus, virtualCode: CodeStatus, twoFA: CodeStatus, vacationModeOn: CodeStatus, autoLockOn: CodeStatus, autoLockTime: Int, soundOn: CodeStatus, fastMode: CodeStatus, voiceValue: VoiceValue, direction: LockDirectionOption, sabbathMode: CodeStatus, language: LanguageStatus) {
         self.latitude = latitude
         self.longitude = longitude
         self.guidingCode = guidingCode
@@ -42,6 +44,8 @@ public class DeviceSetupModelN81 {
         self.voiceValue = voiceValue
         self.direction = direction
         self.sabbathMode = sabbathMode
+        self.language = language
+       
     }
 
 
@@ -161,10 +165,29 @@ public class DeviceSetupModelN81 {
         let sabbath: UInt8 = sabbathMode == .open ? 0x01 : sabbathMode == .close ? 0x00 : 0xFF
         byteArray.append(sabbath)
         
+        let lan: UInt8 = language == .en ? 0x00 : 0xFF
+        byteArray.append(lan)
+ 
+
+        
+      
+        
         return byteArray
     }
     
-
+    func languagesToHexString(languages: [LanguageStatus]) -> UInt8 {
+        var byte: UInt8 = 0
+        for language in languages {
+            switch language {
+            case .en:
+                byte |= 1 << 0  // Set bit 0
+            default:
+                break
+            }
+        }
+    
+        return byte
+    }
 
 
 }

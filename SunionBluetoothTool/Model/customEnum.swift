@@ -53,7 +53,7 @@ public enum CodeStatus: String {
 }
 
 public enum LanguageStatus: UInt8 {
-    case en
+    case en = 0x01
     case unsupport
 
 }

@@ -378,7 +378,7 @@ public class CommandService {
             case .N80:
                 return [0x80, 0x00]
             case .N81(let model):
-                return  [0x81, 0x1D] + model.command
+                return  [0x81, 0x1E] + model.command
             case .N82:
                 return [0x82, 0x00]
             case .N83(let act, let lock, let security):
@@ -584,7 +584,7 @@ public class CommandService {
             case .N80:
                 return 0x00
             case .N81:
-                return 0x1C
+                return 0x1E
             case .N82:
                 return 0x00
             case .N83:
