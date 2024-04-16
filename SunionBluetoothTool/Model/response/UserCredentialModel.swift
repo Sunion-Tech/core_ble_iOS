@@ -140,6 +140,10 @@ public class UserCredentialModel {
     }
     
     public var isCreate: Bool?
+    
+    public var isAdmin: Bool {
+        self.getisAdmin()
+    }
 
     private func getUserIndex() -> Int? {
         guard let firstByte = response[safe: 0],
@@ -152,6 +156,11 @@ public class UserCredentialModel {
         let intValue = Int32(bitPattern: UInt32(uint32))
         return Int(intValue)
         
+    }
+    
+    private func getisAdmin() -> Bool {
+        guard response[safe: 2] != nil else { return true }
+        return false
     }
     
     private func getName() -> String? {
