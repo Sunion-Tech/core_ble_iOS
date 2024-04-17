@@ -10,7 +10,7 @@ import Foundation
 public class CredentialRequestModel {
     
     
-    public var credientialIndex: Int
+
     
     public var userIndex: Int
     
@@ -22,8 +22,8 @@ public class CredentialRequestModel {
         self.getCommand()
     }
     
-    public init(credientialIndex: Int, userIndex: Int, credentialData: CredentialDetailStructRequestModel, isCreate: Bool) {
-        self.credientialIndex = credientialIndex
+    public init(userIndex: Int, credentialData: CredentialDetailStructRequestModel, isCreate: Bool) {
+
         self.userIndex = userIndex
     
         self.credentialData = credentialData
