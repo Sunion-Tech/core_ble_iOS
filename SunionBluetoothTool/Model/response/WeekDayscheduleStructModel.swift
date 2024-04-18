@@ -29,34 +29,7 @@ public class WeekDayscheduleStructModel: NSObject {
          }
     }
     
-    public enum DaysMaskMap: UInt8 {
-        case sunday = 0x01
-        case monday = 0x02
-        case tuesday = 0x04
-        case wednesday = 0x08
-        case thursday = 0x10
-        case friday = 0x20
-        case saturday = 0x40
-        
-        public var description: String {
-            switch self {
-            case .sunday:
-                return "Sunday"
-            case .monday:
-                return "Monday"
-            case .tuesday:
-                return "Tuesday"
-            case .wednesday:
-                return "Wednesday"
-            case .thursday:
-                return "Thursday"
-            case .friday:
-                return "Friday"
-            case .saturday:
-                return "Saturday"
-            }
-        }
-    }
+ 
     
     private var response:[UInt8]
 
@@ -64,15 +37,13 @@ public class WeekDayscheduleStructModel: NSObject {
         self.response = response
     }
     
-    var command:[UInt8] {
-        self.getCommand()
-    }
+
     
     public var status: ScheduleStatusEnum {
         self.getScheduleStatusEnum()
     }
     
-    public var daymask: DaysMaskMap? {
+    public var daymask: [Int]? {
         self.getDayMaskMap()
     }
     
@@ -109,27 +80,11 @@ public class WeekDayscheduleStructModel: NSObject {
         }
     }
     
-    private func getDayMaskMap() -> DaysMaskMap? {
+    private func getDayMaskMap() -> [Int]? {
         guard  let day = response[safe: 1]  else { return nil }
-        switch day {
-        case 0x01:
-            return .sunday
-        case 0x02:
-            return .monday
-        case 0x04:
-            return .tuesday
-        case 0x08:
-            return .wednesday
-        case 0x10:
-            return .thursday
-        case 0x20:
-            return .friday
-        case 0x40:
-            return .saturday
-        default:
-            return nil
-        }
+        let bits = day.bits.map{Int($0)}
         
+        return bits
     }
     
 
@@ -158,38 +113,6 @@ public class WeekDayscheduleStructModel: NSObject {
         return endMinute
     }
 
-    private func getCommand()-> [UInt8] {
-        var byteArray:[UInt8] = []
-        
-        byteArray.append(self.status.rawValue)
-        
-        if let daymask = self.daymask {
-            byteArray.append(daymask.rawValue)
-        }
-        
-   
-        if let startHour = startHour {
-            let startHourIndex = startHour.toInt ?? 100
-            byteArray.append(UInt8((startHourIndex * 4)))
-        }
-        
-        if let startMinute = startMinute {
-            let startMinuteIndex = startMinute.toInt ?? 100
-            byteArray.append(UInt8((startMinuteIndex / 15)))
-        }
-        
-        if let endHour = endHour {
-            let endHourIndex = endHour.toInt ?? 100
-            byteArray.append(UInt8((endHourIndex * 4)))
-        }
-        
-        if let endMinute = endMinute {
-            let endMinuteIndex = endMinute.toInt ?? 100
-            byteArray.append(UInt8((endMinuteIndex / 15)))
-        }
-
-
-        return byteArray
-    }
+ 
     
 }
