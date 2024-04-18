@@ -169,7 +169,16 @@ public class UserCredentialModel {
         guard response[safe: 11] != nil else { return nil }
 
         let data = self.response[2...11]
-        return String(data: Data(data), encoding: .utf8)
+        guard var name = String(data: Data(data), encoding: .utf8) else { return nil }
+
+        // 查找第一个空字符'\0'的位置
+        if let range = name.range(of: "\0") {
+            name = String(name[..<range.lowerBound])  // 截取至第一个'\0'之前的字符串
+        }
+
+        // 进一步清除可能的前后空白字符
+        name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name
     }
     
     private func getUid() -> Int? {

@@ -8,10 +8,7 @@
 import Foundation
 
 public class CredentialRequestModel {
-    
-    
 
-    
     public var userIndex: Int
     
     public var credentialData: CredentialDetailStructRequestModel
