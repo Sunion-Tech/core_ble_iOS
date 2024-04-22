@@ -41,10 +41,15 @@ public class SSIDModel {
             return .unknown
         }
     }
+    
+    public var signal: Int? {
+        guard  let index = self.response[safe: 2] else { return nil }
+        return index.toInt
+    }
 
     public var name:String? {
-        guard self.response[safe: 2] != nil else { return nil }
-        let nameData = self.response[2...self.response.count - 1]
+        guard self.response[safe: 3] != nil else { return nil }
+        let nameData = self.response[3...self.response.count - 1]
         return String(data: Data(nameData), encoding: .utf8)
     }
 }

@@ -852,6 +852,10 @@ extension BluetoothService: CBPeripheralDelegate {
             // 保留藍芽資料
             self.delegate?.updateData(value: self.data)
             self.delegate?.commandState(value: .v3deviceStatus(model))
+        case .B0(let model):
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            self.delegate?.commandState(value: .v3Plug(model))
             // time
         case .D3(let model):
             let res = resTimeUseCase()
@@ -1347,6 +1351,10 @@ extension BluetoothService: CBPeripheralDelegate {
                 res.data = model
                 self.delegate?.commandState(value: .v3Log(res))
                 // wifi
+            case .getWifiList(let model):
+                let res = resWifiUseCase()
+                res.list = model
+                self.delegate?.commandState(value: .v3Wifi(res))
             case .setSSID:
                 self.V3setWifiPassword()
             case .setPassword:
@@ -1373,10 +1381,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 res.isAutoUnlock = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
                 // plug
-            case .B0(let model):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                self.delegate?.commandState(value: .v3Plug(model))
+         
             case .B1(let model):
                 self.delegate?.commandState(value: .v3Plug(model))
                 // ota
@@ -1429,7 +1434,6 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resCredentialUseCase()
                 res.isDeleted = model.isSuccess
                 self.delegate?.commandState(value: .v3Credential(res))
-          
             default:
                 break
             }
