@@ -726,7 +726,7 @@ status| UserStatusEnum| available<br>occupiedEnabled<br>occupiedDisabled<br>unkn
 | Parameters | Type | Description |
 | -------- | -------- | -------- |
 | status     | ScheduleStatusEnum     | available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue<br> |
-|daymask| DaysMaskMap|sunday<br>monday<br>tuesday<br>wednesday<br>thursday<br>friday<br>saturday|
+|daymask| [Int]| [sun mon tue wed thur fri sat] |
 |startHour|String| start hour time|
 |startMinute|String| start Minute time|
 |endHour| String | end hour time|
