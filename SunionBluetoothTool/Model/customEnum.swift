@@ -40,9 +40,40 @@ public enum AccessTypeOption: String {
 }
 
 public enum setupAccessOption: UInt8 {
-    case start = 0x01
     case quit = 0x00
+    case start = 0x01
+
     case update = 0x02
+    
+    public var description: String {
+        switch self {
+        case .start:
+            return "start"
+        case .quit:
+            return "quit"
+        case .update:
+            return "update"
+
+        }
+    }
+}
+
+public enum setupStatusOption: UInt8 {
+    case fail = 0x00
+    case success = 0x01
+    case failwithfull = 0x02
+    
+    public var description: String {
+        switch self {
+        case .fail:
+            return "fail"
+        case .success:
+            return "success"
+        case .failwithfull:
+            return "failwithfull"
+
+        }
+    }
 }
 
 public enum CodeStatus: String {
@@ -53,7 +84,10 @@ public enum CodeStatus: String {
 }
 
 public enum LanguageStatus: UInt8 {
-    case en = 0x01
+    case en = 0x00
+    case es = 0x01
+    case fr = 0x02
+    case zh = 0x03
     case unsupport
 
 }

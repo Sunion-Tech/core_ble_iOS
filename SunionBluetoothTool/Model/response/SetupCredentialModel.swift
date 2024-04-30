@@ -18,12 +18,14 @@ public class SetupCredentialModel {
         self.getState()
     }
     
+    public var status: setupStatusOption {
+        self.getStatus()
+    }
+    
     public var index: Int? {
         self.getIndex()
     }
-    public var isSuccess: Bool {
-        self.getIsSuccess()
-    }
+
     
     public var data: [UInt8]? {
         self.getData()
@@ -103,6 +105,8 @@ public class SetupCredentialModel {
         }
     }
     
+
+    
     private func getIndex() -> Int? {
         guard let index1 = self.response[safe: 2] else { return nil }
         guard let index2 = self.response[safe: 3] else { return nil }
@@ -115,9 +119,19 @@ public class SetupCredentialModel {
         return Int(intValue) >= 65535 ? nil : Int(intValue)
     }
     
-    private func getIsSuccess()-> Bool {
-        guard let index0 = self.response[safe: 4] else { return false }
-        return index0 == 0x01
+    private func getStatus()-> setupStatusOption {
+        guard let index0 = self.response[safe: 4] else { return .fail }
+        
+        switch index0 {
+        case 0x00:
+            return .fail
+        case 0x01:
+            return .success
+        case 0x02:
+            return .failwithfull
+        default:
+            return .fail
+        }
     }
     
     

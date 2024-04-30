@@ -31,6 +31,11 @@ public class Credential  {
         tool?.tool?.bluetoothService?.V3delCredential(position: position)
     }
     
+    public func setCardFpFace(model: SetupCredentialRequestModel) {
+        
+        tool?.tool?.bluetoothService?.V3getCredential(model: model)
+    }
+    
 
 
 }

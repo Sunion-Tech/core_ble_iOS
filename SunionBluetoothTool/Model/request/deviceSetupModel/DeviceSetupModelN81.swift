@@ -167,11 +167,7 @@ public class DeviceSetupModelN81 {
         
         let lan: UInt8 = language == .en ? 0x00 : 0xFF
         byteArray.append(lan)
- 
 
-        
-      
-        
         return byteArray
     }
     

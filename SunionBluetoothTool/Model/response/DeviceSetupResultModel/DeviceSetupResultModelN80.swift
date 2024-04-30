@@ -432,53 +432,38 @@ public class DeviceSetupResultModelN80 {
         
         guard let supports = response[safe: 41] else { return .unsupport }
         
-        let bits = supports.bits.map{Int($0)}
+        let bits = supports.languagebits.map { Int($0) } // Assuming 'bits' is defined somewhere to convert UInt8 to an array of bits
         
-        print("langeage: \(bits)")
+        print("bits: \(bits)")
         
-        let indexofLanguage = findIndicesOfOnesFromRight(in: bits)
-        
-        
-        let nowLanguage = index5.toInt
-        
-        if indexofLanguage.contains(where: { val in
-            return val == nowLanguage
-        }) {
-            switch index5 {
-            case 0x00:
-                return .en
-            default:
-                return .unsupport
-            }
+        if let index = bits.firstIndex(of: 1) {
+            let position = UInt8(index - 1) // Get the 0-based index of the first '1' found
+            print("index: \(index)")
+            print("position: \(position)")
+            return LanguageStatus(rawValue: position) ?? .unsupport
+        } else {
+            return .unsupport
         }
-        
-        return .unsupport
      
     }
     
-    func findIndicesOfOnesFromRight(in bits: [Int]) -> [Int] {
-        let indicesOfOnes = bits.enumerated().compactMap { index, bit -> Int? in
-            bit == 1 ? (bits.count - 1 - index) : nil
-        }
-        return indicesOfOnes.sorted()  // 确保输出索引是从小到大排序
-    }
+
     
     private func getSupportLanguages() -> [LanguageStatus] {
         guard let supports = response[safe: 41] else { return [.unsupport] }
-        let bits = supports.bits.map{Int($0)}
         
-        let indexofLanguage = findIndicesOfOnesFromRight(in: bits)
+        
         var value: [LanguageStatus] = []
-        indexofLanguage.forEach { val in
-            switch val {
-            case 0:
-                value.append(.en)
-            default:
-                break
-            }
+  
+        let bits = supports.languagebits.map { Int($0) } // Assuming 'bits' is defined somewhere to convert UInt8 to an array of bits
+        if let index = bits.firstIndex(of: 1) {
+            let position = UInt8(index - 1) // Get the 0-based index of the first '1' found
+            
+            print("index: \(index)")
+            print("position: \(position)")
+            
+            value.append(LanguageStatus(rawValue: position) ?? .unsupport)
         }
-        
-        
         
         print("langeage: \(bits), \(value)")
         return value

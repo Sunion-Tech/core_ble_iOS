@@ -77,5 +77,6 @@ public class resCredentialUseCase {
     public var data: CredentialModel?
     public var isCreatedorEdited: Bool?
     public var isDeleted: Bool?
+    public var setup: SetupCredentialModel?
 }
 

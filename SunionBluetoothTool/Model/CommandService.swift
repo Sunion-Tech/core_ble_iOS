@@ -417,9 +417,7 @@ public class CommandService {
             case .N95(let model):
                 return [0x95, 0x03] + model.command
             case .N96(let model):
-                let command = model.command
-                let commandLength = UInt8(command.count)
-                return [0x96, commandLength] + model.command
+                return [0x96, 0x0F] + model.command
             case .N97(let model):
                 return [0x97, 0x04] + model.command
             case .N98(let model):
@@ -610,9 +608,8 @@ public class CommandService {
                 return 0x00
             case .N95:
                 return 0x03
-            case .N96(let model):
-                let commandLength = UInt8(model.command.count)
-                return commandLength
+            case .N96:
+                return 0x0F
             case .N97:
                 return 0x04
             case .N98:
