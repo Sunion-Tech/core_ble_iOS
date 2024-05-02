@@ -153,11 +153,7 @@ public class SunionBluetoothTool: NSObject {
     public func switchPlug(mode: CommandService.plugMode) {
         bluetoothService?.switchPlug(mode: mode)
     }
-    
-    public func switchSecurity(mode: CommandService.SecurityboltMode) {
-        bluetoothService?.switchSecurity(mode: mode)
-    }
-    
+
     public func getLogCount() {
         bluetoothService?.getLogCount()
     }

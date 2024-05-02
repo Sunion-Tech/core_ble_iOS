@@ -26,5 +26,15 @@ extension BluetoothService {
         let command =  CommandService.shared.createAction(with: .N83(.lockstate, mode, nil), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+    func V3Securitybolt(mode: CommandService.SecurityboltMode) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .none
+        
+        let command =  CommandService.shared.createAction(with: .N83(.securitybolt, nil, mode), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
 
 }

@@ -345,23 +345,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func switchSecurity(mode: CommandService.SecurityboltMode?) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .A3(.securitybolt, nil, mode), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func switch83Security(mode: CommandService.SecurityboltMode?) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .N83(.securitybolt, nil, mode), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
+
     
     // MARK:  - Log
     // count
