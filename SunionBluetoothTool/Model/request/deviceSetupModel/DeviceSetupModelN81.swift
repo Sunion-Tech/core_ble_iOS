@@ -165,7 +165,21 @@ public class DeviceSetupModelN81 {
         let sabbath: UInt8 = sabbathMode == .open ? 0x01 : sabbathMode == .close ? 0x00 : 0xFF
         byteArray.append(sabbath)
         
-        let lan: UInt8 = language == .en ? 0x00 : 0xFF
+        var lan: UInt8 =  0xFF
+        
+        switch language {
+        case .en:
+            lan = 0x00
+        case .es:
+            lan = 0x01
+        case .fr:
+            lan = 0x02
+        case .zh:
+            lan = 0x03
+        case .unsupport:
+            lan = 0xFF
+        }
+        
         byteArray.append(lan)
 
         return byteArray

@@ -111,9 +111,7 @@ public class UserCredentialModel {
         self.getName()
     }
     
-    public var uid: Int? {
-        self.getUid()
-    }
+
     
     public var status: UserStatusEnum {
         self.getStatus()
@@ -127,9 +125,7 @@ public class UserCredentialModel {
         self.getcredentialRule()
     }
     
-    public var credentialStruct: [CredentialStructModel] {
-        self.getCredentialStruct()
-    }
+
     
     public var weekDayscheduleStruct: [WeekDayscheduleStructModel] {
         self.getWeekDayscheduleStructModel()
@@ -180,21 +176,10 @@ public class UserCredentialModel {
         name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         return name
     }
-    
-    private func getUid() -> Int? {
-        guard response[safe: 12] != nil else { return nil }
-        guard response[safe: 15] != nil else { return nil }
-        
-        
-        let data = self.response[12...15]
-  
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
-        let intValue = Int32(bitPattern: UInt32(uint32))
-        return Int(intValue)
-    }
+
 
     private func getStatus() -> UserStatusEnum {
-        guard  let status = response[safe: 16]  else { return .unknownEnumValue }
+        guard  let status = response[safe: 12]  else { return .unknownEnumValue }
         
         switch status {
         case 0x00:
@@ -209,7 +194,7 @@ public class UserCredentialModel {
     }
     
     private func getType() -> UserTypeEnum {
-        guard  let type = response[safe: 17]  else { return .unknownEnumValue }
+        guard  let type = response[safe: 13]  else { return .unknownEnumValue }
         
         switch type {
         case 0x00:
@@ -238,7 +223,7 @@ public class UserCredentialModel {
     }
     
     private func getcredentialRule() -> CredentialRuleEnum {
-        guard  let credential = response[safe: 18]  else { return .unknownEnumValue }
+        guard  let credential = response[safe: 14]  else { return .unknownEnumValue }
         
         switch credential {
         case 0x00:
@@ -252,41 +237,15 @@ public class UserCredentialModel {
         }
     }
 
-    private func getCredentialStruct() -> [CredentialStructModel] {
-        guard let n1 = response[safe: 19],
+    private func getWeekDayscheduleStructModel() -> [WeekDayscheduleStructModel] {
+        guard let n1 = response[safe: 15],
         n1 != 0 else { return [] }
         
         var structs: [[UInt8]] = []
         // 确保response有足够的元素来取出n1组数据
         for i in 0..<n1.toInt {
-            let start = 22 + i * 3
-            let end = start + 2 // 取三个元素
-            
-            // 检查是否可以从response安全地取出这些元素
-            guard let _ = response[safe: end] else { return [] }
-            let group = Array(response[start...end])
-            structs.append(group)
-        }
-        
-        var models: [CredentialStructModel] = []
-        
-        structs.forEach { value in
-            let data = CredentialStructModel(response: value)
-            models.append(data)
-        }
-
-        return models
-    }
-    
-    private func getWeekDayscheduleStructModel() -> [WeekDayscheduleStructModel] {
-        guard let n1 = response[safe: 19], n1 != 0,
-              let n2 = response[safe: 20], n2 != 0 else { return [] }
-        
-        var structs: [[UInt8]] = []
-        // 确保response有足够的元素来取出n1组数据
-        for i in 0..<n2.toInt {
-            let start = 22 + (n1.toInt * 3) + i * 6
-            let end = start + 5 // 取六个元素
+            let start = 17 + i * 6
+            let end = start + 5 // 取6个元素
             
             // 检查是否可以从response安全地取出这些元素
             guard let _ = response[safe: end] else { return [] }
@@ -302,19 +261,16 @@ public class UserCredentialModel {
         }
 
         return models
-        
-      
     }
     
     private func getYearDayscheduleStruct() -> [YearDayscheduleStructModel] {
-        guard let n1 = response[safe: 19], n1 != 0,
-              let n2 = response[safe: 20], n2 != 0,
-              let n3 = response[safe: 21], n3 != 0 else { return [] }
+        guard let n1 = response[safe: 15], n1 != 0,
+              let n2 = response[safe: 16], n2 != 0 else { return [] }
         
         var structs: [[UInt8]] = []
         // 确保response有足够的元素来取出n1组数据
-        for i in 0..<n3.toInt {
-            let start = 22 + (n1.toInt * 3) + (n2.toInt * 6) + i * 5
+        for i in 0..<n2.toInt {
+            let start = 17 + (n1.toInt * 6) + i * 5
             let end = start + 8 // 取九个元素
             
             // 检查是否可以从response安全地取出这些元素
@@ -334,6 +290,8 @@ public class UserCredentialModel {
         
       
     }
+    
+
     
   
 

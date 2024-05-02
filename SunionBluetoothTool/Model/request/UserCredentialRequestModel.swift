@@ -15,15 +15,11 @@ public class UserCredentialRequestModel {
     
     public var name: String
     
-    public var uid: Int
-    
     public var status: UserCredentialModel.UserStatusEnum
     
     public var type: UserCredentialModel.UserTypeEnum
     
     public var credentialRule: UserCredentialModel.CredentialRuleEnum
-    
-    public var credentialStruct: [CredentialStructRequestModel]
     
     public var weekDayscheduleStruct: [WeekDayscheduleStructRequestModel]
     
@@ -34,15 +30,15 @@ public class UserCredentialRequestModel {
         self.getCommand()
     }
     
-    public init(isCreate: Bool, index: Int, name: String, uid: Int, status: UserCredentialModel.UserStatusEnum, type: UserCredentialModel.UserTypeEnum, credentialRule: UserCredentialModel.CredentialRuleEnum, credentialStruct: [CredentialStructRequestModel], weekDayscheduleStruct: [WeekDayscheduleStructRequestModel], yearDayscheduleStruct: [YearDayscheduleStructRequestModel]) {
+    public init(isCreate: Bool, index: Int, name: String, status: UserCredentialModel.UserStatusEnum, type: UserCredentialModel.UserTypeEnum, credentialRule: UserCredentialModel.CredentialRuleEnum, weekDayscheduleStruct: [WeekDayscheduleStructRequestModel], yearDayscheduleStruct: [YearDayscheduleStructRequestModel]) {
         self.isCreate = isCreate
         self.index = index
         self.name = name
-        self.uid = uid
+      
         self.status = status
         self.type = type
         self.credentialRule = credentialRule
-        self.credentialStruct = credentialStruct
+      
         self.weekDayscheduleStruct = weekDayscheduleStruct
         self.yearDayscheduleStruct = yearDayscheduleStruct
     }
@@ -82,25 +78,7 @@ public class UserCredentialRequestModel {
                }
            }
         
-        print("before: \(byteArray.count)")
-        // uid
-        withUnsafeBytes(of: uid) { bytes in
-            for byte in bytes {
-                let stringHex = String(format: "%02X", byte)
-                let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                byteArray.append(uint8)
-            }
-        }
-        
-        print("after: \(byteArray.count)")
-        
-        // uid has 8 byte command just need 4 byte
-        // remove last two byte
-        byteArray.removeLast(4)
 
-      
-        
-        print("after removeLast: \(byteArray.count)")
         
         
         byteArray.append(self.status.rawValue)
@@ -108,16 +86,6 @@ public class UserCredentialRequestModel {
         byteArray.append(self.type.rawValue)
         
         byteArray.append(self.credentialRule.rawValue)
-        
-        
-        print("before credentialStruct: \(byteArray.count)")
-        
-        credentialStruct.forEach { value in
-            byteArray = byteArray + value.command
-            
-        }
-        
-        print("after credentialStruct: \(byteArray.count)")
         
         
         print("before weekDayscheduleStruct: \(byteArray.count)")

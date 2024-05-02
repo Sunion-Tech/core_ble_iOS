@@ -585,7 +585,10 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
- 
+        
+
+        
+        
         if let mac = mackAddress, mac != "" {
             guard let name = peripheral.name else { return }
             
@@ -608,7 +611,7 @@ extension BluetoothService: CBCentralManagerDelegate {
            manufacturerData.starts(with: [0xE3, 0x0C]) {
             let range = 2..<10
             let uuidData = manufacturerData.subdata(in: range)
-        
+            print("manu uuidData: \(uuidData.toHexString())")
             // 與udid 一樣的裝置
             if uuidData.toHexString().lowercased() == udid.lowercased() {
                 print("🔧🔧🔧找到V3裝置🔧🔧🔧 \n \(udid) \n🔧🔧🔧🔧🔧🔧")
