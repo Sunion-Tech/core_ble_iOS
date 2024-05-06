@@ -111,10 +111,19 @@ public class CommandService {
         case E2
         case E3
         case E4
+        case N8A
         case E5(Int)
+        case N8B(Int)
+        
         case E6(AddTokenModel)
+        case N8C(addBleUserModel)
+        
         case E7(EditTokenModel)
+        case N8D(EditBleUserModel)
+        
         case E8(TokenModel, [UInt8]?)
+        case N8E(BleUserModel, [UInt8]?)
+        
         case E9
         case EA
         case EB(Int)
@@ -301,20 +310,39 @@ public class CommandService {
                 return [0xE3]
             case .E4:
                 return [0xE4, 0x00]
+            case .N8A:
+                return [0x8A, 0x00]
             case .E5(let index):
                 return [0xE5, 0x01, UInt8(index)]
+            case .N8B(let index):
+                return [0x8B, 0x01, UInt8(index)]
+                
             case .E6(let model):
                 let command = model.command
                 let commandLength = UInt8(command.count)
                 var byteArray = [0xE6, commandLength]
                 command.forEach{byteArray.append($0)}
                 return byteArray
+            case .N8C(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                var byteArray = [0x8C, commandLength]
+                command.forEach{byteArray.append($0)}
+                return byteArray
+                
             case .E7(let editTokenModel):
                 let command = editTokenModel.command
                 let commandLength = UInt8(command.count)
                 var byteArray = [0xE7, commandLength]
                 command.forEach{byteArray.append($0)}
                 return byteArray
+            case .N8D(let editTokenModel):
+                let command = editTokenModel.command
+                let commandLength = UInt8(command.count)
+                var byteArray = [0x8D, commandLength]
+                command.forEach{byteArray.append($0)}
+                return byteArray
+                
             case .E8(let tokenModel, let pinCode):
                 if tokenModel.isOwnerToken == .owner {
                     guard let pinCode = pinCode else { return [0xE8] }
@@ -327,6 +355,19 @@ public class CommandService {
                 } else {
                     guard let index = tokenModel.indexOfToken else { return [0xE8] }
                     return [0xE8, 0x01, UInt8(index)]
+                }
+            case .N8E(let tokenModel, let pinCode):
+                if tokenModel.isOwnerToken == .owner {
+                    guard let pinCode = pinCode else { return [0x8E] }
+                    guard let index = tokenModel.indexOfToken else { return [0x8E] }
+                    let length = pinCode.count
+                    let commandLength = 1 + 1 + length
+                    var byteArray = [0x8E, UInt8(commandLength), UInt8(index), UInt8(length)]
+                    pinCode.forEach{byteArray.append($0)}
+                    return byteArray
+                } else {
+                    guard let index = tokenModel.indexOfToken else { return [0x8E] }
+                    return [0x8E, 0x01, UInt8(index)]
                 }
             case .E9:
                 return [0xE9]
@@ -521,15 +562,37 @@ public class CommandService {
                 return 0x01
             case .E4:
                 return 0x00
+            case .N8A:
+                return 0x00
             case .E5:
                 return 0x01
+            case .N8B:
+                return 0x01
+                
             case .E6(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
+            case .N8C(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
+                
             case .E7(let editTokenModel):
                 let commandLength = UInt8(editTokenModel.command.count)
                 return commandLength
+            case .N8D(let editTokenModel):
+                let commandLength = UInt8(editTokenModel.command.count)
+                return commandLength
+                
             case .E8(let tokenModel, let pinCode):
+                if tokenModel.isOwnerToken == .owner {
+                    guard let pinCode = pinCode else { return 0x00 }
+                    let length = pinCode.count
+                    let commandLength = 1 + 1 + length
+                    return UInt8(commandLength)
+                } else {
+                    return 0x01
+                }
+            case .N8E(let tokenModel, let pinCode):
                 if tokenModel.isOwnerToken == .owner {
                     guard let pinCode = pinCode else { return 0x00 }
                     let length = pinCode.count
@@ -662,10 +725,19 @@ public class CommandService {
         case E2
         case E3
         case E4([Int])
+        case N8A([Int])
         case E5(TokenModel)
+        case N8B(BleUserModel)
+        
         case E6(AddTokenResult)
+        case N8C(AddTokenResult)
+        
         case E7(Bool)
+        case N8D(Bool)
+        
         case E8(Bool)
+        case N8E(Bool)
+        
         case E9
         case EA(PinCodeArrayModel)
         case EB(PinCodeModelResult)
@@ -683,6 +755,7 @@ public class CommandService {
         case N85(UserableResponseModel)
         case N86(resUserSupportedCountModel)
         case N87(Bool)
+
         case N90([Int])
         case N91(UserCredentialModel)
         case N92(N9ResponseModel)
@@ -780,14 +853,28 @@ public class CommandService {
                 return 0xE3
             case .E4:
                 return 0xE4
+            case .N8A:
+                return 0x8A
             case .E5:
                 return 0xE5
+            case .N8B:
+                return 0x8B
+                
             case .E6:
                 return 0xE6
+            case .N8C:
+                return 0x8C
+                
             case .E7:
                 return 0xE7
+            case .N8D:
+                return 0x8D
+                
             case .E8:
                 return 0xE8
+            case .N8E:
+                return 0x8E
+                
             case .E9:
                 return 0xE9
             case .EA:
@@ -823,6 +910,10 @@ public class CommandService {
                 return 0x86
             case .N87:
                 return 0x87
+            case .N8A:
+                return 0x8A
+            case .N8B:
+                return 0x8B
             case .N90:
                 return 0x90
             case .N91:
@@ -1217,18 +1308,37 @@ public class CommandService {
         case 0xE4:
             let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
             return .E4(indexArray)
+        case 0x8A:
+            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
+            return .N8A(indexArray)
         case 0xE5:
             let tokenModel = TokenModel(response: data)
             return .E5(tokenModel)
+        case 0x8B:
+            let tokenModel = BleUserModel(response: data)
+            return .N8B(tokenModel)
+            
         case 0xE6:
             let result = AddTokenResult(response: data)
             return .E6(result)
+        case 0x8C:
+            let result = AddTokenResult(response: data)
+            return .N8C(result)
+            
         case 0xE7:
             let isSuccess = data.first == 0x01
             return .E7(isSuccess)
+        case 0x8D:
+            let isSuccess = data.first == 0x01
+            return .N8D(isSuccess)
+            
         case 0xE8:
             let isSuccess = data.first == 0x01
             return .E8(isSuccess)
+        case 0x8E:
+            let isSuccess = data.first == 0x01
+            return .N8E(isSuccess)
+            
         case 0xE9:
             return .E9
         case 0xEA:

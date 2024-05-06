@@ -427,6 +427,10 @@ class BluetoothService: NSObject {
         let command =  CommandService.shared.createAction(with: .E5(tokenIndex), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+
+    
+
 
     // MARK: - PinCode
     func getPinCodeArray() {
@@ -922,7 +926,16 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.data.permanentToken = token
    
                 self.data.permission = tokenModel.tokenPermission
-
+            case .N8B(let tokenModel):
+                guard let token = tokenModel.token else {
+                    self.delegate?.bluetoothState(State: .disconnect(.fail))
+                    self.centralManager.cancelPeripheralConnection(self.connectedPeripheral!)
+                    return
+                }
+                self.permanentToken = token
+                self.data.permanentToken = token
+   
+                self.data.permission = tokenModel.tokenPermission
             default:
                 break
                 
@@ -1310,23 +1323,42 @@ extension BluetoothService: CBPeripheralDelegate {
                 res.isMatter = model
                 self.delegate?.commandState(value: .v3utility(res))
                 // token
-            case .E4(let model):
+            case .N8A(let model):
                 let res  = resTokenUseCase()
                 res.array = model
                 self.delegate?.commandState(value: .v3Token(res))
-            case .E5(let model):
-                let res  = resTokenUseCase()
-                res.data = model
-                self.delegate?.commandState(value: .v3Token(res))
-            case .E6(let model):
+            case .N8B(let model):
+                
+                if qrcodeAes1Key != "" {
+                    let token = model.token?.toHexString() ?? ""
+                    let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName, "U": qrcodeuuid]
+                    let json = JSON(dic).rawString() ?? ""
+                    let value = AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey) ?? ""
+                    
+                    qrcodeAes1Key = ""
+                    qrcodeUserName = ""
+                    qrcodeModelName = ""
+                    qrcodeDeviceName = ""
+                    qrcodeMacAddress =  ""
+                    qrcodeuuid = ""
+                    barcodeKey = ""
+
+                    self.delegate?.commandState(value: .getTokenQrCode(value))
+                } else {
+                    let res  = resTokenUseCase()
+                    res.data = model
+                    self.delegate?.commandState(value: .v3Token(res))
+                }
+              
+            case .N8C(let model):
                 let res  = resTokenUseCase()
                 res.created = model
                 self.delegate?.commandState(value: .v3Token(res))
-            case .E7(let model):
+            case .N8D(let model):
                 let res  = resTokenUseCase()
                 res.isEdited = model
                 self.delegate?.commandState(value: .v3Token(res))
-            case .E8(let model):
+            case .N8E(let model):
                 let res = resTokenUseCase()
                 res.isDeleted = model
                 self.delegate?.commandState(value: .v3Token(res))

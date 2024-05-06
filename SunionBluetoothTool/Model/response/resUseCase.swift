@@ -38,7 +38,7 @@ public class resUtilityUseCase {
 
 public class resTokenUseCase {
     public var array: [Int]?
-    public var data: TokenModel?
+    public var data: BleUserModel?
     public var created: AddTokenResult?
     public var isEdited: Bool?
     public var isDeleted: Bool?

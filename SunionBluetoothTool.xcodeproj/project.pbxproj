@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60B367902BE86EB60005E141 /* BleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B3678F2BE86EB60005E141 /* BleUserModel.swift */; };
+		60B367922BE872350005E141 /* addBleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B367912BE872350005E141 /* addBleUserModel.swift */; };
+		60B367942BE877B90005E141 /* EditBleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B367932BE877B90005E141 /* EditBleUserModel.swift */; };
 		60BE21972BB109B9003AD4E8 /* resUserSupportedCountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */; };
 		60BE21AD2BB24EA5003AD4E8 /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21AC2BB24EA5003AD4E8 /* DeviceStatus.swift */; };
 		60BE21B22BB2564D003AD4E8 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21B12BB2564D003AD4E8 /* UseCase.swift */; };
@@ -24,8 +27,8 @@
 		60BE21D12BB29A30003AD4E8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D02BB29A30003AD4E8 /* Config.swift */; };
 		60BE21D32BB29B04003AD4E8 /* Ex+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */; };
 		60BE21D52BB2A31F003AD4E8 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D42BB2A31F003AD4E8 /* Utility.swift */; };
-		60BE21D72BB2A3E4003AD4E8 /* Ex+Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */; };
-		60BE21D92BB2ABCE003AD4E8 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D82BB2ABCE003AD4E8 /* Token.swift */; };
+		60BE21D72BB2A3E4003AD4E8 /* Ex+BleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D62BB2A3E4003AD4E8 /* Ex+BleUser.swift */; };
+		60BE21D92BB2ABCE003AD4E8 /* BleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21D82BB2ABCE003AD4E8 /* BleUser.swift */; };
 		60BE21DB2BB2B111003AD4E8 /* Ex+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */; };
 		60BE21DD2BB2B1F8003AD4E8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DC2BB2B1F8003AD4E8 /* Log.swift */; };
 		60BE21DF2BB2B24B003AD4E8 /* Ex+Wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */; };
@@ -119,6 +122,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60B3678F2BE86EB60005E141 /* BleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleUserModel.swift; sourceTree = "<group>"; };
+		60B367912BE872350005E141 /* addBleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addBleUserModel.swift; sourceTree = "<group>"; };
+		60B367932BE877B90005E141 /* EditBleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBleUserModel.swift; sourceTree = "<group>"; };
 		60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resUserSupportedCountModel.swift; sourceTree = "<group>"; };
 		60BE21AC2BB24EA5003AD4E8 /* DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		60BE21B12BB2564D003AD4E8 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
@@ -136,8 +142,8 @@
 		60BE21D02BB29A30003AD4E8 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Utility.swift"; sourceTree = "<group>"; };
 		60BE21D42BB2A31F003AD4E8 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
-		60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Token.swift"; sourceTree = "<group>"; };
-		60BE21D82BB2ABCE003AD4E8 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		60BE21D62BB2A3E4003AD4E8 /* Ex+BleUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+BleUser.swift"; sourceTree = "<group>"; };
+		60BE21D82BB2ABCE003AD4E8 /* BleUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleUser.swift; sourceTree = "<group>"; };
 		60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Log.swift"; sourceTree = "<group>"; };
 		60BE21DC2BB2B1F8003AD4E8 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Wifi.swift"; sourceTree = "<group>"; };
@@ -242,6 +248,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60B367952BE877C40005E141 /* BleUser */ = {
+			isa = PBXGroup;
+			children = (
+				60B3678F2BE86EB60005E141 /* BleUserModel.swift */,
+				60B367912BE872350005E141 /* addBleUserModel.swift */,
+				60B367932BE877B90005E141 /* EditBleUserModel.swift */,
+			);
+			path = BleUser;
+			sourceTree = "<group>";
+		};
 		60BE21AE2BB25027003AD4E8 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,7 +268,7 @@
 				60BE21CC2BB2713C003AD4E8 /* Direction.swift */,
 				60BE21D02BB29A30003AD4E8 /* Config.swift */,
 				60BE21D42BB2A31F003AD4E8 /* Utility.swift */,
-				60BE21D82BB2ABCE003AD4E8 /* Token.swift */,
+				60BE21D82BB2ABCE003AD4E8 /* BleUser.swift */,
 				60BE21DC2BB2B1F8003AD4E8 /* Log.swift */,
 				60BE21E22BB2B9B7003AD4E8 /* Wifi.swift */,
 				60BE21E62BB2BD26003AD4E8 /* Plug.swift */,
@@ -273,7 +289,7 @@
 				60BE21CA2BB26F74003AD4E8 /* Ex+Direction.swift */,
 				60BE21CE2BB298D3003AD4E8 /* Ex+Config.swift */,
 				60BE21D22BB29B04003AD4E8 /* Ex+Utility.swift */,
-				60BE21D62BB2A3E4003AD4E8 /* Ex+Token.swift */,
+				60BE21D62BB2A3E4003AD4E8 /* Ex+BleUser.swift */,
 				60BE21DA2BB2B111003AD4E8 /* Ex+Log.swift */,
 				60BE21DE2BB2B24B003AD4E8 /* Ex+Wifi.swift */,
 				60BE21E42BB2BB68003AD4E8 /* Ex+Plug.swift */,
@@ -407,6 +423,7 @@
 		99CB5442299369EB00A5C06F /* response */ = {
 			isa = PBXGroup;
 			children = (
+				60B367952BE877C40005E141 /* BleUser */,
 				9992E51E2B6C77F400E44AB0 /* DeviceStatusModel */,
 				9992E5132B6B846800E44AB0 /* DeviceSetupResultModel */,
 				99AEB52129347D7C00CCAC9C /* apiResDeivceAccessCodeListAccessCode.swift */,
@@ -557,6 +574,7 @@
 				9992E4F52B6A334700E44AB0 /* CredentialDetailStructModel.swift in Sources */,
 				60BE21F42BB3A66B003AD4E8 /* Credential.swift in Sources */,
 				99CB544A29937A1600A5C06F /* DelAccessResponseModel.swift in Sources */,
+				60B367902BE86EB60005E141 /* BleUserModel.swift in Sources */,
 				99AEB51029347CDE00CCAC9C /* TokenModel.swift in Sources */,
 				60BE21C52BB26D3F003AD4E8 /* Ex+AdminCode.swift in Sources */,
 				60BE21F22BB3A4FB003AD4E8 /* Ex+Credential.swift in Sources */,
@@ -570,6 +588,7 @@
 				9992E5052B6B455100E44AB0 /* CredentialRequestModel.swift in Sources */,
 				60BE21C92BB26DC9003AD4E8 /* resUseCase.swift in Sources */,
 				995AD7652990DB1F00810273 /* customEnum.swift in Sources */,
+				60B367942BE877B90005E141 /* EditBleUserModel.swift in Sources */,
 				99CB543B29932B6B00A5C06F /* AccessDataResponseModel.swift in Sources */,
 				99AEB50629347C8800CCAC9C /* CommandService.swift in Sources */,
 				9992E5222B6C784300E44AB0 /* DeviceStatusModelA2.swift in Sources */,
@@ -579,7 +598,7 @@
 				9992E5172B6B84E700E44AB0 /* DeviceSetupResultModelD4.swift in Sources */,
 				99AEB50C29347CBD00CCAC9C /* AddTokenModel.swift in Sources */,
 				99CB543E29933EDF00A5C06F /* AccessRequestModel.swift in Sources */,
-				60BE21D72BB2A3E4003AD4E8 /* Ex+Token.swift in Sources */,
+				60BE21D72BB2A3E4003AD4E8 /* Ex+BleUser.swift in Sources */,
 				995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */,
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
 				9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */,
@@ -619,6 +638,7 @@
 				60BE21C12BB26CF3003AD4E8 /* Ex+DeviceStatus.swift in Sources */,
 				60BE21CB2BB26F74003AD4E8 /* Ex+Direction.swift in Sources */,
 				60BE21E52BB2BB68003AD4E8 /* Ex+Plug.swift in Sources */,
+				60B367922BE872350005E141 /* addBleUserModel.swift in Sources */,
 				60BE21B22BB2564D003AD4E8 /* UseCase.swift in Sources */,
 				999C95392AD634340063BD1F /* OTAStatusRequestModel.swift in Sources */,
 				99AEB50A29347CAA00CCAC9C /* DeviceSetupModel.swift in Sources */,
@@ -631,7 +651,7 @@
 				99F3ABB529BF03CA00E29C23 /* AlertResponseModel.swift in Sources */,
 				9992E5262B6C8C4C00E44AB0 /* UserableResponseModel.swift in Sources */,
 				99CB5446299374EB00A5C06F /* SetupAccessResponseModel.swift in Sources */,
-				60BE21D92BB2ABCE003AD4E8 /* Token.swift in Sources */,
+				60BE21D92BB2ABCE003AD4E8 /* BleUser.swift in Sources */,
 				99AEB51E29347D5600CCAC9C /* UserCodeArrayModel.swift in Sources */,
 				9992E4E52B677C3A00E44AB0 /* UserCredentialModel.swift in Sources */,
 				99AEB51629347D1000CCAC9C /* SSIDModel.swift in Sources */,

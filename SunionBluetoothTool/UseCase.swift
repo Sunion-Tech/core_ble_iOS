@@ -43,8 +43,8 @@ public class useCase  {
         return Utility(tool: self)
     }()
     
-    public lazy var token: Token = {
-        return Token(tool: self)
+    public lazy var bleUser: BleUser = {
+        return BleUser(tool: self)
     }()
     
     public lazy var log: Log = {
