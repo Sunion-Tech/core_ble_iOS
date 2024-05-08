@@ -38,6 +38,23 @@ viewDidLoad
 SunionBluetoothTool.shared.delegate = self
 ```
 # Start
+### Mandatory Process Flowchart
+```mermaid
+graph TD;
+    decodeQrCode--> initBluetooth
+    initBluetooth--> connectingBluetooth
+    connectingBluetooth--> saveDataIfYouNeed
+    saveDataIfYouNeed--> END
+    connectingBluetooth --> setupAdminCode
+    setupAdminCode --> setupDeviceTime
+    setupDeviceTime --> setupTimeZone
+    setupTimeZone --> getDeviceStatus
+    getDeviceStatus -->  response_LockDirection
+    response_LockDirection -- "unknown" --> boltCheck
+     boltCheck --> END
+    response_LockDirection -- "known" --> END
+```
+
 ### Pairing with lock
 To pair with lock, you can get lock connection information by scanning QR code of lock. The content of QR code is encryted with BARCODE_KEY, you can decrypt the contet with the following example code:
 ```
