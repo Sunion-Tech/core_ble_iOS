@@ -40,17 +40,25 @@ public class WeekDayscheduleStructRequestModel {
         
         byteArray.append(getDaymask())
         
-        let startHourIndex = startHour.toInt ?? 100
-        byteArray.append(UInt8((startHourIndex * 4)))
-      
-        let startMinuteIndex = startMinute.toInt ?? 100
-        byteArray.append(UInt8((startMinuteIndex / 15)))
+        if let startHourIndex = startHour.toInt {
+            byteArray.append(UInt8((startHourIndex)))
+        }
        
-        let endHourIndex = endHour.toInt ?? 100
-        byteArray.append(UInt8((endHourIndex * 4)))
       
-        let endMinuteIndex = endMinute.toInt ?? 100
-        byteArray.append(UInt8((endMinuteIndex / 15)))
+        if let startMinuteIndex = startMinute.toInt {
+            byteArray.append(UInt8((startMinuteIndex)))
+        }
+      
+       
+        if let endHourIndex = endHour.toInt {
+            byteArray.append(UInt8((endHourIndex)))
+        }
+       
+      
+        if let endMinuteIndex = endMinute.toInt {
+            byteArray.append(UInt8((endMinuteIndex)))
+        }
+        
       
 
         return byteArray

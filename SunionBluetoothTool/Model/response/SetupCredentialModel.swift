@@ -114,15 +114,15 @@ public class SetupCredentialModel {
         let data = Data([index1, index2, 0x00, 0x00])
         let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
         let intValue = Int32(bitPattern: UInt32(uint32))
-        
-        // 65535 = [0xFF, 0xFF, 0x00, 0x00] = not support
-        return Int(intValue) >= 65535 ? nil : Int(intValue)
+
+        return  Int(intValue)
     }
     
     private func getStatus()-> setupStatusOption {
         guard let index0 = self.response[safe: 4] else { return .fail }
-        
+    
         switch index0 {
+            
         case 0x00:
             return .fail
         case 0x01:
