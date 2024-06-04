@@ -69,12 +69,6 @@ public class CommandService {
         case broken
     }
 
-    enum AdminCodeMode {
-        case setupSuccess
-        case empty
-        case error
-    }
-
     enum ActionOption {
         case getWifiList
         case setSSID(String)
@@ -744,7 +738,7 @@ public class CommandService {
         case EC(Bool)
         case ED(Bool)
         case EE(Bool)
-        case EF(AdminCodeMode)
+        case EF(Bool)
         case F3(DeviceStatusModelN82)
         case F4(Bool)
         case N80(DeviceSetupResultModelN80)
@@ -1136,7 +1130,7 @@ public class CommandService {
     }
 
     private func resolveWithActionCode(actionCode:UInt8, data:[UInt8]) -> ActionResolveOption {
-  
+        print("resolveWithActionCode: \(actionCode)")
         switch actionCode {
         case 0xF2:
             // set wifi 回傳 L
@@ -1357,18 +1351,8 @@ public class CommandService {
             let isSuccess = data.first == 0x01
             return .EE(isSuccess)
         case 0xEF:
-            var adminCodeMode: AdminCodeMode {
-                guard let index0 = data.first else { return .error }
-                switch index0 {
-                case 0x01:
-                    return .setupSuccess
-                case 0x00:
-                    return .empty
-                default:
-                    return .error
-                }
-            }
-            return .EF(adminCodeMode)
+            guard let index0 = data[safe: 0] else { return .EF(false) }
+            return .EF(index0 == 0x01)
  
         case 0xA4:
             let result = SupportDeviceTypesResponseModel(response: data)

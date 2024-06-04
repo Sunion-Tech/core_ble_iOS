@@ -355,6 +355,8 @@ extension SunionBluetoothTool: BluetoothServiceDelegate {
             delegate?.v3Credential(value: model)
         case .v3:
             break
+        case .v3adminExist:
+            break
         }
     }
     

@@ -983,17 +983,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .isAdminCode:
             switch response {
-            case .EF(let adminCodeMode):
-                
-                switch adminCodeMode {
-                case .setupSuccess:
-                    self.delegate?.commandState(value: .isAdminCode(true))
-                case .empty :
-                    self.delegate?.commandState(value: .isAdminCode(false))
-                default:
-                    self.delegate?.commandState(value: .isAdminCode(nil))
-                }
-            
+            case .EF(let bool):
+                self.delegate?.commandState(value: .isAdminCode(bool))
             default:
                 break
             }
@@ -1270,6 +1261,15 @@ extension BluetoothService: CBPeripheralDelegate {
         
         // MARK: - V3
         switch action {
+        case .v3adminExist:
+            switch response {
+            case .EF(let model):
+                let res = resAdminCodeUseCase()
+                res.isExisted = model
+                self.delegate?.commandState(value: .v3adminCode(res))
+            default:
+                break
+            }
         case .v3:
             
             switch response {
@@ -1282,10 +1282,6 @@ extension BluetoothService: CBPeripheralDelegate {
             case .C8(let model):
                 let res = resAdminCodeUseCase()
                 res.isEdited = model
-                self.delegate?.commandState(value: .v3adminCode(res))
-            case .EF(let model):
-                let res = resAdminCodeUseCase()
-                res.isExisted = model == .setupSuccess
                 self.delegate?.commandState(value: .v3adminCode(res))
                 // name
             case .D0(let model):

@@ -35,7 +35,7 @@ extension BluetoothService {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
-        action = .v3
+        action = .v3adminExist
         let command = CommandService.shared.createAction(with: .EF, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
