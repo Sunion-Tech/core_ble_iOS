@@ -167,7 +167,7 @@ class BluetoothService: NSObject {
         }
         
         if let workItem = workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(60), execute: workItem)
         }
     }
     
@@ -627,7 +627,7 @@ extension BluetoothService: CBCentralManagerDelegate {
         }
         
         if let workItem = workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(60), execute: workItem)
         }
         
      

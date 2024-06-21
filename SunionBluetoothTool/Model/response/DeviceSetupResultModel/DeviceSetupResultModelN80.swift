@@ -202,6 +202,8 @@ public class DeviceSetupResultModelN80 {
         }
     }
     
+    
+    
     private func getguidingCode() -> CodeStatus {
         guard let index5 = response[safe: 24] else { return .error }
         switch index5 {
