@@ -91,26 +91,27 @@ public class WeekDayscheduleStructModel: NSObject {
     
     private func getStartHour() -> String? {
         guard  let time = response[safe: 2]  else { return nil }
-        let startHour = (time.toInt / 4).toString
-        return startHour
+
+        return String(time)
     }
     
     private func getStartMinute() -> String? {
         guard  let time = response[safe: 3]  else { return nil }
-        let startMinute = ((time % 4).toInt * 15).toString
-        return startMinute
+        
+
+        return String(time)
     }
     
     private func getEndHour() -> String? {
         guard  let time = response[safe: 4]  else { return nil }
-        let endHour = (time.toInt / 4).toString
-        return endHour
+   
+        return String(time)
     }
     
     private func getEndMinute() -> String? {
         guard  let time = response[safe: 5]  else { return nil }
-        let endMinute = ((time % 4).toInt * 15).toString
-        return endMinute
+ 
+        return String(time)
     }
 
  

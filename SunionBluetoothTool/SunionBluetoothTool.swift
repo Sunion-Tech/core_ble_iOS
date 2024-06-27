@@ -243,6 +243,8 @@ public class SunionBluetoothTool: NSObject {
 
 extension SunionBluetoothTool: BluetoothServiceDelegate {
     func updateData(value: BluetoothToolModel) {
+        
+        print("SunionBluetoothTool updateData: \(value.permanentToken?.toHexString())")
        
         if let data = data {
             data.permanentToken = value.permanentToken
