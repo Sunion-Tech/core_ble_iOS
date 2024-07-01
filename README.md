@@ -52,16 +52,6 @@ graph TD;
     response_LockDirection -- "known" --> END
 ```
 
-### Pairing with lock
-When pairing with the lock, you can obtain the lock's connection information by scanning the lock's QR code. You can use the following example to filter the QR code information:
-```
-let response = SunionBluetoothTool.shared.qrCode(value: String)
-```
-### Parameter
-| Parameter | Type | Description |
-| -------- | -------- | -------- |
-|value | String | get from qrCode
-
 
 Before connecting to the lock, you can setup connection state observer:
 ```
@@ -159,4 +149,4 @@ let data = SunionBluetoothTool.shared.data
 | version  | Description |File Name 
 | --------  | -------- | --|
 | v1, v2| Preliminary version of Bluetooth commands| Version1
-|v3| ncludes Matter Device | Version3
+|v3| includes Matter Device | Version3

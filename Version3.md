@@ -1,3 +1,24 @@
+# Pairing with lock
+When pairing with the lock, you can obtain the lock's connection information by scanning the lock's QR code. You can use the following example to filter the QR code information:
+```
+let response = SunionBluetoothTool.shared.qrCode(value: String)
+```
+### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|value| String | qrCode Value
+
+==After obtaining this response, you need to request, api-key get from FU HSING==
+
+```
+curl -X POST "https://apii.ikey-lock.com/v1/production/get" -H "x-api-key: your-api-key" -H "Content-Type: application/json" -d '{"code":"string-from-qrcode"}'
+```
+### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|x-api-key| String | api-key
+|code| String| string-from-response
+
 # USECASE
 |name|
 |-|
@@ -8,13 +29,13 @@
 |[direction](#direction)|
 |[config](#config)|
 |[utility](#utility)|
-|[token](#token)|
 |[log](#log)|
 |[wifi](#wifi)|
 |[plug](#plug)|
 |[ota](#ota)|
 |[user](#user)|
 |[credential](#credential)|
+[bleuser](#bleuser)
 
 ## deviceStatus
 ### Get DeviceStatus
@@ -29,6 +50,16 @@ SunionBluetoothTool.shared.Usecase.deviceStatus.lockorUnlock(value: CommandServi
 | Parameters | Type | Description |
 | -------- | -------- | -------- |
 | value     | CommandService.DeviceMode     | lock<br>unlock|
+
+### SecurityOnOff
+```
+SunionBluetoothTool.shared.Usecase.deviceStatus.securityOnOff(value: CommandService.SecurityboltMode)
+```
+#### Parameters
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| value     | CommandService.SecurityboltMode     | protrude<br>unprotrude|
+
 ### Delegate function
 ```
  public func v3deviceStatus(value: DeviceStatusModelN82?) {
@@ -76,7 +107,14 @@ SunionBluetoothTool.shared.Usecase.time.setTimeZone(value: String)
 ```
 func v3time(value: resTimeUseCase?) {
      if let value = value {
-        // do something here
+         if let time = value.isSavedTime {
+             // do something here
+         }
+         
+          if let timezone = value.isSavedTimeZone {
+             // do something here
+         }
+        
      } else {
          // error
      }
@@ -125,7 +163,18 @@ SunionBluetoothTool.shared.Usecase.adminCode.exists()
 ```
 func v3adminCode(value: resAdminCodeUseCase?) {
      if let value = value {
-        // do something here
+         if created = value.isCreated {
+              // do something here
+         }
+         
+          if edited = value.isEdited {
+              // do something here
+         }
+         
+          if existed = value.isExisted {
+              // do something here
+         }
+       
      } else {
          // error
      }
@@ -159,7 +208,13 @@ SunionBluetoothTool.shared.Usecase.name.set(value: String)
 ```
 func v3Name(value: resNameUseCase?) {
      if let value = value {
-        // do something here
+        if let configured = value.isConfigured {
+            // do something here
+        }
+        
+        if let data = value.data {
+            // do something here
+        }
      } else {
          // error
      }
@@ -238,7 +293,13 @@ SunionBluetoothTool.shared.Usecase.config.set(model: DeviceSetupModelN81)
 ```
  public func v3Config(value: resConfigUseCase?) {
      if let value = value {
-          // do something here
+          if let configured = value.isConfigured {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
      } else {
          // error
      }
@@ -308,7 +369,25 @@ SunionBluetoothTool.shared.Usecase.utility.isMatter()
 ```
  public func v3utility(value: resUtilityUseCase?) {
      if let value = value {
-          // do something here
+          if let version = value.version {
+              // do something here
+          }
+          
+          if let factoryreset = value.isFactoryReset {
+              // do something here
+          }
+          
+          if let plugfactoryreset = value.isPlugFactoryReset {
+              // do something here
+          }
+          
+          if let matter = value.isMatter {
+              // do something here
+          }
+          
+          if let alert = value.alert {
+              // do something here
+          }
      } else {
          // error
      }
@@ -337,83 +416,6 @@ SunionBluetoothTool.shared.Usecase.utility.isMatter()
 |type|  CommandService.alertType|errorAccess<br>correctButErrortime<br>correctButVacationMode<br>activelyPressClearKey<br>moreError<br>broken
 
 ---
-## token
-### array
-```
-SunionBluetoothTool.shared.Usecase.token.array()
-```
-
-### data
-```
-SunionBluetoothTool.shared.Usecase.token.data(position: Int)
-```
-#### Parameters
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-| position     | index    | location of the token |
-
-### create
-```
-SunionBluetoothTool.shared.Usecase.token.create(model: AddTokenModel)
-```
-#### AddTokenModel
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-| tokenName     | String    | name of the token |
-|tokenPermission|TokenPermission|all<br>limit
-
-### edit
-```
-SunionBluetoothTool.shared.Usecase.token.edit(model: EditTokenModel)
-```
-#### EditTokenModel
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-| tokenName     | String    | name of the token |
-|tokenPermission|TokenPermission|all<br>limit|
-|tokenIndex| Int| location of the token|
-### delete
-```
-SunionBluetoothTool.shared.Usecase.token.delete(model: TokenModel)
-```
-#### TokenModel
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-| isEnable     | Bool    | enable of the token |
-|tokenMode|TokenType|permanent<br>oneTime<br>invalid|
-|isOwnerToken| OwnerTokenType| owner<br>notOwner<br>error|
-|tokenPermission|TokenPermission|all<br>limit|
-|token|[UInt8]| data of the token
-| name     | String    | name of the token |
-
-### Delegate function
-```
- public v3Token(value: resTokenUseCase?) {
-     if let value = value {
-          // do something here
-     } else {
-         // error
-     }
- }
-```
-
-##### resTokenUseCase
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-|array| [Int]| location where the Token is stored
-|data|TokenModel|[LINK](#TokenModel)
-|created|addTokenResult|[LINK](#addTokenResult)
-|isEdited|Bool| Verify if edited the token was successful
-|isDeleted|Bool| Verify if deleted the token was successful
-
-##### addTokenResult
-| Parameters | Type | Description |
-| -------- | -------- | -------- |
-|isSuccess|Bool| Verify if create the token was successful
-|index|Int|location of the token|
-|token|[UInt8]| data of the token
-
----
 
 ## log
 
@@ -435,7 +437,13 @@ SunionBluetoothTool.shared.Usecase.log.data(position: Int)
 ```
  public v3Log(value: resLogUseCase?) {
      if let value = value {
-          // do something here
+          if let count = value.count {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
      } else {
          // error
      }
@@ -555,7 +563,29 @@ SunionBluetoothTool.shared.Usecase.wifi.waitForButtonThenAutoUnlockWiFi(identity
 ```
  public v3Wifi(value: resWifiUseCase?)  {
      if let value = value {
-          // do something here
+          if let list = value.list {
+              // do something here
+          }
+          
+          if let status = value.status {
+              // do something here
+          }
+          
+          if let wifi = value.isWifi {
+              // do something here
+          }
+          
+          if let mqtt = value.isMQTT {
+              // do something here
+          }
+          
+          if let clould = value.isClould {
+              // do something here
+          }
+          
+          if let autounlock = value.isAutoUnlock {
+              // do something here
+          }
      } else {
          // error
      }
@@ -646,7 +676,13 @@ SunionBluetoothTool.shared.Usecase.ota.update(model: OTADataRequestModel)
 ```
  public v3OTA(value: resOTAUseCase?)  {
      if let value = value {
-          // do something here
+          if let status = value.status {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
      } else {
          // error
      }
@@ -752,7 +788,30 @@ SunionBluetoothTool.shared.Usecase.user.delete(position: Int)
 ```
  public v3User(value: resUserUseCase?)  {
      if let value = value {
-          // do something here
+          if let able = value.able {
+              // do something here
+          }
+          
+          if let supportedCounts = value.supportedCounts {
+              // do something here
+          }
+          
+          if let array = value.array {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
+          
+          if let createdoredited = value.isCreatedorEdited {
+              // do something here
+          }
+          
+         if let deleted = value.isDeleted {
+              // do something here
+          }
+          
      } else {
          // error
      }
@@ -879,12 +938,40 @@ SunionBluetoothTool.shared.Usecase.credential.delete(position: Int)
 | position     | index    | location of the user |
 
 
+### set Card/Fingerpring/Face
+```
+SunionBluetoothTool.shared.Usecase.credential.setCardFpFace(model: SetupCredentialRequestModel)
+```
+#### SetupCredentialRequestModel
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| accessType     |  CredentialStructModel.CredentialTypeEnum    | programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue |
+|state|setupAccessOption|quit<br>start<br>update
+|index|Int| position of card/fingerpring/face
 
 ### Delegate function
 ```
  public v3Credential(value: resCredentialUseCase?)  {
      if let value = value {
-          // do something here
+          if let array = value.array {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
+          
+          if let createdoredited = value.isCreatedorEdited {
+              // do something here
+          }
+          
+          if let delete = value.isDeleted {
+              // do something here
+          }
+          
+          if let setup = value.setup {
+              // do something here
+          }
      } else {
          // error
      }
@@ -898,6 +985,7 @@ SunionBluetoothTool.shared.Usecase.credential.delete(position: Int)
 |data|CredentialModel|[LINK](#CredentialModel)
 |isCreatedorEdited|Bool| Verify if created or edited was successful
 |isDeleted|Bool| Verify if deleted was successful
+|setup|SetupCredentialModel|[LINK](#SetupCredentialModel)
 
 #### CredentialModel
 | Parameter | Type | Description |
@@ -917,3 +1005,128 @@ SunionBluetoothTool.shared.Usecase.credential.delete(position: Int)
 |status| UserStatusEnum|available<br>occupiedEnabled<br>occupiedDisabled<br>unknownEnumValue|
 |type|CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
 |data|String| value of credential|
+
+#### SetupCredentialModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|type|CredentialStructModel.CredentialTypeEnum|programmingPIN<br>pin<br>rfid<br>fingerprint<br>fingerVein<br>face<br>unknownEnumValue|
+|state|setupAccessOption|quit<br>start<br>update|
+|status| setupStatusOption|fail<br>success<br>failwithfull|
+|index|Int|position of card/fingerpring/face|
+|data|[UInt8]| value of card/fingerpring/face
+
+---
+## bleuser
+### array
+```
+SunionBluetoothTool.shared.Usecase.BleUser.array()
+```
+
+### data
+```
+SunionBluetoothTool.shared.Usecase.BleUser.data(position: Int)
+```
+#### Parameters
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| position     | index    | location of the token |
+
+### create
+```
+SunionBluetoothTool.shared.Usecase.BleUser.create(model: AddBleUserModel)
+```
+#### AddBleUserModel
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| tokenName     | String    | name of the token |
+|tokenPermission|TokenPermission|all<br>limit
+| idenity| String| unique id for user
+
+### edit
+```
+SunionBluetoothTool.shared.Usecase.BleUser.edit(model: EditBleUserModel)
+```
+#### EditBleUserModel
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| tokenName     | String    | name of the token |
+|tokenPermission|TokenPermission|all<br>limit|
+|tokenIndex| Int| location of the token|
+| idenity| String| unique id for user
+### delete
+```
+SunionBluetoothTool.shared.Usecase.BleUser.delete(model: BleUserModel)
+```
+#### BleUserModel
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| isEnable     | Bool    | enable of the token |
+|tokenMode|TokenType|permanent<br>oneTime<br>invalid|
+|isOwnerToken| OwnerTokenType| owner<br>notOwner<br>error|
+|tokenPermission|TokenPermission|all<br>limit|
+|token|[UInt8]| data of the token
+| name     | String    | name of the token |
+| idenity| String| unique id for user
+
+### qrCode
+```
+SunionBluetoothTool.shared.Usecase.BleUser.qrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String?, uuid: String?, userName: String, modelName: String, deviceName: String)
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|barcodeKey|String| enCode QrCode
+| tokenIndex     | Int     | position of token |
+|aes1Key| Data | get it from QR code
+| macAddress| String | bluetooth macAddress
+|uuid| String| bluetooth uuid
+| userName| String| name of share
+| modelName | String | name of model
+| deviceName | String | name of device
+
+
+### Delegate function
+```
+ public v3BleUser(value: resTokenUseCase?) {
+     if let value = value {
+          if let array = value.array {
+              // do something here
+          }
+          
+          if let data = value.data {
+              // do something here
+          }
+          
+          if let created = value.created {
+              // do something here
+          }
+          
+          if let edited = value.isEdited {
+              // do something here
+          }
+          
+          if let deleted = value.isDeleted {
+              // do something here
+          }
+     } else {
+         // error
+     }
+ }
+```
+
+##### resTokenUseCase
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+|array| [Int]| location where the Token is stored
+|data|TokenModel|[LINK](#TokenModel)
+|created|addTokenResult|[LINK](#addTokenResult)
+|isEdited|Bool| Verify if edited the token was successful
+|isDeleted|Bool| Verify if deleted the token was successful
+
+##### addTokenResult
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+|isSuccess|Bool| Verify if create the token was successful
+|index|Int|location of the token|
+|token|[UInt8]| data of the token

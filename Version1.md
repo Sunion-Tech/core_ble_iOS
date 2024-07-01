@@ -1,5 +1,16 @@
 
-### IncomingDeviceStatusUseCase
+# Pairing with lock
+When pairing with the lock, you can obtain the lock's connection information by scanning the lock's QR code. You can use the following example to filter the QR code information:
+```
+let response = SunionBluetoothTool.shared.decodeQrCode(barcodeKey: String, qrCode: String)
+```
+### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|barcodeKey | String | get from FU HSING
+|qrCode| String | qrCode Value
+
+# IncomingDeviceStatusUseCase
 IncomingDeviceStatusUseCase collects device status notified by lock. You can setup the observer when lock connection is ready: [info Link](#DeviceStatus)
 
 ```

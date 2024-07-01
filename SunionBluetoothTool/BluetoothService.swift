@@ -1322,7 +1322,7 @@ extension BluetoothService: CBPeripheralDelegate {
             case .N8A(let model):
                 let res  = resTokenUseCase()
                 res.array = model
-                self.delegate?.commandState(value: .v3Token(res))
+                self.delegate?.commandState(value: .v3BleUser(res))
             case .N8B(let model):
                 
                 if qrcodeAes1Key != "" {
@@ -1343,21 +1343,21 @@ extension BluetoothService: CBPeripheralDelegate {
                 } else {
                     let res  = resTokenUseCase()
                     res.data = model
-                    self.delegate?.commandState(value: .v3Token(res))
+                    self.delegate?.commandState(value: .v3BleUser(res))
                 }
               
             case .N8C(let model):
                 let res  = resTokenUseCase()
                 res.created = model
-                self.delegate?.commandState(value: .v3Token(res))
+                self.delegate?.commandState(value: .v3BleUser(res))
             case .N8D(let model):
                 let res  = resTokenUseCase()
                 res.isEdited = model
-                self.delegate?.commandState(value: .v3Token(res))
+                self.delegate?.commandState(value: .v3BleUser(res))
             case .N8E(let model):
                 let res = resTokenUseCase()
                 res.isDeleted = model
-                self.delegate?.commandState(value: .v3Token(res))
+                self.delegate?.commandState(value: .v3BleUser(res))
                 // log
             case .E0(let model):
                 let res  = resLogUseCase()

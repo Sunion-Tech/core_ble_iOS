@@ -49,7 +49,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func v3Name(value: resNameUseCase?)
     func v3Config(value: resConfigUseCase?)
     func v3utility(value: resUtilityUseCase?)
-    func v3Token(value: resTokenUseCase?)
+    func v3BleUser(value: resTokenUseCase?)
     func v3Log(value: resLogUseCase?)
     func v3Wifi(value: resWifiUseCase?)
     func v3Plug(value: plugStatusResponseModel?)
@@ -98,7 +98,7 @@ extension SunionBluetoothToolDelegate {
     public func v3Name(value: resNameUseCase?) {}
     public func v3Config(value: resConfigUseCase?) {}
     public func v3utility(value: resUtilityUseCase?) {}
-    public func v3Token(value: resTokenUseCase?) {}
+    public func v3BleUser(value: resTokenUseCase?) {}
     public func v3Log(value: resLogUseCase?) {}
     public func v3Wifi(value: resWifiUseCase?) {}
     public func v3Plug(value: plugStatusResponseModel?) {}
