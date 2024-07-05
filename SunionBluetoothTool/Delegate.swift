@@ -8,41 +8,6 @@
 import Foundation
 
 public protocol SunionBluetoothToolDelegate: AnyObject {
-    func remoteBluetoothState(State: bluetoothState)
-    func remoteDeviceStatus(value: DeviceStatusModel?)
-    func remoteConfig(bool: Bool?)
-    func remoteAdminCodeExist(bool: Bool?)
-    func remoteAdminCode(bool: Bool?)
-    func remoteEditAdminCode(bool: Bool?)
-    func remoteTimeZone(bool: Bool?)
-    func remoteDeviceName(bool: Bool?)
-    func remoteDeviceNameData(value: String?)
-    func remoteEditToken(bool: Bool?)
-    func remoteTokenArray(value: [Int]?)
-    func remoteTokenData(value: TokenModel?)
-    func remoteTokenOption(value: AddTokenResult?)
-    func remoteToken(bool: Bool?)
-    func remoteTokenQrCode(value: String?)
-    func remoteDeviceConfig(value: DeviceSetupResultModel?)
-    func remoteLogCount(value: Int?)
-    func remoteLogData(value: LogModel?)
-    func remotePinCodeArray(value: PinCodeArrayModel?)
-    func remotePinCodeData(value: PinCodeModelResult?)
-    func remotePinCode(bool: Bool?)
-    func remoteFactoryReset(bool: Bool?)
-    func remoteSupportType(value: SupportDeviceTypesResponseModel?)
-    func remoteAccessArray(value: AccessArrayResponseModel?)
-    func remoteSearchAccess(value: AccessDataResponseModel?)
-    func remoteAccessAction(value: AccessResponseModel?)
-    func remoteSetupAccess(value: SetupAccessResponseModel?)
-    func remoteDelAccess(value: DelAccessResponseModel?)
-    func remotewifiList(value: SSIDModel?)
-    func remoteconnectWifi(bool: Bool?)
-    func remoteconnectMQTT(bool: Bool?)
-    func remoteconnectClould(bool: Bool?)
-    func remoteOTAStatus(value: OTAResponseModel?)
-    func remoteOTAData(value: OTADataResponseModel?)
-    func remoteResponse(value: String?)
     
     
     // MARK: - Bluetooth
@@ -74,53 +39,28 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func AccessAction(value: AccessResponseModel?)
     func SetupAccess(value: SetupAccessResponseModel?)
     func DelAccess(value: DelAccessResponseModel?)
-    func wifiList(value: SSIDModel?)
-    func connectWifi(bool: Bool?)
-    func connectMQTT(bool: Bool?)
-    func connectClould(bool: Bool?)
-    func debug(value: String)
-    func OTAStatus(value: OTAResponseModel?)
-    func OTAData(value: OTADataResponseModel?)
-
-   
+  
+    
+    // MARK: - V3
+    
+    func v3deviceStatus(value: DeviceStatusModelN82?)
+    func v3time(value: resTimeUseCase?)
+    func v3adminCode(value: resAdminCodeUseCase?)
+    func v3Name(value: resNameUseCase?)
+    func v3Config(value: resConfigUseCase?)
+    func v3utility(value: resUtilityUseCase?)
+    func v3BleUser(value: resTokenUseCase?)
+    func v3Log(value: resLogUseCase?)
+    func v3Wifi(value: resWifiUseCase?)
+    func v3Plug(value: plugStatusResponseModel?)
+    func v3OTA(value: resOTAUseCase?)
+    func v3User(value: resUserUseCase?)
+    func v3Credential(value: resCredentialUseCase?)
 }
+
 
 extension SunionBluetoothToolDelegate {
     
-    public func remoteDeviceStatus(value: DeviceStatusModel?) {}
-    public func remoteConfig(bool: Bool?) {}
-    public func remoteAdminCodeExist(bool: Bool?) {}
-    public func remoteAdminCode(bool: Bool?) {}
-    public func remoteEditAdminCode(bool: Bool?) {}
-    public func remoteTimeZone(bool: Bool?) {}
-    public func remoteDeviceName(bool: Bool?) {}
-    public func remoteDeviceNameData(value: String?) {}
-    public func remoteEditToken(bool: Bool?) {}
-    public func remoteTokenArray(value: [Int]?) {}
-    public func remoteTokenData(value: TokenModel?) {}
-    public func remoteTokenOption(value: AddTokenResult?) {}
-    public func remoteToken(bool: Bool?) {}
-    public func remoteTokenQrCode(value: String?) {}
-    public func remoteDeviceConfig(value: DeviceSetupResultModel?) {}
-    public func remoteLogCount(value: Int?) {}
-    public func remoteLogData(value: LogModel?) {}
-    public func remotePinCodeArray(value: PinCodeArrayModel?) {}
-    public func remotePinCodeData(value: PinCodeModelResult?) {}
-    public func remotePinCode(bool: Bool?) {}
-    public func remoteFactoryReset(bool: Bool?) {}
-    public func remoteSupportType(value: SupportDeviceTypesResponseModel?) {}
-    public func remoteAccessArray(value: AccessArrayResponseModel?) {}
-    public func remoteSearchAccess(value: AccessDataResponseModel?) {}
-    public func remoteAccessAction(value: AccessResponseModel?) {}
-    public func remoteSetupAccess(value: SetupAccessResponseModel?) {}
-    public func remoteDelAccess(value: DelAccessResponseModel?) {}
-    public func remotewifiList(value: SSIDModel?) {}
-    public func remoteconnectWifi(bool: Bool?) {}
-    public func remoteconnectMQTT(bool: Bool?) {}
-    public func remoteconnectClould(bool: Bool?) {}
-    public func remoteOTAStatus(value: OTAResponseModel?) {}
-    public func remoteOTAData(value: OTADataResponseModel?) {}
-    public func remoteResponse(value: String?) {}
     
     //  bluetooth
     public func DeviceStatus(value: DeviceStatusModel?) {}
@@ -150,12 +90,19 @@ extension SunionBluetoothToolDelegate {
     public func AccessAction(value: AccessResponseModel?) {}
     public func SetupAccess(value: SetupAccessResponseModel?) {}
     public func DelAccess(value: DelAccessResponseModel?) {}
-    public func wifiList(value: SSIDModel?) {}
-    public func connectWifi(bool: Bool?) {}
-    public func debug(value: String) {}
-    public func connectMQTT(bool: Bool?) {}
-    public func connectClould(bool: Bool?) {}
-    public func OTAStatus(value: OTAResponseModel?) {}
-    public func OTAData(value: OTADataResponseModel?) {}
-   
+  
+    
+    public func v3deviceStatus(value: DeviceStatusModelN82?) {}
+    public func v3time(value: resTimeUseCase?) {}
+    public func v3adminCode(value: resAdminCodeUseCase?) {}
+    public func v3Name(value: resNameUseCase?) {}
+    public func v3Config(value: resConfigUseCase?) {}
+    public func v3utility(value: resUtilityUseCase?) {}
+    public func v3BleUser(value: resTokenUseCase?) {}
+    public func v3Log(value: resLogUseCase?) {}
+    public func v3Wifi(value: resWifiUseCase?) {}
+    public func v3Plug(value: plugStatusResponseModel?) {}
+    public func v3OTA(value: resOTAUseCase?) {}
+    public func v3User(value: resUserUseCase?) {}
+    public func v3Credential(value: resCredentialUseCase?) {}
 }

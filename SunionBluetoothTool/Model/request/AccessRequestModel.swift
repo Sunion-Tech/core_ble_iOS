@@ -120,8 +120,7 @@ public class AccessRequestModel {
                 nameLen.append(uint8)
             }
         }
-        // time has 4 byte command just need 2 byte
-        // remove last two byte
+      
         command.append(nameLen.first!)
         
         

@@ -36,15 +36,7 @@ public class CommandService {
         case securitybolt = 0x02
     }
     
-    public enum deviceMode00Status: UInt8 {
-        case link = 0x00
-        case unlink = 0x01
-    }
-    
-    public enum deviceMode00Audio: UInt8 {
-        case sound = 0x01
-        case unsound = 0x00
-    }
+
     
     public enum AccessTypeMode: UInt8 {
         case AccessCode = 0x00
@@ -77,28 +69,24 @@ public class CommandService {
         case broken
     }
 
-    enum AdminCodeMode {
-        case setupSuccess
-        case empty
-        case error
-    }
-
     enum ActionOption {
         case getWifiList
         case setSSID(String)
         case setPassword(String)
         case setConnection
-        case B0
-        case B1(plugMode)
         case C0([UInt8]?)
         case C1([UInt8])
+        case C2(RFMCURequestModel)
         case C3(OTAStatusRequestModel)
         case C4(OTADataRequestModel)
         case C7([Int])
         case C8(EditAdminCodeModel)
         case CC
+        case CB
         case CE([Int])
         case CF
+        case B0
+        case B1(plugMode)
         case D0
         case D1(String)
         case D2
@@ -109,20 +97,27 @@ public class CommandService {
         case A1(DeviceSetupModelA1) // same D5
         case D6
         case A2 // same D6
-        case Z0 // same D6
         case D7(DeviceMode)
         case A3(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
-        case Z1(deviceMode00Status, deviceMode00Audio) // same D7
         case D9(Int32, Data)
         case E0
         case E1(Int)
         case E2
         case E3
         case E4
+        case N8A
         case E5(Int)
+        case N8B(Int)
+        
         case E6(AddTokenModel)
+        case N8C(addBleUserModel)
+        
         case E7(EditTokenModel)
+        case N8D(EditBleUserModel)
+        
         case E8(TokenModel, [UInt8]?)
+        case N8E(BleUserModel, [UInt8]?)
+        
         case E9
         case EA
         case EB(Int)
@@ -130,7 +125,28 @@ public class CommandService {
         case ED(PinCodeManageModel)
         case EE(Int)
         case EF
-        case F1(String)
+        case F3(String)
+        case F4(String)
+        case N80
+        case N81(DeviceSetupModelN81)
+        case N82
+        case N83(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
+        case N84(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
+        case N85
+        case N86
+        case N87
+        case N90
+        case N91(IndexUserCredentialRequestModel)
+        case N92(UserCredentialRequestModel)
+        case N93(IndexUserCredentialRequestModel)
+        case N94
+        case N95(SearchCredentialRequestModel)
+        case N96(CredentialRequestModel)
+        case N97(SetupCredentialRequestModel)
+        case N98(IndexUserCredentialRequestModel)
+        case N99(HashusercredentialRequestModel)
+        case N9A
+        case N9D
         case A4
         case A5(AccessTypeMode)
         case A6(SearchAccessRequestModel)
@@ -145,16 +161,16 @@ public class CommandService {
             switch self {
             case .getWifiList:
                 guard let data = "L".data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setSSID(let ssidName):
                 guard let data = ("S" + ssidName).data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setPassword(let ssidPassword):
                 guard let data = ("P" + ssidPassword).data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .setConnection:
                 guard let data = "C".data(using: .utf8) else { return [0x00] }
-                return [0xF0, UInt8(data.count)] + data.map{$0}
+                return [0xF2, UInt8(data.count)] + data.map{$0}
             case .B0:
                 return [0xB0, 0x03]
             case .B1(let data):
@@ -165,6 +181,8 @@ public class CommandService {
                 var byteArray:[UInt8] = [0xC1, 0x08]
                 token.forEach{byteArray.append($0)}
                 return byteArray
+            case .C2(let model):
+                return model.command
             case .C3(let data):
                 let length = UInt8(data.command.count)
                 var byteArray:[UInt8] = [0xC3, length]
@@ -185,6 +203,8 @@ public class CommandService {
                 return model.command
             case .CC:
                 return [0xCC, 0x00]
+            case .CB:
+                return [0xCB, 0x00]
             case .CE(let adminCode):
                 let length = UInt8(adminCode.count)
                 var byteArray = [0xCE, length + 1, length]
@@ -241,164 +261,10 @@ public class CommandService {
                 return [0xD4, 0x00]
             case .A0:
                 return [0xA0, 0x00]
-            case .D5(let setupModel):
-             
-                let resetBolt:UInt8 = setupModel.resetBolt ? 0xA2 : 0xA3
-                let soundSetting:UInt8 = setupModel.soundOn ? 0x01 : 0x00
-                let vacationSetting:UInt8 = setupModel.vacationModeOn ? 0x01 : 0x00
-                let autoLockSetting:UInt8 = setupModel.autoLockOn ? 0x01 : 0x00
-                let autoLockTime = UInt8(setupModel.autoLockTime)
-                let leadCode: UInt8 = setupModel.guidingCode ? 0x01 : 0x00
-                var byteArray:[UInt8] = [0xD5, 0x16, resetBolt, soundSetting, vacationSetting, autoLockSetting, autoLockTime, leadCode]
-                let latitude1 = setupModel.latitude.toInt32
-                let latitude2 = setupModel.latitude.decimalPartToInt32
-                let longitude1 = setupModel.longitude.toInt32
-                let longitude2 = setupModel.longitude.decimalPartToInt32
-                withUnsafeBytes(of: latitude1) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: latitude2) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: longitude1) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: longitude2) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-                return byteArray
-            case .A1(let setupModel):
-                var byteArray:[UInt8] = [0xA1, 0x1C]
-                let latitude1 = setupModel.latitude.toInt32
-                let latitude2 = setupModel.latitude.decimalPartToInt32
-                let longitude1 = setupModel.longitude.toInt32
-                let longitude2 = setupModel.longitude.decimalPartToInt32
-                withUnsafeBytes(of: latitude1) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: latitude2) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: longitude1) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-
-                withUnsafeBytes(of: longitude2) { bytes in
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                        byteArray.append(uint8)
-                    }
-                }
-             //   let direction: UInt8 =  setupModel.direction == .unknown ? 0xA2 : setupModel.direction == .ignore ? 0xA3 : 0xFF
-                var direction: UInt8 = 0xFF
-                switch setupModel.direction {
-                case .right:
-                    direction = 0xA0
-                case .left:
-                    direction = 0xA1
-                case .unknown:
-                    direction = 0xA2
-                case .ignore:
-                    direction = 0xA3
-                default:
-                    break
-                    
-                }
-                
-                byteArray.append(direction)
-                let guidingCode: UInt8 = setupModel.guidingCode == .open ? 0x01 : setupModel.guidingCode == .close ? 0x00 : 0xFF
-                byteArray.append(guidingCode)
-                let virtualCode: UInt8 = setupModel.virtualCode == .open ? 0x01 : setupModel.virtualCode == .close ? 0x00 : 0xFF
-                byteArray.append(virtualCode)
-                let twoFA: UInt8 = setupModel.twoFA == .open ? 0x01 : setupModel.twoFA == .close ? 0x00 : 0xFF
-                byteArray.append(twoFA)
-                let vacationModeOn: UInt8 = setupModel.vacationModeOn == .open ? 0x01 : setupModel.vacationModeOn == .close ? 0x00 : 0xFF
-                byteArray.append(vacationModeOn)
-                let autoLockOn: UInt8 = setupModel.autoLockOn == .open ? 0x01 : setupModel.autoLockOn == .close ? 0x00 : 0xFF
-                byteArray.append(autoLockOn)
-            
-                print("autoLockOn: \(setupModel.autoLockOn.rawValue)")
-                
-                let time = Int32(setupModel.autoLockTime)
-           
-                withUnsafeBytes(of: time) { bytes in
-               
-                    for byte in bytes {
-                        let stringHex = String(format: "%02x", byte)
-                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
-                      
-                        byteArray.append(uint8)
-                    }
-                }
-                // time has 4 byte command just need 2 byte
-                // remove last two byte
-                byteArray.removeLast(2)
-                
-                let soundOn: UInt8 = setupModel.soundOn == .open ? 0x01 : setupModel.soundOn == .close ? 0x00 : 0xFF
-                byteArray.append(soundOn)
-                
-                var voice: [UInt8] = [0xFF, 0xFF]
-                switch setupModel.voiceValue {
-                case .close:
-                    voice = [0x01, 0x00]
-                case .open:
-                    voice = [0x01, 0x64]
-                case .loudly:
-                    voice = [0x02, 0x64]
-                case .whisper:
-                    voice = [0x02, 0x32]
-                case .value(let value):
-                    var element: UInt8 = 0x00
-                    let hexString = String(value, radix: 16)
-                    element =  UInt8(hexString) ?? 0x00
-    
-                    print("progress Value: \(value)")
-                    print("progress uint8: \(element)")
-                    voice = [0x03, UInt8(value)]
-                    
-                default:
-                    voice = [0xFF, 0xFF]
-                }
-                byteArray = byteArray + voice
-                
-                let fastMode: UInt8 = setupModel.fastMode == .open ? 0x01 : setupModel.fastMode == .close ? 0x00 : 0xFF
-                byteArray.append(fastMode)
-                
-                return byteArray
+            case .D5(let model):
+                return  [0xD5, 0x16] + model.command
+            case .A1(let model):
+                return  [0xA1, 0x1C] + model.command
             case .D6:
                 return [0xD6, 0x00]
             case .A2:
@@ -438,20 +304,39 @@ public class CommandService {
                 return [0xE3]
             case .E4:
                 return [0xE4, 0x00]
+            case .N8A:
+                return [0x8A, 0x00]
             case .E5(let index):
                 return [0xE5, 0x01, UInt8(index)]
+            case .N8B(let index):
+                return [0x8B, 0x01, UInt8(index)]
+                
             case .E6(let model):
                 let command = model.command
                 let commandLength = UInt8(command.count)
                 var byteArray = [0xE6, commandLength]
                 command.forEach{byteArray.append($0)}
                 return byteArray
+            case .N8C(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                var byteArray = [0x8C, commandLength]
+                command.forEach{byteArray.append($0)}
+                return byteArray
+                
             case .E7(let editTokenModel):
                 let command = editTokenModel.command
                 let commandLength = UInt8(command.count)
                 var byteArray = [0xE7, commandLength]
                 command.forEach{byteArray.append($0)}
                 return byteArray
+            case .N8D(let editTokenModel):
+                let command = editTokenModel.command
+                let commandLength = UInt8(command.count)
+                var byteArray = [0x8D, commandLength]
+                command.forEach{byteArray.append($0)}
+                return byteArray
+                
             case .E8(let tokenModel, let pinCode):
                 if tokenModel.isOwnerToken == .owner {
                     guard let pinCode = pinCode else { return [0xE8] }
@@ -464,6 +349,19 @@ public class CommandService {
                 } else {
                     guard let index = tokenModel.indexOfToken else { return [0xE8] }
                     return [0xE8, 0x01, UInt8(index)]
+                }
+            case .N8E(let tokenModel, let pinCode):
+                if tokenModel.isOwnerToken == .owner {
+                    guard let pinCode = pinCode else { return [0x8E] }
+                    guard let index = tokenModel.indexOfToken else { return [0x8E] }
+                    let length = pinCode.count
+                    let commandLength = 1 + 1 + length
+                    var byteArray = [0x8E, UInt8(commandLength), UInt8(index), UInt8(length)]
+                    pinCode.forEach{byteArray.append($0)}
+                    return byteArray
+                } else {
+                    guard let index = tokenModel.indexOfToken else { return [0x8E] }
+                    return [0x8E, 0x01, UInt8(index)]
                 }
             case .E9:
                 return [0xE9]
@@ -479,7 +377,7 @@ public class CommandService {
                 return [0xEE, 0x01, UInt8(index)]
             case .EF:
                 return [0xEF, 0x00]
-            case .F1(let identity):
+            case .F3(let identity):
        
                 let length = identity.count
                 let commandLength = 2 + length
@@ -487,11 +385,17 @@ public class CommandService {
                     return [0x00]
                 }
                 
-                return [0xF1, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
-            case .Z0:
-                return [0x00, 0x00]
-            case .Z1(let staus, let audio):
-                return [0x01, 0x02, staus.rawValue, audio.rawValue]
+                return [0xF3, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+            case .F4(let identity):
+       
+                let length = identity.count
+                let commandLength = 2 + length
+                guard let data = identity.data(using: .utf8) else {
+                    return [0x00]
+                }
+                
+                return [0xF4, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+
             case .A4:
                 return [0xA4, 0x00]
             case .A5(let type):
@@ -506,6 +410,60 @@ public class CommandService {
                 return [0xA9, 0x04] +  model.command
             case .AA(let model):
                 return [0xAA, 0x03] + model.command
+            case .N80:
+                return [0x80, 0x00]
+            case .N81(let model):
+                return  [0x81, 0x1E] + model.command
+            case .N82:
+                return [0x82, 0x00]
+            case .N83(let act, let lock, let security):
+                switch act {
+                case .lockstate:
+                    return [0x83, 0x02, 0x01, lock!.rawValue]
+                case .securitybolt:
+                    return [0x83, 0x02, 0x02, security!.rawValue]
+                }
+            case .N84(let act, let lock, let security):
+                switch act {
+                case .lockstate:
+                    return [0x84, 0x02, 0x01, lock!.rawValue]
+                case .securitybolt:
+                    return [0x84, 0x02, 0x02, security!.rawValue]
+                }
+            case .N85:
+                return [0x85, 0x00]
+            case .N86:
+                return [0x86, 0x00]
+            case .N87:
+                return [0x87, 0x00]
+            case .N90:
+                return [0x90, 0x00]
+            case .N91(let model):
+                
+                return [0x91, 0x02] + model.command
+            case .N92(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                return [0x92, commandLength] + model.command
+            case .N93(let model):
+                return [0x93, 0x02] + model.command
+            case .N94:
+                return [0x94, 0x00]
+            case .N95(let model):
+                return [0x95, 0x03] + model.command
+            case .N96(let model):
+                return [0x96, 0x0F] + model.command
+            case .N97(let model):
+                return [0x97, 0x04] + model.command
+            case .N98(let model):
+                return [0x98, 0x02] + model.command
+            case .N99(let model):
+                return [0x99, 0x01] + model.command
+            case .N9A:
+                return [0x9A, 0x00]
+            case .N9D:
+                return [0x9D, 0x00]
+                
             }
         }
 
@@ -535,6 +493,8 @@ public class CommandService {
                 return 0x10
             case .C1:
                 return 0x08
+            case .C2:
+                return 0x01
             case .C3(let data):
                 return UInt8(data.command.count)
             case .C4(let data):
@@ -545,11 +505,14 @@ public class CommandService {
                 return model.commandLength
             case .CC:
                 return 0x00
+            case .CB:
+                return 0x00
             case .CE(let adminCode):
                 let length = UInt8(1 + adminCode.count)
                 return length
             case .CF:
                 return 0x00
+         
             case .D0:
                 return 0x00
             case .D1(let lockName):
@@ -593,15 +556,37 @@ public class CommandService {
                 return 0x01
             case .E4:
                 return 0x00
+            case .N8A:
+                return 0x00
             case .E5:
                 return 0x01
+            case .N8B:
+                return 0x01
+                
             case .E6(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
+            case .N8C(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
+                
             case .E7(let editTokenModel):
                 let commandLength = UInt8(editTokenModel.command.count)
                 return commandLength
+            case .N8D(let editTokenModel):
+                let commandLength = UInt8(editTokenModel.command.count)
+                return commandLength
+                
             case .E8(let tokenModel, let pinCode):
+                if tokenModel.isOwnerToken == .owner {
+                    guard let pinCode = pinCode else { return 0x00 }
+                    let length = pinCode.count
+                    let commandLength = 1 + 1 + length
+                    return UInt8(commandLength)
+                } else {
+                    return 0x01
+                }
+            case .N8E(let tokenModel, let pinCode):
                 if tokenModel.isOwnerToken == .owner {
                     guard let pinCode = pinCode else { return 0x00 }
                     let length = pinCode.count
@@ -624,16 +609,19 @@ public class CommandService {
                 return 0x01
             case .EF:
                 return 0x00
-            case .F1(let identity):
+            case .F3(let identity):
                
                 let length = identity.count
                 let commandLength = length + 2
                 
                 return UInt8(commandLength)
-            case .Z0:
-                return 0x00
-            case .Z1:
-                return 0x02
+            case .F4(let identity):
+               
+                let length = identity.count
+                let commandLength = length + 2
+                
+                return UInt8(commandLength)
+          
             case .A4:
                 return 0x00
             case .A5:
@@ -648,6 +636,47 @@ public class CommandService {
                 return 0x04
             case .AA:
                 return 0x03
+            case .N80:
+                return 0x00
+            case .N81:
+                return 0x1E
+            case .N82:
+                return 0x00
+            case .N83:
+                return 0x02
+            case .N84:
+                return 0x02
+            case .N85:
+                return 0x00
+            case .N86:
+                return 0x00
+            case .N87:
+                return 0x00
+            case .N90:
+                return 0x00
+            case .N91:
+                return 0x02
+            case .N92(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
+            case .N93:
+                return 0x02
+            case .N94:
+                return 0x00
+            case .N95:
+                return 0x03
+            case .N96:
+                return 0x0F
+            case .N97:
+                return 0x04
+            case .N98:
+                return 0x02
+            case .N99:
+                return 0x01
+            case .N9A:
+                return 0x00
+            case .N9D:
+                return 0x00
             }
         }
     }
@@ -659,17 +688,19 @@ public class CommandService {
         case setConnection(Bool)
         case setMQTT(Bool)
         case setCloud(Bool)
-        case B0(plugStatusResponseModel)
-        case B1(plugStatusResponseModel)
         case C0([UInt8])
         case C1(tokenType, TokenPermission)
+        case C2(RFMCUversionModel)
         case C3(OTAResponseModel)
         case C4(OTADataResponseModel)
         case C7(Bool)
         case C8(Bool)
         case CC
+        case CB(Bool)
         case CE(Bool)
         case CF(Bool)
+        case B0(plugStatusResponseModel)
+        case B1(plugStatusResponseModel)
         case D0(String?)
         case D1(Bool)
         case D2
@@ -688,21 +719,50 @@ public class CommandService {
         case E2
         case E3
         case E4([Int])
+        case N8A([Int])
         case E5(TokenModel)
+        case N8B(BleUserModel)
+        
         case E6(AddTokenResult)
+        case N8C(AddTokenResult)
+        
         case E7(Bool)
+        case N8D(Bool)
+        
         case E8(Bool)
+        case N8E(Bool)
+        
         case E9
         case EA(PinCodeArrayModel)
         case EB(PinCodeModelResult)
         case EC(Bool)
         case ED(Bool)
         case EE(Bool)
-        case EF(AdminCodeMode)
-        case F1(DeviceStatusModelA2)
+        case EF(Bool)
+        case F3(DeviceStatusModelN82)
+        case F4(Bool)
+        case N80(DeviceSetupResultModelN80)
+        case N81(N81ResponseModel)
+        case N82(DeviceStatusModelN82)
+        case N83
+        case N84(Bool)
+        case N85(UserableResponseModel)
+        case N86(resUserSupportedCountModel)
+        case N87(Bool)
+
+        case N90([Int])
+        case N91(UserCredentialModel)
+        case N92(N9ResponseModel)
+        case N93(N9ResponseModel)
+        case N94([Int])
+        case N95(CredentialModel)
+        case N96(N9ResponseModel)
+        case N97(SetupCredentialModel)
+        case N98(N9ResponseModel)
+        case N99(HashusercredentialModel)
+        case N9A(Bool)
+        case N9D(Bool)
         case error(String)
-        case Z0(DeviceStatusModel00)
-        case Z1
         case A4(SupportDeviceTypesResponseModel)
         case A5(AccessArrayResponseModel)
         case A6(AccessDataResponseModel)
@@ -714,17 +774,17 @@ public class CommandService {
         var transmissionKey:UInt8? {
             switch self {
             case .getWifiList:
-                return 0xF0
+                return 0xF2
             case .setSSID:
-                return 0xF0
+                return 0xF2
             case .setPassword:
-                return 0xF0
+                return 0xF2
             case .setConnection:
-                return 0xF0
+                return 0xF2
             case .setMQTT:
-                return 0xF0
+                return 0xF2
             case .setCloud:
-                return 0xF0
+                return 0xF2
             case .B0:
                 return 0xB0
             case .B1:
@@ -733,6 +793,8 @@ public class CommandService {
                 return 0xC0
             case .C1:
                 return 0xC1
+            case .C2:
+                return 0xC2
             case .C3:
                 return 0xC3
             case .C4:
@@ -743,6 +805,8 @@ public class CommandService {
                 return 0xC8
             case .CC:
                 return 0xCC
+            case .CB:
+                return 0xCB
             case .CE:
                 return 0xCE
             case .CF:
@@ -783,14 +847,28 @@ public class CommandService {
                 return 0xE3
             case .E4:
                 return 0xE4
+            case .N8A:
+                return 0x8A
             case .E5:
                 return 0xE5
+            case .N8B:
+                return 0x8B
+                
             case .E6:
                 return 0xE6
+            case .N8C:
+                return 0x8C
+                
             case .E7:
                 return 0xE7
+            case .N8D:
+                return 0x8D
+                
             case .E8:
                 return 0xE8
+            case .N8E:
+                return 0x8E
+                
             case .E9:
                 return 0xE9
             case .EA:
@@ -805,12 +883,55 @@ public class CommandService {
                 return 0xEE
             case .EF:
                 return 0xEF
-            case .F1:
-                return 0xF1
-            case .Z0:
-                return 0x00
-            case .Z1:
-                return 0x01
+ 
+            case .F3:
+                return 0xF3
+            case .F4:
+                return 0xF4
+            case .N80:
+                return 0x80
+            case .N81:
+                return 0x81
+            case .N82:
+                return 0x82
+            case .N83:
+                return 0x83
+            case .N84:
+                return 0x84
+            case .N85:
+                return 0x85
+            case .N86:
+                return 0x86
+            case .N87:
+                return 0x87
+            case .N8A:
+                return 0x8A
+            case .N8B:
+                return 0x8B
+            case .N90:
+                return 0x90
+            case .N91:
+                return 0x91
+            case .N92:
+                return 0x92
+            case .N93:
+                return 0x93
+            case .N94:
+                return 0x94
+            case .N95:
+                return 0x95
+            case .N96:
+                return 0x96
+            case .N97:
+                return 0x97
+            case .N98:
+                return 0x98
+            case .N99:
+                return 0x99
+            case .N9A:
+                return 0x9A
+            case .N9D:
+                return 0x9D
             case .A4:
                 return 0xA4
             case .A5:
@@ -907,7 +1028,7 @@ public class CommandService {
 
 
         guard let aesBytes = AESModel.shared.encrypt(key: key, bytesArray) else { return nil }
-
+        print("aes : \(aesBytes.toHexString())")
         return Data(aesBytes)
     }
 
@@ -921,7 +1042,19 @@ public class CommandService {
         
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
+            // 获取当前日期和时间
+            let now = Date()
 
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data CBCharacteristic \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             if Int(dataLength) > decryptData.count {
@@ -937,7 +1070,19 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, data) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            
+            // 获取当前日期和时间
+            let now = Date()
+
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data  Data \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             
@@ -950,7 +1095,19 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, Data.init(byteArray)) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            
+            // 获取当前日期和时间
+            let now = Date()
+
+            // 获取当前用户的日历
+            let calendar = Calendar.current
+
+            // 从当前日期中提取小时、分钟和秒
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            let second = calendar.component(.second, from: now)
+
+            // 打印结果
+            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
             print("🌜🌜🌜 \n response data  [UInt8] \(decryptData.bytesToHex()) \n 🌜🌜🌜")
             
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])
@@ -973,15 +1130,15 @@ public class CommandService {
     }
 
     private func resolveWithActionCode(actionCode:UInt8, data:[UInt8]) -> ActionResolveOption {
-  
+        print("resolveWithActionCode: \(actionCode)")
         switch actionCode {
-        case 0xF0:
+        case 0xF2:
             // set wifi 回傳 L
             // set ssid 回傳 S
             // set password 回傳 P
             // set connection 回傳 "CWiFi Succ" or "LE"
-            guard let index0 = data[safe: 0] else { return .error("Can't get F0 response") }
-            guard let stringValue = String(data: Data([index0]), encoding: .utf8) else { return .error("[F0]:Convert data to string error")}
+            guard let index0 = data[safe: 0] else { return .error("Can't get F2 response") }
+            guard let stringValue = String(data: Data([index0]), encoding: .utf8) else { return .error("[F2]:Convert data to string error")}
             print("👊👊👊  WifiConnectState 👊👊👊 \n \(String(data: Data(data), encoding: .utf8)) \n 👊👊👊👊👊👊")
             // CWiFi Succ
             // SWiFi Fail
@@ -1022,7 +1179,7 @@ public class CommandService {
                 return .setConnection(false)
                
             default:
-                return .error("Unknown F0 response: \(data.bytesToHex())")
+                return .error("Unknown F2 response: \(data.bytesToHex())")
             }
         case 0xB0:
             let model = plugStatusResponseModel(data)
@@ -1069,6 +1226,8 @@ public class CommandService {
                 }
             }
             return .C1(tokenMode, tokenPermission)
+        case 0xC2:
+            return .C2(RFMCUversionModel(response: data))
         case 0xC3:
        
             let model = OTAResponseModel(data)
@@ -1085,6 +1244,9 @@ public class CommandService {
             return .C8(isSuccess)
         case 0xCC:
             return .CC
+        case 0xCB:
+            let isSuccess = data.first == 0x01
+            return .CB(isSuccess)
         case 0xCE:
             let isSuccess = data.first == 0x01
             return .CE(isSuccess)
@@ -1140,18 +1302,37 @@ public class CommandService {
         case 0xE4:
             let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
             return .E4(indexArray)
+        case 0x8A:
+            let indexArray = data.enumerated().filter{$0.1 == 0x01}.map{$0.0}
+            return .N8A(indexArray)
         case 0xE5:
             let tokenModel = TokenModel(response: data)
             return .E5(tokenModel)
+        case 0x8B:
+            let tokenModel = BleUserModel(response: data)
+            return .N8B(tokenModel)
+            
         case 0xE6:
             let result = AddTokenResult(response: data)
             return .E6(result)
+        case 0x8C:
+            let result = AddTokenResult(response: data)
+            return .N8C(result)
+            
         case 0xE7:
             let isSuccess = data.first == 0x01
             return .E7(isSuccess)
+        case 0x8D:
+            let isSuccess = data.first == 0x01
+            return .N8D(isSuccess)
+            
         case 0xE8:
             let isSuccess = data.first == 0x01
             return .E8(isSuccess)
+        case 0x8E:
+            let isSuccess = data.first == 0x01
+            return .N8E(isSuccess)
+            
         case 0xE9:
             return .E9
         case 0xEA:
@@ -1170,23 +1351,9 @@ public class CommandService {
             let isSuccess = data.first == 0x01
             return .EE(isSuccess)
         case 0xEF:
-            var adminCodeMode: AdminCodeMode {
-                guard let index0 = data.first else { return .error }
-                switch index0 {
-                case 0x01:
-                    return .setupSuccess
-                case 0x00:
-                    return .empty
-                default:
-                    return .error
-                }
-            }
-            return .EF(adminCodeMode)
-        case 0x00:
-            let state = DeviceStatusModel00(data)
-            return .Z0(state)
-        case 0x01:
-            return .Z1
+            guard let index0 = data[safe: 0] else { return .EF(false) }
+            return .EF(index0 == 0x01)
+ 
         case 0xA4:
             let result = SupportDeviceTypesResponseModel(response: data)
             return .A4(result)
@@ -1211,9 +1378,107 @@ public class CommandService {
         case 0xAF:
             let result = AlertResponseModel(data)
             return .AF(result)
-        case 0xF1:
-            let state = DeviceStatusModelA2(data)
-            return .F1(state)
+        case 0xF3:
+            let state = DeviceStatusModelN82(data)
+            return .F3(state)
+        case 0xF4:
+            let isSuccess = data.first == 0x01
+            return .F4(isSuccess)
+        case 0x80:
+            let model = DeviceSetupResultModelN80(data)
+            return .N80(model)
+        case 0x81:
+            let model = N81ResponseModel(response: data)
+            return .N81(model)
+        case 0x82:
+            let state = DeviceStatusModelN82(data)
+            return .N82(state)
+        case 0x83:
+            return .N83
+        case 0x84:
+            let isSuccess = data.first == 0x01
+            return .N84(isSuccess)
+        case 0x85:
+            let state = UserableResponseModel(response: data)
+            return .N85(state)
+        case 0x86:
+            let data = resUserSupportedCountModel(response: data)
+            return .N86(data)
+        case 0x87:
+            let isSuccess = data.first == 0x01
+            return .N87(isSuccess)
+        case 0x90:
+            
+     
+            
+            
+            let stringData = Array(data[1...data.count - 1])
+            var passwordPositions: [Int] = []
+
+              // 遍历Data中的每个字节
+              for (byteIndex, byte) in stringData.enumerated() {
+                  // 遍历字节的每一位
+                  for bitIndex in 0..<8 {
+                      // 检查特定位是否被设置（即是否为1）
+                      if (byte & (1 << bitIndex)) != 0 {
+                          // 计算并记录全局位置
+                          let position = byteIndex * 8 + bitIndex
+                          passwordPositions.append(position)
+                      }
+                  }
+              }
+            
+            return .N90(passwordPositions)
+        case 0x91:
+            let model = UserCredentialModel(response: data)
+            return .N91(model)
+        case 0x92:
+            let model = N9ResponseModel(response: data)
+            return .N92(model)
+        case 0x93:
+            let model = N9ResponseModel(response: data)
+            return .N93(model)
+        case 0x94:
+            
+            let stringData = Array(data[1...data.count - 1])
+            
+            var passwordPositions: [Int] = []
+            
+            // 遍历Data中的每个字节
+            for (byteIndex, byte) in stringData.enumerated() {
+                // 遍历字节的每一位
+                for bitIndex in 0..<8 {
+                    // 检查特定位是否被设置（即是否为1）
+                    if (byte & (1 << bitIndex)) != 0 {
+                        // 计算并记录全局位置
+                        let position = byteIndex * 8 + bitIndex
+                        passwordPositions.append(position)
+                    }
+                }
+            }
+   
+            return .N94(passwordPositions)
+        case 0x95:
+            let model = CredentialModel(response: data)
+            return .N95(model)
+        case 0x96:
+            let model = N9ResponseModel(response: data)
+            return .N96(model)
+        case 0x97:
+            let model = SetupCredentialModel(data)
+            return .N97(model)
+        case 0x98:
+            let model = N9ResponseModel(response: data)
+            return .N98(model)
+        case 0x99:
+            let model = HashusercredentialModel(response: data)
+            return .N99(model)
+        case 0x9A:
+            let isSuccess = data.first == 0x01
+            return .N9A(isSuccess)
+        case 0x9D:
+            let isSuccess = data.first == 0x01
+            return .N9D(isSuccess)
         default:
             return .error("Unkown action \(actionCode)")
         }

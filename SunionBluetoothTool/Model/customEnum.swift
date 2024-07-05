@@ -39,11 +39,41 @@ public enum AccessTypeOption: String {
     case error
 }
 
-public enum setupAccessOption: String {
-    case start
-    case quit
-    case update
-    case error
+public enum setupAccessOption: UInt8 {
+    case quit = 0x00
+    case start = 0x01
+
+    case update = 0x02
+    
+    public var description: String {
+        switch self {
+        case .start:
+            return "start"
+        case .quit:
+            return "quit"
+        case .update:
+            return "update"
+
+        }
+    }
+}
+
+public enum setupStatusOption: UInt8 {
+    case fail = 0x00
+    case success = 0x01
+    case failwithfull = 0x02
+    
+    public var description: String {
+        switch self {
+        case .fail:
+            return "fail"
+        case .success:
+            return "success"
+        case .failwithfull:
+            return "failwithfull"
+
+        }
+    }
 }
 
 public enum CodeStatus: String {
@@ -51,6 +81,15 @@ public enum CodeStatus: String {
     case close
     case unsupport
     case error
+}
+
+public enum LanguageStatus: UInt8 {
+    case en = 0x00
+    case es = 0x01
+    case fr = 0x02
+    case zh = 0x03
+    case unsupport
+
 }
 
 public enum DeadboltStatus: String {

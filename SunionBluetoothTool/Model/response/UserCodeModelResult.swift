@@ -17,6 +17,7 @@ public class PinCodeModelResult {
     public var isEnable:Bool {
         self.getIsEnable()
     }
+    
     public var PinCode:[UInt8]? {
         self.getPinCode()
     }

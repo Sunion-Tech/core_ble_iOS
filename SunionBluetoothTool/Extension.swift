@@ -70,6 +70,10 @@ extension String {
         return newString
     }
     
+    var toInt:Int? {
+        return Int(self)
+    }
+    
     
 }
 
@@ -220,5 +224,18 @@ extension Collection where Indices.Iterator.Element == Index {
 extension ContiguousBytes {
     func object<T>() -> T {
         withUnsafeBytes { $0.load(as: T.self) }
+    }
+}
+
+extension UInt8 {
+    // Convert UInt8 to an array of bits
+    var languagebits: [UInt8] {
+        var bitsArray = [UInt8]()
+        var num = self
+        for _ in 0..<8 {
+            bitsArray.append(num & 1)
+            num >>= 1
+        }
+        return bitsArray.reversed() // The array is reversed for most-significant bit at index 0
     }
 }

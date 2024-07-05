@@ -19,6 +19,8 @@ public class BluetoothToolModel {
     public var qrCodeDisplayName: String?
     public var modelName: String?
     public var FirmwareVersion: String?
+    public var RFVersion: String?
     public var bleName: String?
     public var identifier: String?
+    public var uuid: String?
 }

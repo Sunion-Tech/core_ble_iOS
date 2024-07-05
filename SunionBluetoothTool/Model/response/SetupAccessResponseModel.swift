@@ -78,7 +78,7 @@ public class SetupAccessResponseModel {
     }
     
     private func getState() -> setupAccessOption {
-        guard let index1 = self.response[safe: 1] else { return .error }
+        guard let index1 = self.response[safe: 1] else { return .quit }
         
         switch index1 {
         case 0x00:
@@ -88,7 +88,7 @@ public class SetupAccessResponseModel {
         case 0x02:
             return .update
         default:
-            return .error
+            return .quit
         }
     }
     

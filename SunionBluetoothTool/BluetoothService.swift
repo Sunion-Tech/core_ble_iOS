@@ -13,7 +13,6 @@ protocol BluetoothServiceDelegate: AnyObject {
     func bluetoothState(State: bluetoothState)
     func commandState(value: commandState)
     func updateData(value: BluetoothToolModel)
-    func debug(value: String)
 }
 
 
@@ -29,11 +28,15 @@ class BluetoothService: NSObject {
         CBUUID(string: "fc3d8cf8-4ddc-7ade-1dd9-2497851131d7")
     ]
     
+    private let notifyUUID: CBUUID = CBUUID(string: "DE915DCE-3539-61EA-ADE7-D44A2237601F")
+    
+    
 
     
     enum modelCommandType {
         case D
         case A
+        case N8
     }
     
     
@@ -59,6 +62,7 @@ class BluetoothService: NSObject {
     var qrcodeModelName: String = ""
     var qrcodeDeviceName: String = ""
     var qrcodeMacAddress: String = ""
+    var qrcodeuuid: String = ""
     
     var barcodeKey: String = ""
 
@@ -69,14 +73,17 @@ class BluetoothService: NSObject {
     
     var wifiPassword = ""
     
+    var v3udid: String?
     
-    init( delegate: BluetoothServiceDelegate?, mackAddress: String, aes1Key: [UInt8], token: [UInt8]) {
+    
+    init(delegate: BluetoothServiceDelegate?, mackAddress: String?, aes1Key: [UInt8], token: [UInt8], udid: String?) {
         
         super.init()
         self.mackAddress = mackAddress
         self.delegate = delegate
         self.aes1key = aes1Key
         self.oneTimeToken = token
+        self.v3udid = udid
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
     }
@@ -105,15 +112,15 @@ class BluetoothService: NSObject {
         delegate?.bluetoothState(State: .connecting)
       
         if let uid = UUID(uuidString: value) {
-            delegate?.debug(value: "retrievePeripherals")
+           
             let cbs = centralManager.retrievePeripherals(withIdentifiers: [uid])
 
             if let first = cbs.first {
               
-                delegate?.debug(value: "cbs first")
+              
                 self.autoStartTime = Date().timeIntervalSince1970
                 self.connectedPeripheral = first
-                delegate?.debug(value: ".connect")
+         
                 DispatchQueue.global().async {
                     self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
@@ -127,6 +134,19 @@ class BluetoothService: NSObject {
     
     //MARK: - 連線 + 交換token
     func startConnecting() {
+        // 获取当前日期和时间
+        let now = Date()
+
+        // 获取当前用户的日历
+        let calendar = Calendar.current
+
+        // 从当前日期中提取小时、分钟和秒
+        let hour = calendar.component(.hour, from: now)
+        let minute = calendar.component(.minute, from: now)
+        let second = calendar.component(.second, from: now)
+
+        // 打印结果
+        print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
         print("🔧🔧🔧開始掃描🔧🔧🔧")
 
         action = .deviceStatus(nil)
@@ -147,7 +167,7 @@ class BluetoothService: NSObject {
         }
         
         if let workItem = workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(60), execute: workItem)
         }
     }
     
@@ -263,6 +283,15 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+    func getDeviceConfig80() {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .deviceSetting(nil)
+        let command =  CommandService.shared.createAction(with: .N80, key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
     // MARK: - 設定設定檔
     func setupDeviceConfig(model: DeviceSetupModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
@@ -271,7 +300,7 @@ class BluetoothService: NSObject {
         
         action = .config(nil)
         
-        let command =  CommandService.shared.createAction(with: commandType == .D ? .D5(model.D5!) : .A1(model.A1!), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: commandType == .D ? .D5(model.D5!) :  .A1(model.A1!), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
 
@@ -292,7 +321,7 @@ class BluetoothService: NSObject {
             return
         }
         action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: commandType == .D ? .D6 : .A2, key: aes2key!)
+        let command =  CommandService.shared.createAction(with: commandType == .D ? .D6 : commandType == .A ? .A2: .N82, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
@@ -303,7 +332,7 @@ class BluetoothService: NSObject {
         }
         action = .deviceStatus(nil)
         
-        let command =  CommandService.shared.createAction(with: commandType == .D ? .D7(mode) : .A3(.lockstate, mode, nil), key: aes2key!)
+        let command =  CommandService.shared.createAction(with: commandType == .D ? .D7(mode) : commandType == .A ? .A3(.lockstate, mode, nil) : .N83(.lockstate, mode, nil), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
@@ -316,14 +345,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func switchSecurity(mode: CommandService.SecurityboltMode?) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .A3(.securitybolt, nil, mode), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
+
     
     // MARK:  - Log
     // count
@@ -346,18 +368,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    // MARK: - 00 / 01
-    
-    func setupDeviceStatus01(status: CommandService.deviceMode00Status, audio: CommandService.deviceMode00Audio) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .Z1(status, audio), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-        
-    }
-    
+
     // MARK: - Share User
     // count
     func getTokenArray() {
@@ -401,7 +412,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     // qrcode
-    func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String, userName: String, modelName: String, deviceName: String) {
+    func getTokenQrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String?, uuid: String?, userName: String, modelName: String, deviceName: String) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
@@ -410,11 +421,16 @@ class BluetoothService: NSObject {
         qrcodeUserName = userName
         qrcodeModelName = modelName
         qrcodeDeviceName = deviceName
-        qrcodeMacAddress = macAddress
+        qrcodeMacAddress = macAddress ?? ""
+        qrcodeuuid = uuid ?? ""
         self.barcodeKey = barcodeKey
         let command =  CommandService.shared.createAction(with: .E5(tokenIndex), key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+
+    
+
 
     // MARK: - PinCode
     func getPinCodeArray() {
@@ -534,73 +550,7 @@ class BluetoothService: NSObject {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    // MARK: - Wifi
-    func wifiList() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .wifiList(nil)
-        let command =  CommandService.shared.createAction(with: .getWifiList, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func setSSID(SSIDName: String, password: String) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        wifiPassword = password
-        let command =  CommandService.shared.createAction(with: .setSSID(SSIDName), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func setWifiPassword() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        let command =  CommandService.shared.createAction(with: .setPassword(wifiPassword), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func connectWifi() {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .connectWifi(nil)
-        let command =  CommandService.shared.createAction(with: .setConnection, key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    // MARK: - OTA {
-    func otaStatus(req: OTAStatusRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .OTAStatus(nil)
-        let command =  CommandService.shared.createAction(with: .C3(req), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    func otaData(req: OTADataRequestModel) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .OTAData(nil)
-        let command =  CommandService.shared.createAction(with: .C4(req), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
-    // MARK: - wifi Autounlock
-    func wifiAutoUnlock(identity: String ) {
-        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
-            return
-        }
-        action = .deviceStatus(nil)
-        let command =  CommandService.shared.createAction(with: .F1(identity), key: aes2key!)
-        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
-    }
-    
+
 
 }
 
@@ -623,46 +573,76 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-      
         
-        guard let name = peripheral.name else { return }
+
         
-        let macAddressSuffix = mackAddress!.subString(start: 6, end: 11).uppercased()
-        if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
-           name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
-            print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
-            self.data.bleName = name
-            self.data.identifier = peripheral.identifier.uuidString
-            self.delegate?.updateData(value: self.data)
-            connectedPeripheral = peripheral
-            DispatchQueue.global().async {
-                self.centralManager.connect(self.connectedPeripheral!, options: nil)
-            }
+        
+        if let mac = mackAddress, mac != "" {
+            guard let name = peripheral.name else { return }
             
-            workItem = DispatchWorkItem {
-                if self.centralManager.isScanning {
-                    // Stop scanning
-              
-                    self.centralManager.stopScan()
-                    
-                    self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
-                    print("Stopped scanning after 5 seconds")
+            let macAddressSuffix = mac.subString(start: 6, end: 11).uppercased()
+            if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
+               name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
+                print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
+                self.data.bleName = name
+                self.data.identifier = peripheral.identifier.uuidString
+                self.delegate?.updateData(value: self.data)
+                connectedPeripheral = peripheral
+                DispatchQueue.global().async {
+                    self.centralManager.connect(self.connectedPeripheral!, options: nil)
+                }
+            }
+        }
+        
+        if let udid = v3udid,
+            let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data ,
+           manufacturerData.starts(with: [0xE3, 0x0C]) {
+            let range = 2..<10
+            let uuidData = manufacturerData.subdata(in: range)
+            print("manu uuidData: \(uuidData.toHexString())")
+            // 與udid 一樣的裝置
+            if uuidData.toHexString().lowercased() == udid.lowercased() {
+                print("🔧🔧🔧找到V3裝置🔧🔧🔧 \n \(udid) \n🔧🔧🔧🔧🔧🔧")
+                self.data.identifier = peripheral.identifier.uuidString
+                self.delegate?.updateData(value: self.data)
+                connectedPeripheral = peripheral
+                
+                
+                DispatchQueue.global().async {
+                    self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
             }
             
-            if let workItem = workItem {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: workItem)
-            }
-            
-       
-           
         }
+        
+        workItem = DispatchWorkItem {
+            if self.centralManager.isScanning {
+                // Stop scanning
+          
+                self.centralManager.stopScan()
+                
+                self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
+                print("Stopped scanning after 5 seconds")
+            }
+        }
+        
+        if let workItem = workItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(60), execute: workItem)
+        }
+        
+     
         
     }
 
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        delegate?.bluetoothState(State: .connected(peripheral.name!))
+        print("didConnect: \(peripheral.name)")
+        if let name = peripheral.name {
+            delegate?.bluetoothState(State: .connected(name))
+        } else {
+            delegate?.bluetoothState(State: .connected("v3"))
+        }
+  
         connectedPeripheral = peripheral
         connectedPeripheral?.delegate = self
         
@@ -675,7 +655,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        delegate?.debug(value: "didDisconnectPeripheral")
+      
         print("🔧🔧🔧didDisconnectPeripheral error🔧🔧🔧\n \(error.debugDescription) \n🔧🔧🔧🔧🔧🔧")
         if error != nil  {
             delegate?.bluetoothState(State: .disconnect(.fail))
@@ -700,6 +680,8 @@ extension BluetoothService: CBPeripheralDelegate {
     // setp 1
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        
+        print("didDiscoverServices")
         
         if (error != nil) {
             
@@ -733,6 +715,7 @@ extension BluetoothService: CBPeripheralDelegate {
        
         // Device Information -> get firewareVersion
         let service = self.data.FirmwareVersion == nil ? targetServices?.first : targetServices?.last
+      
         peripheral.discoverCharacteristics(nil, for: service!)
 
     }
@@ -740,18 +723,24 @@ extension BluetoothService: CBPeripheralDelegate {
     // step 2
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        print("didDiscoverCharacteristicsFor")
         guard let characteristics = service.characteristics else {
             delegate?.bluetoothState(State: .disconnect(.discoverCharacteristics))
             return
         }
         
+
+        
+        
         for characteristic in characteristics {
-            
+            print(characteristic)
+       
             
             let propertie = characteristic.properties
             
-            if propertie.contains(.notify) {
-              
+            if propertie.contains(.notify), characteristic.uuid == notifyUUID {
+                print("setNotifyValue: \(characteristic)")
                 peripheral.setNotifyValue(true, for: characteristic)
                 
             }
@@ -761,7 +750,7 @@ extension BluetoothService: CBPeripheralDelegate {
                 
             }
             
-            if propertie.contains(.writeWithoutResponse) {
+            if propertie.contains(.writeWithoutResponse), characteristic.uuid == notifyUUID {
          
                 writableCharacteristic = characteristic
             }
@@ -798,10 +787,12 @@ extension BluetoothService: CBPeripheralDelegate {
         print("🔧🔧🔧🔧🔧🔧")
         // get Firmware version
         if self.data.FirmwareVersion == nil {
-        
+           
+  
             let str = String(data: characteristic.value!, encoding: .utf8)
             self.data.FirmwareVersion = str
             print("🔧🔧🔧FirmwareVersion🔧🔧🔧\n \(str)\n🔧🔧🔧🔧🔧🔧")
+        
             self.connectedPeripheral!.discoverCharacteristics(nil, for: self.targetServices!.last!)
             return
         }
@@ -809,8 +800,8 @@ extension BluetoothService: CBPeripheralDelegate {
         
         
         let response = CommandService.shared.resolveAction(characteristic, key: self.aes2key ?? self.aes1key!)
-        // 錯誤處理
         
+        // 錯誤處理
         switch response {
         case .error(_):
             self.delegate?.bluetoothState(State: .disconnect(.fail))
@@ -824,9 +815,53 @@ extension BluetoothService: CBPeripheralDelegate {
             let data = DeviceStatusModel()
             data.AF = model
             self.delegate?.commandState(value: .deviceStatus(data))
+            var res = resUtilityUseCase()
+            res.alert = model
+            self.delegate?.commandState(value: .v3utility(res))
         default:
             break
         }
+        
+        // 共同處理
+        
+        switch response {
+        case .D6(let model):
+            commandType = .D
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            
+            let data = DeviceStatusModel()
+            data.D6 = model
+            self.delegate?.commandState(value: .deviceStatus(data))
+        case .A2(let model):
+            commandType = .A
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            let data = DeviceStatusModel()
+            data.A2 = model
+            self.delegate?.commandState(value: .deviceStatus(data))
+            // deviceStatus\direction
+        case .N82(let model):
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            self.delegate?.commandState(value: .v3deviceStatus(model))
+        case .B0(let model):
+            // 保留藍芽資料
+            self.delegate?.updateData(value: self.data)
+            self.delegate?.commandState(value: .v3Plug(model))
+            // time
+        case .D3(let model):
+            let res = resTimeUseCase()
+            res.isSavedTime = model
+            self.delegate?.commandState(value: .v3time(res))
+        case .D9(let model):
+            let res = resTimeUseCase()
+            res.isSavedTimeZone = model
+            self.delegate?.commandState(value: .v3time(res))
+        default:
+            break
+        }
+        
         
         // 根據不同action 做相對應處理
         switch action {
@@ -877,6 +912,10 @@ extension BluetoothService: CBPeripheralDelegate {
                 if !bool {
                     self.delegate?.commandState(value: .deviceStatus(nil))
                 }
+            case .N81(let model):
+                if !model.isSuccess {
+                    self.delegate?.commandState(value: .deviceStatus(nil))
+                }
             case .E5(let tokenModel):
                 guard let token = tokenModel.token else {
                     self.delegate?.bluetoothState(State: .disconnect(.fail))
@@ -887,37 +926,16 @@ extension BluetoothService: CBPeripheralDelegate {
                 self.data.permanentToken = token
    
                 self.data.permission = tokenModel.tokenPermission
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model), .F1(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .B0(let model):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.B0 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .Z0(_):
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-           
-                let data = DeviceStatusModel()
-               // data.DeviceStatusModel00 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-  
-            case .EF( _):
-                self.delegate?.commandState(value: .deviceStatus(nil))
+            case .N8B(let tokenModel):
+                guard let token = tokenModel.token else {
+                    self.delegate?.bluetoothState(State: .disconnect(.fail))
+                    self.centralManager.cancelPeripheralConnection(self.connectedPeripheral!)
+                    return
+                }
+                self.permanentToken = token
+                self.data.permanentToken = token
+   
+                self.data.permission = tokenModel.tokenPermission
             default:
                 break
                 
@@ -925,21 +943,6 @@ extension BluetoothService: CBPeripheralDelegate {
      
         case .config:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .D5(let bool):
                 var commandStateValue: commandState = .config(true)
                 if !bool {
@@ -952,6 +955,14 @@ extension BluetoothService: CBPeripheralDelegate {
                     commandStateValue = .config(false)
                 }
                 self.delegate?.commandState(value: commandStateValue)
+            case .N81(let model):
+                var commandStateValue: commandState = .config(true)
+                if !model.isSuccess {
+                    commandStateValue = .config(false)
+                }
+                self.delegate?.commandState(value: commandStateValue)
+            case .C2(let model):
+                self.data.RFVersion = model.version
             case .EF( _):
                 self.delegate?.commandState(value: .config(nil))
             default:
@@ -959,21 +970,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .updateName:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .D1(let bool):
                 var commandStateValue: commandState = .updateName(true)
                 if !bool {
@@ -987,52 +983,13 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .isAdminCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .EF(let adminCodeMode):
-                
-                switch adminCodeMode {
-                case .setupSuccess:
-                    self.delegate?.commandState(value: .isAdminCode(true))
-                case .empty :
-                    self.delegate?.commandState(value: .isAdminCode(false))
-                default:
-                    self.delegate?.commandState(value: .isAdminCode(nil))
-                }
-            
+            case .EF(let bool):
+                self.delegate?.commandState(value: .isAdminCode(bool))
             default:
                 break
             }
         case .setupAdminCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .C7(let bool):
                 var commandStateValue: commandState = .setupAdminCode(true)
                 if !bool {
@@ -1045,21 +1002,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .editAdminCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .C8(let bool):
                 var commandStateValue: commandState = .editAdminCode(true)
                 if !bool {
@@ -1072,21 +1014,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .setupTimeZone:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .D9(let bool):
                 var commandStateValue: commandState = .setupTimeZone(true)
                 if !bool {
@@ -1100,21 +1027,6 @@ extension BluetoothService: CBPeripheralDelegate {
 
         case .DeviceName:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .D0(let value):
                 self.delegate?.commandState(value: .DeviceName(value))
             case .EF( _):
@@ -1123,21 +1035,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .editToken:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E7(let bool):
                 var commandStateValue: commandState = .editToken(true)
                 if !bool {
@@ -1151,21 +1048,6 @@ extension BluetoothService: CBPeripheralDelegate {
         case .deviceSetting:
             
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .D4(let model):
                 let res = DeviceSetupResultModel()
                 res.D4 = model
@@ -1183,21 +1065,6 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .logCount:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E0(let index):
                 self.delegate?.commandState(value: .logCount(index))
             case .EF(_):
@@ -1207,21 +1074,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .log:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E1(let model):
                 self.delegate?.commandState(value: .log(model))
             case .EF(_):
@@ -1231,21 +1083,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .getTokenArray:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E4(let index):
                 self.delegate?.commandState(value: .getTokenArray(index))
             case .EF(_):
@@ -1255,21 +1092,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .getToken:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E5(let model):
                 self.delegate?.commandState(value: .getToken(model))
             case .EF(_):
@@ -1279,21 +1101,6 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .createToken:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E6(let model):
                 self.delegate?.commandState(value: .createToken(model))
             case .EF(_):
@@ -1304,21 +1111,6 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .delToken:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E8(let bool):
                 var commandStateValue: commandState = .delToken(true)
                 if !bool {
@@ -1331,24 +1123,9 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .getTokenQrCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
             case .E5(let model):
                 let token = model.token?.toHexString() ?? ""
-                let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName]
+                let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName, "U": qrcodeuuid]
                 let json = JSON(dic).rawString() ?? ""
                 let value = AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey) ?? ""
                 self.delegate?.commandState(value: .getTokenQrCode(value))
@@ -1359,21 +1136,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .getPinCodeArray:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+          
+      
             case .EA(let model):
                 self.delegate?.commandState(value: .getPinCodeArray(model))
             case .EF(_):
@@ -1382,21 +1146,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .getPinCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+        
+         
             case .EB(let model):
                 self.delegate?.commandState(value: .getPinCode(model))
             case .EF(_):
@@ -1406,21 +1157,8 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .pinCodeoption:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+     
+        
             case .EC(let bool):
                 self.delegate?.commandState(value: .pinCodeoption(bool))
             case .ED(let bool):
@@ -1432,21 +1170,8 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .delPinCode:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+         
+ 
             case .EE(let bool):
                 self.delegate?.commandState(value: .delPinCode(bool))
             case .EF(_):
@@ -1456,21 +1181,8 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .factoryReset:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+    
+         
             case .CE(let bool):
                 self.delegate?.commandState(value: .factoryReset(bool))
             case .CF(let bool):
@@ -1481,21 +1193,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .supportType:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+          
+      
             case .A4(let model):
                 self.delegate?.commandState(value: .supportType(model))
             case .EF(_):
@@ -1504,21 +1203,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .accessArray:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+ 
+     
             case .A5(let model):
                 self.delegate?.commandState(value: .accessArray(model))
             case .EF(_):
@@ -1527,21 +1213,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .searchAccess:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+       
+           
             case .A6(let model):
                 self.delegate?.commandState(value: .searchAccess(model))
             case .EF(_):
@@ -1550,21 +1223,7 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .accessAction:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+       
             case .A7(let model):
                 self.delegate?.commandState(value: .accessAction(model))
             case .A8(let model):
@@ -1575,21 +1234,8 @@ extension BluetoothService: CBPeripheralDelegate {
             }
         case .delAccess:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+      
+          
             case .AA(let model):
                 self.delegate?.commandState(value: .delAccess(model))
             case .EF(_):
@@ -1599,21 +1245,8 @@ extension BluetoothService: CBPeripheralDelegate {
             
         case .setupAccess:
             switch response {
-            case .D6(let model):
-                commandType = .D
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-              
-                let data = DeviceStatusModel()
-                data.D6 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
-            case .A2(let model):
-                commandType = .A
-                // 保留藍芽資料
-                self.delegate?.updateData(value: self.data)
-                let data = DeviceStatusModel()
-                data.A2 = model
-                self.delegate?.commandState(value: .deviceStatus(data))
+  
+           
             case .A9(let model):
                 self.delegate?.commandState(value: .setupAccess(model))
             case .EF(_):
@@ -1621,50 +1254,210 @@ extension BluetoothService: CBPeripheralDelegate {
             default: break
             }
             
-        case .wifiList:
-            switch response {
-            case .getWifiList(let model):
-                self.delegate?.commandState(value: .wifiList(model))
-            case .EF(_):
-                self.delegate?.commandState(value: .wifiList(nil))
-            default:
-                break
-            }
-        case .connectWifi:
-            switch response {
-            case .setSSID:
-                self.setWifiPassword()
-            case .setPassword:
-                self.connectWifi()
-            case .setConnection(let bool):
-                self.delegate?.commandState(value: .connectWifi(bool))
-            case .setMQTT(let bool):
-                self.delegate?.commandState(value: .connectMQTT(bool))
-            case .setCloud(let bool):
-                self.delegate?.commandState(value: .connectClould(bool))
-            case .EF(_):
-                self.delegate?.commandState(value: .connectWifi(nil))
-            default:
-                break
-            }
 
-        case .OTAStatus:
-            switch response {
-            case .C3(let model):
-                self.delegate?.commandState(value: .OTAStatus(model))
-            default:
-                break
-            }
+        default:
+            break
+        }
         
-            
-        case .OTAData:
+        // MARK: - V3
+        switch action {
+        case .v3adminExist:
             switch response {
-            case .C4(let model):
-                self.delegate?.commandState(value: .OTAData(model))
+            case .EF(let model):
+                let res = resAdminCodeUseCase()
+                res.isExisted = model
+                self.delegate?.commandState(value: .v3adminCode(res))
             default:
                 break
             }
-          
+        case .v3:
+            
+            switch response {
+   
+                // admincode
+            case .C7(let model):
+                let res = resAdminCodeUseCase()
+                res.isCreated = model
+                self.delegate?.commandState(value: .v3adminCode(res))
+            case .C8(let model):
+                let res = resAdminCodeUseCase()
+                res.isEdited = model
+                self.delegate?.commandState(value: .v3adminCode(res))
+                // name
+            case .D0(let model):
+                let res = resNameUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Name(res))
+            case .D1(let model):
+                let res = resNameUseCase()
+                res.isConfigured = model
+                self.delegate?.commandState(value: .v3Name(res))
+                // config
+            case .N80(let model):
+                let res  = resConfigUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Config(res))
+            case .N81(let model):
+                let res =  resConfigUseCase()
+                res.isConfigured = model.isSuccess
+                self.delegate?.commandState(value: .v3Config(res))
+                // utility
+            case .C2(let model):
+                let res  = resUtilityUseCase()
+                res.version = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .CE(let model):
+                let res  = resUtilityUseCase()
+                res.isFactoryReset = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .CF(let model):
+                let res  = resUtilityUseCase()
+                res.isPlugFactoryReset = model
+                self.delegate?.commandState(value: .v3utility(res))
+            case .N87(let model):
+                let res  = resUtilityUseCase()
+                res.isMatter = model
+                self.delegate?.commandState(value: .v3utility(res))
+                // token
+            case .N8A(let model):
+                let res  = resTokenUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3BleUser(res))
+            case .N8B(let model):
+                
+                if qrcodeAes1Key != "" {
+                    let token = model.token?.toHexString() ?? ""
+                    let dic = ["T": token,"K": qrcodeAes1Key,"A": qrcodeMacAddress, "F": qrcodeUserName, "L": qrcodeDeviceName, "M": qrcodeModelName, "U": qrcodeuuid]
+                    let json = JSON(dic).rawString() ?? ""
+                    let value = AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey) ?? ""
+                    
+                    qrcodeAes1Key = ""
+                    qrcodeUserName = ""
+                    qrcodeModelName = ""
+                    qrcodeDeviceName = ""
+                    qrcodeMacAddress =  ""
+                    qrcodeuuid = ""
+                    barcodeKey = ""
+
+                    self.delegate?.commandState(value: .getTokenQrCode(value))
+                } else {
+                    let res  = resTokenUseCase()
+                    res.data = model
+                    self.delegate?.commandState(value: .v3BleUser(res))
+                }
+              
+            case .N8C(let model):
+                let res  = resTokenUseCase()
+                res.created = model
+                self.delegate?.commandState(value: .v3BleUser(res))
+            case .N8D(let model):
+                let res  = resTokenUseCase()
+                res.isEdited = model
+                self.delegate?.commandState(value: .v3BleUser(res))
+            case .N8E(let model):
+                let res = resTokenUseCase()
+                res.isDeleted = model
+                self.delegate?.commandState(value: .v3BleUser(res))
+                // log
+            case .E0(let model):
+                let res  = resLogUseCase()
+                res.count = model
+                self.delegate?.commandState(value: .v3Log(res))
+            case .E1(let model):
+                let res  = resLogUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Log(res))
+                // wifi
+            case .getWifiList(let model):
+                let res = resWifiUseCase()
+                res.list = model
+                self.delegate?.commandState(value: .v3Wifi(res))
+            case .setSSID:
+                self.V3setWifiPassword()
+            case .setPassword:
+                self.V3connectWifi()
+            case .setConnection(let bool):
+                let res = resWifiUseCase()
+                res.isWifi = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+            case .setMQTT(let bool):
+                let res = resWifiUseCase()
+                res.isMQTT = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+            case .setCloud(let bool):
+                let res = resWifiUseCase()
+                res.isClould = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+            case .F3(let model):
+                self.delegate?.updateData(value: self.data)
+                let res = resWifiUseCase()
+                res.status = model
+                self.delegate?.commandState(value: .v3Wifi(res))
+            case .F4(let bool):
+                let res = resWifiUseCase()
+                res.isAutoUnlock = bool
+                self.delegate?.commandState(value: .v3Wifi(res))
+                // plug
+         
+            case .B1(let model):
+                self.delegate?.commandState(value: .v3Plug(model))
+                // ota
+            case .C3(let model):
+                let res = resOTAUseCase()
+                res.status = model
+                self.delegate?.commandState(value: .v3OTA(res))
+            case .C4(let model):
+                let res = resOTAUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3OTA(res))
+                // user
+            case .N85(let model):
+                let res = resUserUseCase()
+                res.able = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N86(let model):
+                let res = resUserUseCase()
+                res.supportedCounts = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N90(let model):
+                let res = resUserUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N91(let model):
+                let res = resUserUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3User(res))
+            case .N92(let model):
+                let res = resUserUseCase()
+                res.isCreatedorEdited = model.isSuccess
+                self.delegate?.commandState(value: .v3User(res))
+            case .N93(let model):
+                let res = resUserUseCase()
+                res.isDeleted = model.isSuccess
+                self.delegate?.commandState(value: .v3User(res))
+            case .N94(let model):
+                let res = resCredentialUseCase()
+                res.array = model
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N95(let model):
+                let res = resCredentialUseCase()
+                res.data = model
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N96(let model):
+                let res = resCredentialUseCase()
+                res.isCreatedorEdited = model.isSuccess
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N97(let model):
+                let res = resCredentialUseCase()
+                res.setup = model
+                self.delegate?.commandState(value: .v3Credential(res))
+            case .N98(let model):
+                let res = resCredentialUseCase()
+                res.isDeleted = model.isSuccess
+                self.delegate?.commandState(value: .v3Credential(res))
+            default:
+                break
+            }
         default:
             break
         }

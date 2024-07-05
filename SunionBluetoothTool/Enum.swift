@@ -25,6 +25,7 @@ public enum disconnectState {
 }
 
 public enum commandState {
+
     case none
     case deviceStatus(DeviceStatusModel?)
     case config(Bool?)
@@ -54,11 +55,22 @@ public enum commandState {
     case accessAction(AccessResponseModel?)
     case setupAccess(SetupAccessResponseModel?)
     case delAccess(DelAccessResponseModel?)
-    case wifiList(SSIDModel?)
-    case connectWifi(Bool?)
-    case connectMQTT(Bool?)
-    case connectClould(Bool?)
-    case OTAStatus(OTAResponseModel?)
-    case OTAData(OTADataResponseModel?)
+
    
+    // v3
+    case v3
+    case v3adminExist
+    case v3deviceStatus(DeviceStatusModelN82?)
+    case v3time(resTimeUseCase?)
+    case v3adminCode(resAdminCodeUseCase?)
+    case v3Name(resNameUseCase?)
+    case v3Config(resConfigUseCase?)
+    case v3utility(resUtilityUseCase?)
+    case v3BleUser(resTokenUseCase?)
+    case v3Log(resLogUseCase?)
+    case v3Wifi(resWifiUseCase?)
+    case v3Plug(plugStatusResponseModel?)
+    case v3OTA(resOTAUseCase?)
+    case v3User(resUserUseCase?)
+    case v3Credential(resCredentialUseCase?)
 }
