@@ -118,6 +118,31 @@ Parameters
 
 ### Connecting to paired lock
 To connect to paired lock, you should use the saved LockConnectionInfo to connect to lock.
+
+```
+SunionBluetoothTool.shared.initBluetooth(macAddress: String, aes1Key: [UInt8], token: [UInt8], v3uuid: String)        
+```
+#### Parameters
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|macAddress|String| device mac
+|aes1Key|[UInt8]|get from QrCode
+|token|[UInt8]|first time from Qrcode, then from device
+|v3uuid|String|from Qrcode
+
+
+```
+ SunionBluetoothTool.shared.connectWithIdentifier(value: String)
+```
+#### Parameters
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|value|String|get from data
+
+
+### Data
+Information related to Device
+
 ```
 let data = SunionBluetoothTool.shared.data
 ```
