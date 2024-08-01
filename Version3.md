@@ -94,13 +94,28 @@ SunionBluetoothTool.shared.Usecase.deviceStatus.securityOnOff(value: CommandServ
 SunionBluetoothTool.shared.Usecase.time.syncCurrentTime()
 ```
 ### Set the TimeZone
+
 ```
 SunionBluetoothTool.shared.Usecase.time.setTimeZone(value: String)
 ```
+
+#### wifi Device only
+```
+SunionBluetoothTool.shared.Usecase.time.setTimeZoneForWIFIDevice(value: String)
+```
+
 #### Parameters
 | Parameters | Type | Description |
 | -------- | -------- | -------- |
 | value     | String     | Time-zone ID, such as Asia/Taipei    |
+
+
+
+### get TimeZone
+```
+SunionBluetoothTool.shared.Usecase.time.getTimeZoneValue()
+```
+
 
 
 ### Delegate function
@@ -111,8 +126,17 @@ func v3time(value: resTimeUseCase?) {
              // do something here
          }
          
-          if let timezone = value.isSavedTimeZone {
+         
+           if let timezone = value.isSavedTimeZone {
              // do something here
+         }
+         
+          if let timezone = value.isSavedTimeZoneWIFI {
+             // do something here
+         }
+         
+         if let data = value.timezoneValue {
+             // do sonething here
          }
         
      } else {
@@ -126,6 +150,14 @@ func v3time(value: resTimeUseCase?) {
 | -------- | -------- | -------- |
 | isSavedTime     | Bool     | Verify if setting the time was successful  |
 |isSavedTimeZone|Bool| Verify if setting the timeZone was successful
+|isSavedTimeZoneWIFI|Bool| Verify if setting the timeZone was successful
+| timezoneValue| timeZoneResponseModel| timezone value
+
+##### timeZoneResponseModel
+| Parameters | Type | Description |
+| -------- | -------- | -------- |
+| Offset     | Int     | timezone offset  |
+|data|String| timezone name
 
 ---
 

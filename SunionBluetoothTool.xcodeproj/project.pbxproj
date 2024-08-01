@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		601593A72C5B640700C0F657 /* timezoneResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601593A62C5B640700C0F657 /* timezoneResponseModel.swift */; };
 		60B367902BE86EB60005E141 /* BleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B3678F2BE86EB60005E141 /* BleUserModel.swift */; };
 		60B367922BE872350005E141 /* addBleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B367912BE872350005E141 /* addBleUserModel.swift */; };
 		60B367942BE877B90005E141 /* EditBleUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B367932BE877B90005E141 /* EditBleUserModel.swift */; };
@@ -122,6 +123,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		601593A62C5B640700C0F657 /* timezoneResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timezoneResponseModel.swift; sourceTree = "<group>"; };
 		60B3678F2BE86EB60005E141 /* BleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleUserModel.swift; sourceTree = "<group>"; };
 		60B367912BE872350005E141 /* addBleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addBleUserModel.swift; sourceTree = "<group>"; };
 		60B367932BE877B90005E141 /* EditBleUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBleUserModel.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				9992E5252B6C8C4C00E44AB0 /* UserableResponseModel.swift */,
 				60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */,
 				60BE21C82BB26DC9003AD4E8 /* resUseCase.swift */,
+				601593A62C5B640700C0F657 /* timezoneResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -590,6 +593,7 @@
 				995AD7652990DB1F00810273 /* customEnum.swift in Sources */,
 				60B367942BE877B90005E141 /* EditBleUserModel.swift in Sources */,
 				99CB543B29932B6B00A5C06F /* AccessDataResponseModel.swift in Sources */,
+				601593A72C5B640700C0F657 /* timezoneResponseModel.swift in Sources */,
 				99AEB50629347C8800CCAC9C /* CommandService.swift in Sources */,
 				9992E5222B6C784300E44AB0 /* DeviceStatusModelA2.swift in Sources */,
 				9992E5152B6B847A00E44AB0 /* DeviceSetupResultModel.swift in Sources */,

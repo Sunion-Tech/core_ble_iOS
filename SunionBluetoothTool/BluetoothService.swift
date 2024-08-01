@@ -858,6 +858,14 @@ extension BluetoothService: CBPeripheralDelegate {
             let res = resTimeUseCase()
             res.isSavedTimeZone = model
             self.delegate?.commandState(value: .v3time(res))
+        case .F6(let model):
+            let res = resTimeUseCase()
+            res.isSavedTimeZoneWIFI = model
+            self.delegate?.commandState(value: .v3time(res))
+        case .F5(let value):
+            let res = resTimeUseCase()
+            res.timezoneValue = value
+            self.delegate?.commandState(value: .v3time(res))
         default:
             break
         }

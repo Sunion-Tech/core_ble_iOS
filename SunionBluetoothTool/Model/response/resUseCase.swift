@@ -10,6 +10,8 @@ import Foundation
 public class resTimeUseCase {
     public var isSavedTime: Bool?
     public var isSavedTimeZone: Bool?
+    public var isSavedTimeZoneWIFI: Bool?
+    public var timezoneValue: timeZoneResponseModel?
 }
 
 public class resAdminCodeUseCase {

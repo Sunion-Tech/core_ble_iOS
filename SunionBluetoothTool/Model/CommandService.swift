@@ -100,6 +100,8 @@ public class CommandService {
         case D7(DeviceMode)
         case A3(deviceStatusMode, DeviceMode?, SecurityboltMode?) // same D7
         case D9(Int32, Data)
+        case F5
+        case F6(Int32, [UInt8])
         case E0
         case E1(Int)
         case E2
@@ -127,6 +129,7 @@ public class CommandService {
         case EF
         case F3(String)
         case F4(String)
+   
         case N80
         case N81(DeviceSetupModelN81)
         case N82
@@ -294,6 +297,24 @@ public class CommandService {
                 }
                 abbreviation.forEach{byteArray.append($0)}
                 return byteArray
+            case .F6(let offset, let abbreviation):
+                var byteArray:[UInt8] = [0xF6]
+                let timeZoneOffSetLength = 4
+//                guard let data = abbreviation.data(using: .utf8) else { return [0xD9] }
+
+                let dataLength = UInt8(timeZoneOffSetLength + abbreviation.count)
+                byteArray.append(dataLength)
+                withUnsafeBytes(of: offset) { bytes in
+                    for byte in bytes {
+                        let stringHex = String(format: "%02x", byte)
+                        let uint8 = UInt8(stringHex, radix: 16) ?? 0x00
+                        byteArray.append(uint8)
+                    }
+                }
+                abbreviation.forEach{byteArray.append($0)}
+                return byteArray
+            case .F5:
+                return [0xF5, 0x00]
             case .E0:
                 return [0xE0, 0x00]
             case .E1(let index):
@@ -546,6 +567,13 @@ public class CommandService {
 //                guard let data = abbreviation.data(using: .utf8) else { return 0x01 }
                 let dataLength = UInt8(timeZoneOffSetLength + abbreviation.count)
                 return dataLength
+            case .F6( _, let abbreviation):
+                let timeZoneOffSetLength = 4
+//                guard let data = abbreviation.data(using: .utf8) else { return 0x01 }
+                let dataLength = UInt8(timeZoneOffSetLength + abbreviation.count)
+                return dataLength
+            case .F5:
+                return 0x00
             case .E0:
                 return 0x00
             case .E1:
@@ -714,6 +742,8 @@ public class CommandService {
         case D7
         case A3
         case D9(Bool)
+        case F5(timeZoneResponseModel)
+        case F6(Bool)
         case E0(Int)
         case E1(LogModel)
         case E2
@@ -837,6 +867,10 @@ public class CommandService {
                 return 0xA3
             case .D9:
                 return 0xD9
+            case .F5:
+                return 0xF5
+            case .F6:
+                return 0xF6
             case .E0:
                 return 0xE0
             case .E1:
@@ -1289,6 +1323,12 @@ public class CommandService {
         case 0xD9:
             let isSuccess = data.first == 0x01
             return .D9(isSuccess)
+        case 0xF6:
+            let isSuccess = data.first == 0x01
+            return .F6(isSuccess)
+        case 0xF5:
+            let value = timeZoneResponseModel(data)
+            return .F5(value)
         case 0xE0:
             let logQuantity = data.first?.toInt ?? 0
             return .E0(logQuantity)

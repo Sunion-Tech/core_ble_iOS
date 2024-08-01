@@ -22,6 +22,14 @@ public class Time  {
     public func setTimeZone(value: String) {
         tool?.tool?.bluetoothService?.V3setTimeZone(timezone: value)
     }
+    
+    public func setTimeZoneForWIFIDevice(value: String) {
+        tool?.tool?.bluetoothService?.V3setTimeZoneForWIFIDevice(timezone: value)
+    }
+    
+    public func getTimeZoneValue() {
+        tool?.tool?.bluetoothService?.V3getTimeZone()
+    }
 
 
 }
