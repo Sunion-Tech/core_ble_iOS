@@ -98,11 +98,11 @@ public class DeviceSetupResultModelD4 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("latitude digitValue \(digitValue)")
+     
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("latitude withLeadingZero \(withLeadingZero)")
+
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("latitude intvalue \(intValue), value is \(doubleValue)")
+     
         return Double(intValue) + doubleValue
     }
 
@@ -124,11 +124,11 @@ public class DeviceSetupResultModelD4 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("Logitude digitValue \(digitValue)")
+ 
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("Logitude withLeadingZero \(withLeadingZero)")
+   
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("Logitude intvalue \(intValue), value is \(doubleValue)")
+       
         return Double(intValue) + doubleValue
     }
 }

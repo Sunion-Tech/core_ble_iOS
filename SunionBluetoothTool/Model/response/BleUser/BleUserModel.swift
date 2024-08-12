@@ -121,12 +121,12 @@ public class BleUserModel {
 
         // Name length (max 20)
         guard let length = response[safe: 12]  else { return nil }
-        print("Name length: \(length.toInt)")
+    
         if length.toInt > 20 { return nil }
         
         let namelastIndex = 14+length.toInt-1
         
-        print(" end: \(namelastIndex)")
+   
         
         guard  response[safe: 14] != nil && response[safe: namelastIndex] != nil else { return nil}
 
@@ -151,7 +151,7 @@ public class BleUserModel {
         guard  response[safe: idStartIndex] != nil && response[safe: idEndIndex] != nil else { return nil}
         let data = self.response[idStartIndex...idEndIndex]
         
-        print("id start: \(idStartIndex), end: \(idEndIndex)")
+     
         
         return String(data: Data(data), encoding: .utf8)
     }

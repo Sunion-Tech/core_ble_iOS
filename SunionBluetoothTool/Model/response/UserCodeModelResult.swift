@@ -140,8 +140,7 @@ public class PinCodeScheduleResult {
 
             let endTimestamp = [endTime4 << 24, endTime3 << 16, endTime2 << 8, endTime1].reduce(0, +)
 
-            print("start time \(startTimestamp)")
-            print("end time \(endTimestamp)")
+          
             return .validTime(Date(timeIntervalSince1970: Double(startTimestamp)), Date(timeIntervalSince1970: Double(endTimestamp)))
         default:
             return .error
@@ -175,8 +174,7 @@ public class PinCodeScheduleResult {
     
             guard let endTime = data.Attributes?.Rule?.first?.Conditions?.ValidTimeRange?.EndTimeStamp else { return .error }
     
-            print("start time \(startTime)")
-            print("end time \(endTime)")
+     
             return .validTime(Date(timeIntervalSince1970: Double(startTime)), Date(timeIntervalSince1970: Double(endTime)))
         default:
             return .error

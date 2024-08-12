@@ -144,8 +144,7 @@ public class DeviceSetupModelA1 {
             let hexString = String(value, radix: 16)
             element =  UInt8(hexString) ?? 0x00
 
-            print("progress Value: \(value)")
-            print("progress uint8: \(element)")
+   
             voice = [0x03, UInt8(value)]
             
         default:

@@ -196,7 +196,7 @@ public class CredentialModel {
             // 获取从index开始的10个字节
             let unitData = Array(response[index..<(index + sizeOfUnit)])
             // 假设你有一个方法来从一个字节数组创建一个CredentialDetailStructModel
-            print("CredentialDetailStructModel: \(Array(response[index..<(index + sizeOfUnit)]).toHexString())")
+      
             models.append(CredentialDetailStructModel(response: unitData))
             
             

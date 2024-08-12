@@ -92,11 +92,11 @@ public class DeviceSetupResultModelA0 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("latitude digitValue \(digitValue)")
+
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("latitude withLeadingZero \(withLeadingZero)")
+    
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("latitude intvalue \(intValue), value is \(doubleValue)")
+     
         return Double(intValue) + doubleValue
     }
 
@@ -118,11 +118,11 @@ public class DeviceSetupResultModelA0 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("Logitude digitValue \(digitValue)")
+
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("Logitude withLeadingZero \(withLeadingZero)")
+     
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("Logitude intvalue \(intValue), value is \(doubleValue)")
+      
         return Double(intValue) + doubleValue
     }
     
@@ -252,9 +252,7 @@ public class DeviceSetupResultModelA0 {
     
     private func getSound() -> CodeStatus {
         guard let index5 = response[safe: 28] else { return .error }
-        print("getSound")
-        print(index5)
-        print("getSound")
+
         switch index5 {
         case 0x01:
             return .open
@@ -317,9 +315,7 @@ public class DeviceSetupResultModelA0 {
         case .percentage:
             // 100 ~ 0
             var val = 0
-            print("==percentage==")
-            print(index5)
-            print("========")
+    
             return .value(Int(index5))
         default:
             return .error

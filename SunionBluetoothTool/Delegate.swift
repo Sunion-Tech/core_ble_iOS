@@ -9,7 +9,8 @@ import Foundation
 
 public protocol SunionBluetoothToolDelegate: AnyObject {
     
-    
+    // MARK: - debug
+    func debug(level: LogLevel, value: String)
     // MARK: - Bluetooth
     func BluetoothState(State: bluetoothState)
     func DeviceStatus(value: DeviceStatusModel?)
@@ -61,7 +62,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
 
 extension SunionBluetoothToolDelegate {
     
-    
+    public func debug(level: LogLevel, value: String) {}
     //  bluetooth
     public func DeviceStatus(value: DeviceStatusModel?) {}
     public func Config(bool: Bool?) {}

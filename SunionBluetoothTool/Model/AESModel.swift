@@ -23,20 +23,20 @@ class AESModel {
             return encrypted
 
         } catch let error {
-            print("aes encrypt error \(error)")
+          
             return nil
         }
     }
 
     func decrypt(key: [UInt8], _ data: Data) -> [UInt8]? {
-//        print("aes model key \(key.bytesToHex()) ")
+
         let bytesArray = Array(data)
         do {
             let aes = try AES(key: key, blockMode: ECB(), padding: .noPadding)
             let decode = try aes.decrypt(bytesArray)
             return decode
         } catch let error {
-            print("aes decrypt error \(error)")
+        
             return nil
         }
     }
@@ -50,7 +50,7 @@ class AESModel {
             let string = String(data: Data(ciphertext), encoding: .utf8)
             return string
         } catch let error {
-            print("decode base64 error \(error)")
+        
             return nil
 
         }
@@ -64,7 +64,7 @@ class AESModel {
             let ciphertext = try aes.encrypt(encodeData)
             return ciphertext.toBase64()
         } catch let error {
-            print("encode base64 error \(error)")
+         
             return nil
 
         }

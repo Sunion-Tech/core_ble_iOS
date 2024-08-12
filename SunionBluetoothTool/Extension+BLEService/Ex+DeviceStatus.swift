@@ -15,6 +15,7 @@ extension BluetoothService {
         }
         action = .none
         let command =  CommandService.shared.createAction(with: .N82, key: aes2key!)
+  
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     

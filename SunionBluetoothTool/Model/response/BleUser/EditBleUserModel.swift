@@ -39,16 +39,16 @@ public class EditBleUserModel {
         tokenValue.forEach{byteArray.append($0)}
         
         // name length
-        print("nLength before: \(byteArray.count)")
+    
         let nLength = tokenName.count
         byteArray.append(UInt8(nLength))
-        print("nLength after: \(byteArray.count)")
+   
         // id length
         
        
         let iLength = idenity.count
         byteArray.append(UInt8(iLength))
-        print("iLength after: \(byteArray.count)")
+      
         
         
         // nvalue

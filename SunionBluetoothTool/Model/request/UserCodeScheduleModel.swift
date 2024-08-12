@@ -49,8 +49,7 @@ public class PinCodeScheduleModel {
             let timeATimestamp = timeA.timeIntervalSince1970.toInt64
             let timeBTimestamp = timeB.timeIntervalSince1970.toInt64
 
-            print("write start \(timeATimestamp)")
-            print("write end \(timeBTimestamp)")
+
 
             var data = "S".data(using: .utf8)?.bytes ?? []
             data.append(0x00)
@@ -58,7 +57,7 @@ public class PinCodeScheduleModel {
             data.append(0x00)
 
             if timeATimestamp >= 0 && timeATimestamp <= Int64(4294967295) {
-                print("Int64 value is in range for unsingned UInt32")
+              
                 
                 withUnsafeBytes(of: timeATimestamp) { bytes in
                     for byte in bytes {
@@ -76,7 +75,7 @@ public class PinCodeScheduleModel {
                 
                 
             } else {
-                print("Int64 value is out of range for UInt32")
+        
                 data.append(0xFF)
                 data.append(0xFF)
                 data.append(0xFF)
@@ -87,8 +86,7 @@ public class PinCodeScheduleModel {
             
             
             if timeBTimestamp >= 0 && timeBTimestamp <= Int64(4294967295) {
-                print("Int64 value is in range for unsingned UInt32")
-                
+               
                 withUnsafeBytes(of: timeBTimestamp) { bytes in
                     for byte in bytes {
                         let stringHex = String(format: "%02X", byte)

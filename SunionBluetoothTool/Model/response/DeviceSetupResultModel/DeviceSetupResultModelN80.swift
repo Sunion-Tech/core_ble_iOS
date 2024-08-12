@@ -150,11 +150,11 @@ public class DeviceSetupResultModelN80 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("latitude digitValue \(digitValue)")
+      
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("latitude withLeadingZero \(withLeadingZero)")
+    
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("latitude intvalue \(intValue), value is \(doubleValue)")
+      
         return Double(intValue) + doubleValue
     }
 
@@ -176,11 +176,11 @@ public class DeviceSetupResultModelN80 {
         let data2 = Data([index9, index10, index11, index12])
         let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
         let digitValue = Int32(bitPattern: UInt32(digit))
-        print("Logitude digitValue \(digitValue)")
+    
         let withLeadingZero = String(format: "%09D", digitValue)
-        print("Logitude withLeadingZero \(withLeadingZero)")
+       
         let doubleValue = (Double(withLeadingZero) ?? 0.0) / 1000000000
-        print("Logitude intvalue \(intValue), value is \(doubleValue)")
+   
         return Double(intValue) + doubleValue
     }
     
@@ -312,9 +312,7 @@ public class DeviceSetupResultModelN80 {
     
     private func getSound() -> CodeStatus {
         guard let index5 = response[safe: 35] else { return .error }
-        print("getSound")
-        print(index5)
-        print("getSound")
+  
         switch index5 {
         case 0x01:
             return .open
@@ -377,9 +375,7 @@ public class DeviceSetupResultModelN80 {
         case .percentage:
             // 100 ~ 0
             var val = 0
-            print("==percentage==")
-            print(index5)
-            print("========")
+      
             return .value(Int(index5))
         default:
             return .error
@@ -436,12 +432,11 @@ public class DeviceSetupResultModelN80 {
         
         let bits = supports.languagebits.map { Int($0) } // Assuming 'bits' is defined somewhere to convert UInt8 to an array of bits
         
-        print("bits: \(bits)")
+
         
         if let index = bits.firstIndex(of: 1) {
             let position = UInt8(index - 1) // Get the 0-based index of the first '1' found
-            print("index: \(index)")
-            print("position: \(position)")
+           
             return LanguageStatus(rawValue: position) ?? .unsupport
         } else {
             return .unsupport
@@ -461,13 +456,12 @@ public class DeviceSetupResultModelN80 {
         if let index = bits.firstIndex(of: 1) {
             let position = UInt8(index - 1) // Get the 0-based index of the first '1' found
             
-            print("index: \(index)")
-            print("position: \(position)")
+      
             
             value.append(LanguageStatus(rawValue: position) ?? .unsupport)
         }
         
-        print("langeage: \(bits), \(value)")
+   
         return value
     }
     

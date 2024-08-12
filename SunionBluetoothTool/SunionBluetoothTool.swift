@@ -54,16 +54,9 @@ public class SunionBluetoothTool: NSObject {
         model.modelName = qrService.modelName
         model.uuid = qrService.uuid
         
-        print("🔧🔧🔧decodeQrCode🔧🔧🔧")
-        print("token: \(model.token?.toHexString())")
-        print("aes1Key: \(model.aes1Key?.toHexString())")
-        print("macAddress: \(model.macAddress)")
-        print("qrCodeShareFrom: \(model.qrCodeShareFrom)")
-        print("qrCodeDisplayName: \(model.qrCodeDisplayName)")
-        print("qrCodeSerialNumber: \(model.qrCodeSerialNumber)")
-        print("modelName: \(model.modelName)")
-        print("uuid: \(model.uuid)")
-        print("🔧🔧🔧🔧🔧🔧")
+        delegate?.debug(level: .info, value: "decodeQrCode token: \(model.token?.toHexString()), aes1Key: \(model.aes1Key?.toHexString()), macAddress: \(model.macAddress), uuid: \(model.uuid), qrCodeShareFrom: \(model.qrCodeShareFrom), qrCodeDisplayName: \(model.qrCodeDisplayName), modelName: \(model.modelName)")
+        
+
         self.data = model
         return model
     }
@@ -242,10 +235,14 @@ public class SunionBluetoothTool: NSObject {
 // MARK: - BluetoothServiceDelegate
 
 extension SunionBluetoothTool: BluetoothServiceDelegate {
+    
+    func debug(level: LogLevel,value: String) {
+        delegate?.debug(level: level, value: "🧰🦷" + value)
+    }
+    
     func updateData(value: BluetoothToolModel) {
         
-        print("SunionBluetoothTool updateData: \(value.permanentToken?.toHexString())")
-       
+   
         if let data = data {
             data.permanentToken = value.permanentToken
             data.permission = value.permission

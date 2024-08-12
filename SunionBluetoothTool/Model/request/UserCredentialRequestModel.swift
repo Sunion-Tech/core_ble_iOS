@@ -87,24 +87,19 @@ public class UserCredentialRequestModel {
         
         byteArray.append(self.credentialRule.rawValue)
         
-        
-        print("before weekDayscheduleStruct: \(byteArray.count)")
-        
+     
         weekDayscheduleStruct.forEach { value in
             byteArray = byteArray + value.command
             
         }
         
-        print("after weekDayscheduleStruct: \(byteArray.count)")
-        
-        
-        print("before yearDayscheduleStruct: \(byteArray.count)")
+     
         yearDayscheduleStruct.forEach { value in
             byteArray = byteArray + value.command
             
         }
         
-        print("after yearDayscheduleStruct: \(byteArray.count)")
+    
 
         return byteArray
     }

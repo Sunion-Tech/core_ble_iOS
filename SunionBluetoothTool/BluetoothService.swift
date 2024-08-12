@@ -9,10 +9,22 @@
 import CoreBluetooth
 import SwiftyJSON
 
+public struct LogMsg {
+    var level: LogLevel
+    var msg: String
+}
+
+public enum LogLevel {
+    case error
+    case info
+    case debug
+}
+
 protocol BluetoothServiceDelegate: AnyObject {
     func bluetoothState(State: bluetoothState)
     func commandState(value: commandState)
     func updateData(value: BluetoothToolModel)
+    func debug(level: LogLevel, value: String)
 }
 
 
@@ -86,6 +98,10 @@ class BluetoothService: NSObject {
         self.v3udid = udid
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
+        CommandService.shared.logHandler = { logMessage in
+            
+            delegate?.debug(level: logMessage.level, value:  logMessage.msg)
+        }
     }
     
     private func deviceTokenExchange() {
@@ -93,8 +109,9 @@ class BluetoothService: NSObject {
             return
         }
         self.data.identifier = peripheral.identifier.uuidString
-        print("aes1: \(aes1key?.toHexString())")
-        print("aes2: \(aes2key?.toHexString())")
+
+        delegate?.debug(level: .info, value: "aes1: \(aes1key?.toHexString())")
+        delegate?.debug(level: .info, value: "aes2: \(aes2key?.toHexString())")
         let command = CommandService.shared.createAction(with: .C0(c0RandomData), key: aes1key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
@@ -134,20 +151,8 @@ class BluetoothService: NSObject {
     
     //MARK: - 連線 + 交換token
     func startConnecting() {
-        // 获取当前日期和时间
-        let now = Date()
 
-        // 获取当前用户的日历
-        let calendar = Calendar.current
-
-        // 从当前日期中提取小时、分钟和秒
-        let hour = calendar.component(.hour, from: now)
-        let minute = calendar.component(.minute, from: now)
-        let second = calendar.component(.second, from: now)
-
-        // 打印结果
-        print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
-        print("🔧🔧🔧開始掃描🔧🔧🔧")
+        delegate?.debug(level: .info, value: "Start Scan")
 
         action = .deviceStatus(nil)
         delegate?.bluetoothState(State: .connecting)
@@ -162,7 +167,9 @@ class BluetoothService: NSObject {
                 self.centralManager.stopScan()
                 
                 self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
-                print("Stopped scanning after 5 seconds")
+            
+                self.delegate?.debug(level: .debug, value: "Stopped scanning after 60 seconds")
+                
             }
         }
         
@@ -574,16 +581,14 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         
-
-        
-        
         if let mac = mackAddress, mac != "" {
             guard let name = peripheral.name else { return }
             
             let macAddressSuffix = mac.subString(start: 6, end: 11).uppercased()
             if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
                name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
-                print("🔧🔧🔧找到裝置🔧🔧🔧 \n \(name) \n🔧🔧🔧🔧🔧🔧")
+       
+                delegate?.debug(level: .info, value: "Find Device- mac: \(mac)")
                 self.data.bleName = name
                 self.data.identifier = peripheral.identifier.uuidString
                 self.delegate?.updateData(value: self.data)
@@ -599,10 +604,11 @@ extension BluetoothService: CBCentralManagerDelegate {
            manufacturerData.starts(with: [0xE3, 0x0C]) {
             let range = 2..<10
             let uuidData = manufacturerData.subdata(in: range)
-            print("manu uuidData: \(uuidData.toHexString())")
+         
             // 與udid 一樣的裝置
             if uuidData.toHexString().lowercased() == udid.lowercased() {
-                print("🔧🔧🔧找到V3裝置🔧🔧🔧 \n \(udid) \n🔧🔧🔧🔧🔧🔧")
+           
+                delegate?.debug(level: .info, value: "Find Device- uuid: \(udid)")
                 self.data.identifier = peripheral.identifier.uuidString
                 self.delegate?.updateData(value: self.data)
                 connectedPeripheral = peripheral
@@ -622,7 +628,7 @@ extension BluetoothService: CBCentralManagerDelegate {
                 self.centralManager.stopScan()
                 
                 self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
-                print("Stopped scanning after 5 seconds")
+                self.delegate?.debug(level: .debug, value: "Stopped discover after 60 seconds")
             }
         }
         
@@ -636,7 +642,9 @@ extension BluetoothService: CBCentralManagerDelegate {
 
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        print("didConnect: \(peripheral.name)")
+   
+        delegate?.debug(level: .info, value: "didConnect: \(peripheral.name)")
+        
         if let name = peripheral.name {
             delegate?.bluetoothState(State: .connected(name))
         } else {
@@ -655,16 +663,17 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-      
-        print("🔧🔧🔧didDisconnectPeripheral error🔧🔧🔧\n \(error.debugDescription) \n🔧🔧🔧🔧🔧🔧")
+
         if error != nil  {
+            delegate?.debug(level: .error, value: "didDisconnectPeripheral error: \(error.debugDescription)")
             delegate?.bluetoothState(State: .disconnect(.fail))
         }
 
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        print("🔧🔧🔧didFailToConnect🔧🔧🔧")
+ 
+        delegate?.debug(level: .error, value: "didFailToConnect: \(error.debugDescription)")
         delegate?.bluetoothState(State: .disconnect(.fail))
     }
     
@@ -681,7 +690,7 @@ extension BluetoothService: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         
-        print("didDiscoverServices")
+      
         
         if (error != nil) {
             
@@ -699,9 +708,6 @@ extension BluetoothService: CBPeripheralDelegate {
         }
         
      
-        for service in services {
-            print(service)
-        }
         
         let custom = services.first { service in
             
@@ -724,23 +730,24 @@ extension BluetoothService: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
-        print("didDiscoverCharacteristicsFor")
+    
         guard let characteristics = service.characteristics else {
             delegate?.bluetoothState(State: .disconnect(.discoverCharacteristics))
             return
         }
         
 
-        
+        delegate?.debug(level: .info, value: "didDiscoverCharacteristicsFor")
         
         for characteristic in characteristics {
-            print(characteristic)
-       
+         
+            delegate?.debug(level: .info, value: "\(characteristic)")
             
             let propertie = characteristic.properties
             
             if propertie.contains(.notify), characteristic.uuid == notifyUUID {
-                print("setNotifyValue: \(characteristic)")
+        
+                delegate?.debug(level: .info, value: "setNotifyValue: \(characteristic)")
                 peripheral.setNotifyValue(true, for: characteristic)
                 
             }
@@ -771,7 +778,8 @@ extension BluetoothService: CBPeripheralDelegate {
     // step 4
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
-        print("🔧🔧🔧通知註冊成功🔧🔧🔧\n \(characteristic)\n🔧🔧🔧🔧🔧🔧")
+   
+        delegate?.debug(level: .info, value: "didUpdateNotificationStateFor: \(characteristic)")
         deviceTokenExchange()
         
     }
@@ -780,19 +788,13 @@ extension BluetoothService: CBPeripheralDelegate {
     // step 5
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
-        
-        print("🔧🔧🔧BLE RESPONSE🔧🔧🔧")
-        print("action: \(action)")
-        print("value: \(String(data: characteristic.value!, encoding: .utf8))")
-        print("🔧🔧🔧🔧🔧🔧")
         // get Firmware version
         if self.data.FirmwareVersion == nil {
            
   
             let str = String(data: characteristic.value!, encoding: .utf8)
             self.data.FirmwareVersion = str
-            print("🔧🔧🔧FirmwareVersion🔧🔧🔧\n \(str)\n🔧🔧🔧🔧🔧🔧")
-        
+            delegate?.debug(level: .info, value: "FirmwareVersion: \(str)")
             self.connectedPeripheral!.discoverCharacteristics(nil, for: self.targetServices!.last!)
             return
         }
@@ -885,8 +887,10 @@ extension BluetoothService: CBPeripheralDelegate {
                 }
                 peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
             case .C1(let tokenType, let tokenPermission):
-                print("🔧🔧🔧tokenType🔧🔧🔧\n \(tokenType)\n🔧🔧🔧🔧🔧🔧")
-                print("🔧🔧🔧tokenPermission🔧🔧🔧\n \(tokenPermission)\n🔧🔧🔧🔧🔧🔧")
+              
+                delegate?.debug(level: .info, value: "tokenType: \(tokenType)")
+                delegate?.debug(level: .info, value: "tokenPermission: \(tokenPermission)")
+               
                 guard let peripheral = connectedPeripheral else {
                     self.delegate?.bluetoothState(State: .disconnect(.fail))
                     return

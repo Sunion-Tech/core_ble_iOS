@@ -13,7 +13,7 @@ public class CredentialDetailStructModel: NSObject {
     private var response:[UInt8]
     
     init(response:[UInt8]) {
-        print("CredentialDetailStructModel init: \(response.toHexString())")
+     
         self.response = response
     }
     

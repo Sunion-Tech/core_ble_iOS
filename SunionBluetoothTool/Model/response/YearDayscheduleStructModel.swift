@@ -93,7 +93,7 @@ public class YearDayscheduleStructModel: NSObject {
         if let start = start {
             let timeATimestamp = start.timeIntervalSince1970.toInt64
             if timeATimestamp >= 0 && timeATimestamp <= Int64(4294967295) {
-                print("Int64 value is in range for unsingned UInt32")
+      
                 
                 withUnsafeBytes(of: timeATimestamp) { bytes in
                     for byte in bytes {
@@ -111,7 +111,7 @@ public class YearDayscheduleStructModel: NSObject {
                 
                 
             } else {
-                print("Int64 value is out of range for UInt32")
+           
                 byteArray.append(0xFF)
                 byteArray.append(0xFF)
                 byteArray.append(0xFF)
@@ -123,7 +123,7 @@ public class YearDayscheduleStructModel: NSObject {
             let timeBTimestamp = end.timeIntervalSince1970.toInt64
             
             if timeBTimestamp >= 0 && timeBTimestamp <= Int64(4294967295) {
-                print("Int64 value is in range for unsingned UInt32")
+            
                 
                 withUnsafeBytes(of: timeBTimestamp) { bytes in
                     for byte in bytes {

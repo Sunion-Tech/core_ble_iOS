@@ -12,6 +12,8 @@ import CoreBluetooth
 
 public class CommandService {
     static let shared = CommandService()
+    
+    var logHandler: ((LogMsg) -> Void)?
 
     var counter: Int = 0
 
@@ -233,7 +235,7 @@ public class CommandService {
                 
         
                 if timestamp >= 0 && timestamp <= Int64(4294967295) {
-                    print("Int64 value is in range for unsingned UInt32")
+            
              
                     withUnsafeBytes(of: timestamp) { bytes in
                         for byte in bytes {
@@ -250,7 +252,7 @@ public class CommandService {
                     byteArray.removeLast()
   
                 } else {
-                    print("Int64 value is out of range for UInt32")
+                  
                     byteArray.append(0xFF)
                     byteArray.append(0xFF)
                     byteArray.append(0xFF)
@@ -1015,7 +1017,8 @@ public class CommandService {
         for _ in 0...fillCount - 1  {
             byteArray.append(UInt8.random(in: 0x00...0xff))
         }
-        print("🌊🌊🌊 \n send Command: \(byteArray.bytesToHex()) \n 🌊🌊🌊")
+
+        logHandler?(LogMsg(level: .info, msg: "Send Command: \(byteArray.bytesToHex())"))
         return byteArray
     }
 
@@ -1062,7 +1065,7 @@ public class CommandService {
 
 
         guard let aesBytes = AESModel.shared.encrypt(key: key, bytesArray) else { return nil }
-        print("aes : \(aesBytes.toHexString())")
+    
         return Data(aesBytes)
     }
 
@@ -1076,21 +1079,9 @@ public class CommandService {
         
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            // 获取当前日期和时间
-            let now = Date()
-
-            // 获取当前用户的日历
-            let calendar = Calendar.current
-
-            // 从当前日期中提取小时、分钟和秒
-            let hour = calendar.component(.hour, from: now)
-            let minute = calendar.component(.minute, from: now)
-            let second = calendar.component(.second, from: now)
-
-            // 打印结果
-            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
-            print("🌜🌜🌜 \n response data CBCharacteristic \(decryptData.bytesToHex()) \n 🌜🌜🌜")
-            
+    
+         
+            logHandler?(LogMsg(level: .info, msg: "response Data \(decryptData.bytesToHex())"))
             if Int(dataLength) > decryptData.count {
                 return .error("Unknown response")
             }
@@ -1104,21 +1095,9 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, data) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            // 获取当前日期和时间
-            let now = Date()
-
-            // 获取当前用户的日历
-            let calendar = Calendar.current
-
-            // 从当前日期中提取小时、分钟和秒
-            let hour = calendar.component(.hour, from: now)
-            let minute = calendar.component(.minute, from: now)
-            let second = calendar.component(.second, from: now)
-
-            // 打印结果
-            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
-            print("🌜🌜🌜 \n response data  Data \(decryptData.bytesToHex()) \n 🌜🌜🌜")
-            
+          
+          
+            logHandler?(LogMsg(level: .info, msg: "response Data \(decryptData.bytesToHex())"))
             
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])
             if action == 0xA5 {
@@ -1129,20 +1108,9 @@ public class CommandService {
             guard let decryptData = AESModel.shared.decrypt(key: key, Data.init(byteArray)) else { return .error("Decrypt data error") }
             guard let action = decryptData[safe: 2] else { return .error("Can't get first value of characteristic")}
             guard let dataLength = decryptData[safe: 3] else { return .error("Can't get first value of characteristic")}
-            // 获取当前日期和时间
-            let now = Date()
-
-            // 获取当前用户的日历
-            let calendar = Calendar.current
-
-            // 从当前日期中提取小时、分钟和秒
-            let hour = calendar.component(.hour, from: now)
-            let minute = calendar.component(.minute, from: now)
-            let second = calendar.component(.second, from: now)
-
-            // 打印结果
-            print("当前时间是：\(hour)时 \(minute)分 \(second)秒")
-            print("🌜🌜🌜 \n response data  [UInt8] \(decryptData.bytesToHex()) \n 🌜🌜🌜")
+          
+           
+            logHandler?(LogMsg(level: .info, msg: "response Data \(decryptData.bytesToHex())"))
             
             var dataWithoutHeader = Array(decryptData[4...Int(dataLength) + 3])
             if action == 0xA5 {
@@ -1164,7 +1132,7 @@ public class CommandService {
     }
 
     private func resolveWithActionCode(actionCode:UInt8, data:[UInt8]) -> ActionResolveOption {
-        print("resolveWithActionCode: \(actionCode)")
+
         switch actionCode {
         case 0xF2:
             // set wifi 回傳 L
@@ -1173,7 +1141,8 @@ public class CommandService {
             // set connection 回傳 "CWiFi Succ" or "LE"
             guard let index0 = data[safe: 0] else { return .error("Can't get F2 response") }
             guard let stringValue = String(data: Data([index0]), encoding: .utf8) else { return .error("[F2]:Convert data to string error")}
-            print("👊👊👊  WifiConnectState 👊👊👊 \n \(String(data: Data(data), encoding: .utf8)) \n 👊👊👊👊👊👊")
+         
+            logHandler?(LogMsg(level: .info, msg: "WifiConnectState \(String(data: Data(data), encoding: .utf8))"))
             // CWiFi Succ
             // SWiFi Fail
             switch stringValue {
@@ -1245,7 +1214,8 @@ public class CommandService {
             var tokenPermission: TokenPermission {
                 guard let index1 = data[safe: 1] else { return .error }
                 guard let string = String(data: Data([index1]), encoding: .utf8)?.lowercased() else { return .error }
-                print("tokenPermission: \(string)")
+   
+                logHandler?(LogMsg(level: .info, msg: "tokenPermission \(string)"))
                 switch string {
                 case "m":
                     return .owner
@@ -1523,6 +1493,8 @@ public class CommandService {
             return .error("Unkown action \(actionCode)")
         }
     }
+    
+
 }
 
 

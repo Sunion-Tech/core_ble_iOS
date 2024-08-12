@@ -18,6 +18,7 @@
 | [Setup](#Setup)
 | [Quick start](#start)
 | [Version](#Version)
+| [Log](#Log)
 
 # Install
 1. Click on Project Navigator
@@ -175,3 +176,17 @@ let data = SunionBluetoothTool.shared.data
 | --------  | -------- | --|
 | v1, v2| Preliminary version of Bluetooth commands| Version1
 |v3| includes Matter Device | Version3
+
+# Log
+
+in Delegate can get
+```
+func debug(level: LogLevel, value: String) {
+    // do something here
+}
+```
+
+| Name | Type | Description |
+| -------- | -------- | -------- |
+|level| LogLevel| error<br>info<br>debug
+| value| String | value of log
