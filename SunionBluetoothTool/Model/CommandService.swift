@@ -940,10 +940,7 @@ public class CommandService {
                 return 0x86
             case .N87:
                 return 0x87
-            case .N8A:
-                return 0x8A
-            case .N8B:
-                return 0x8B
+           
             case .N90:
                 return 0x90
             case .N91:

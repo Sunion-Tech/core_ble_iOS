@@ -146,7 +146,7 @@ public class BleUserModel {
         if length.toInt > 60 { return nil }
         
         let idStartIndex = 14+nlength.toInt - 1
-        let idEndIndex = idStartIndex+length.toInt - 1
+        let idEndIndex = idStartIndex+length.toInt
         
         guard  response[safe: idStartIndex] != nil && response[safe: idEndIndex] != nil else { return nil}
         let data = self.response[idStartIndex...idEndIndex]
