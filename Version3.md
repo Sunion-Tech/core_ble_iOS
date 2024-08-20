@@ -162,6 +162,11 @@ func v3time(value: resTimeUseCase?) {
 ---
 
 ## adminCode 
+
+:::warning
+The first step in this process is to set this parameter; otherwise, other commands will not function properly.
+:::
+
 ### Set adminCode
 ```
 SunionBluetoothTool.shared.Usecase.adminCode.set(value: String)
@@ -452,6 +457,9 @@ SunionBluetoothTool.shared.Usecase.utility.isMatter()
 ## log
 
 ### count
+:::warning
+First, retrieve the array, and then use the returned array data to fetch the corresponding records.
+:::
 ```
 SunionBluetoothTool.shared.Usecase.log.count()
 ```
@@ -739,6 +747,14 @@ SunionBluetoothTool.shared.Usecase.ota.update(model: OTADataRequestModel)
 
 ## user
 
+### Flowchart
+```mermaid
+graph TD;
+    createUser--> createCredential
+    createCredential--> END
+   
+```
+
 ### able
 ```
 SunionBluetoothTool.shared.Usecase.user.able()
@@ -750,6 +766,11 @@ SunionBluetoothTool.shared.Usecase.user.supportCount()
 ```
 
 ### array
+
+:::warning
+First, retrieve the array, and then use the returned array data to fetch the corresponding records.
+:::
+
 ```
 SunionBluetoothTool.shared.Usecase.user.array()
 ```
@@ -924,6 +945,9 @@ status| UserStatusEnum| available<br>occupiedEnabled<br>occupiedDisabled<br>unkn
 ## credential
 
 ### array
+:::warning
+First, retrieve the array, and then use the returned array data to fetch the corresponding records.
+:::
 ```
 SunionBluetoothTool.shared.Usecase.credential.array()
 ```
@@ -1050,6 +1074,9 @@ SunionBluetoothTool.shared.Usecase.credential.setCardFpFace(model: SetupCredenti
 ---
 ## bleuser
 ### array
+:::warning
+First, retrieve the array, and then use the returned array data to fetch the corresponding records.
+:::
 ```
 SunionBluetoothTool.shared.Usecase.BleUser.array()
 ```
