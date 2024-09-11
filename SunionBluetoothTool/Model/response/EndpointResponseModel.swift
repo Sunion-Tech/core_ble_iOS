@@ -15,7 +15,7 @@ public class EndpointResponseModel {
     public var type: EndpointTargetEnum {
         self.gettype()
     }
-    public var data: [UInt8]? {
+    public var data: String? {
         self.getData()
     }
     
@@ -33,20 +33,25 @@ public class EndpointResponseModel {
         case 0x02:
             return .mqtt
         case 0x03:
-            return .mqtt
+            return .hash
         default:
             return .error
             
         }
     }
     
-    private func getData() -> [UInt8]? {
-        guard let data = self.response[safe: 1] else { return nil }
+    private func getData() -> String? {
+        guard self.response[safe: 1] != nil else { return nil }
         
-        let dataValue = Array(self.response[1...self.response.count - 1])
+        let data = Array(self.response[1...self.response.count - 1])
         
-        return dataValue
         
+        if let stringValue = String(data: Data(data), encoding: .utf8) {
+            return stringValue
+        } else {
+            return data.toHexString()
+        }
+
     }
 
 

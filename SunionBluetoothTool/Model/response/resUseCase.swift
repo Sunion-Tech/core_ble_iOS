@@ -84,6 +84,6 @@ public class resCredentialUseCase {
 
 public class resEndpointUseCase {
     public var type: EndpointTargetEnum?
-    public var data: [UInt8]?
+    public var data: String?
 }
 

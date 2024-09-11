@@ -48,7 +48,7 @@ extension BluetoothService {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
-    func V3EndPoint(type: EndpointTargetEnum, data: [UInt8]) {
+    func V3EndPoint(type: EndpointTargetEnum, data: String) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return
         }
