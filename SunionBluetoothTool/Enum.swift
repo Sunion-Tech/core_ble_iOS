@@ -73,4 +73,5 @@ public enum commandState {
     case v3OTA(resOTAUseCase?)
     case v3User(resUserUseCase?)
     case v3Credential(resCredentialUseCase?)
+    case v3Endpoint(resEndpointUseCase?)
 }

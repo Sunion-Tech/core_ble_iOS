@@ -1409,7 +1409,11 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resWifiUseCase()
                 res.isAutoUnlock = bool
                 self.delegate?.commandState(value: .v3Wifi(res))
-                // plug
+            case .F7(let model):
+                let res = resEndpointUseCase()
+                res.type = model.type
+                res.data = model.data
+                self.delegate?.commandState(value: .v3Endpoint(res))
          
             case .B1(let model):
                 self.delegate?.commandState(value: .v3Plug(model))

@@ -47,4 +47,16 @@ extension BluetoothService {
         let command =  CommandService.shared.createAction(with:  .N87, key: aes2key!)
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
+    
+    func V3EndPoint(type: EndpointTargetEnum, data: [UInt8]) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .v3
+        
+        let model = EndpointRequestModel(type: type, data: data)
+        
+        let command =  CommandService.shared.createAction(with:  .F7(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
 }

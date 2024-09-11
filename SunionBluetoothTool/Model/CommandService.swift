@@ -112,6 +112,7 @@ public class CommandService {
         case N8A
         case E5(Int)
         case N8B(Int)
+   
         
         case E6(AddTokenModel)
         case N8C(addBleUserModel)
@@ -131,6 +132,7 @@ public class CommandService {
         case EF
         case F3(String)
         case F4(String)
+        case F7(EndpointRequestModel)
    
         case N80
         case N81(DeviceSetupModelN81)
@@ -418,6 +420,12 @@ public class CommandService {
                 }
                 
                 return [0xF4, UInt8(commandLength), 0x01, 0x00] + data.map{$0}
+                
+            case .F7(let model):
+                
+                let length = UInt8(model.command.count)
+                
+                return [0xF7, length] + model.command
 
             case .A4:
                 return [0xA4, 0x00]
@@ -651,7 +659,8 @@ public class CommandService {
                 let commandLength = length + 2
                 
                 return UInt8(commandLength)
-          
+            case .F7(let model):
+                return UInt8(model.command.count)
             case .A4:
                 return 0x00
             case .A5:
@@ -773,6 +782,7 @@ public class CommandService {
         case EF(Bool)
         case F3(DeviceStatusModelN82)
         case F4(Bool)
+        case F7(EndpointResponseModel)
         case N80(DeviceSetupResultModelN80)
         case N81(N81ResponseModel)
         case N82(DeviceStatusModelN82)
@@ -924,6 +934,8 @@ public class CommandService {
                 return 0xF3
             case .F4:
                 return 0xF4
+            case .F7:
+                return 0xF7
             case .N80:
                 return 0x80
             case .N81:
@@ -1296,6 +1308,9 @@ public class CommandService {
         case 0xF5:
             let value = timeZoneResponseModel(data)
             return .F5(value)
+        case 0xF7:
+            let value = EndpointResponseModel(data)
+            return .F7(value)
         case 0xE0:
             let logQuantity = data.first?.toInt ?? 0
             return .E0(logQuantity)

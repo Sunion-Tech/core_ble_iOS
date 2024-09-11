@@ -82,3 +82,8 @@ public class resCredentialUseCase {
     public var setup: SetupCredentialModel?
 }
 
+public class resEndpointUseCase {
+    public var type: EndpointTargetEnum?
+    public var data: [UInt8]?
+}
+

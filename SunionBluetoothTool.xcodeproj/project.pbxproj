@@ -42,6 +42,8 @@
 		60BE21F02BB3A2F7003AD4E8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21EF2BB3A2F7003AD4E8 /* User.swift */; };
 		60BE21F22BB3A4FB003AD4E8 /* Ex+Credential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21F12BB3A4FB003AD4E8 /* Ex+Credential.swift */; };
 		60BE21F42BB3A66B003AD4E8 /* Credential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE21F32BB3A66B003AD4E8 /* Credential.swift */; };
+		60D4C19D2C9120A5008CD17A /* EndpointRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D4C19C2C9120A5008CD17A /* EndpointRequestModel.swift */; };
+		60D4C19F2C912993008CD17A /* EndpointResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D4C19E2C912993008CD17A /* EndpointResponseModel.swift */; };
 		995AD7652990DB1F00810273 /* customEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD7642990DB1F00810273 /* customEnum.swift */; };
 		995AD77D29921A1000810273 /* SupportDeviceTypesResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */; };
 		995AD77F2992270300810273 /* AccessArrayResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995AD77E2992270300810273 /* AccessArrayResponseModel.swift */; };
@@ -158,6 +160,8 @@
 		60BE21EF2BB3A2F7003AD4E8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		60BE21F12BB3A4FB003AD4E8 /* Ex+Credential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Credential.swift"; sourceTree = "<group>"; };
 		60BE21F32BB3A66B003AD4E8 /* Credential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credential.swift; sourceTree = "<group>"; };
+		60D4C19C2C9120A5008CD17A /* EndpointRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointRequestModel.swift; sourceTree = "<group>"; };
+		60D4C19E2C912993008CD17A /* EndpointResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointResponseModel.swift; sourceTree = "<group>"; };
 		995AD7642990DB1F00810273 /* customEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customEnum.swift; sourceTree = "<group>"; };
 		995AD77C29921A1000810273 /* SupportDeviceTypesResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportDeviceTypesResponseModel.swift; sourceTree = "<group>"; };
 		995AD77E2992270300810273 /* AccessArrayResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessArrayResponseModel.swift; sourceTree = "<group>"; };
@@ -418,6 +422,7 @@
 				9992E5042B6B455100E44AB0 /* CredentialRequestModel.swift */,
 				9992E5062B6B45E100E44AB0 /* CredentialDetailStructRequestModel.swift */,
 				9992E5082B6B6F3300E44AB0 /* HashusercredentialRequestModel.swift */,
+				60D4C19C2C9120A5008CD17A /* EndpointRequestModel.swift */,
 			);
 			path = request;
 			sourceTree = "<group>";
@@ -459,6 +464,7 @@
 				60BE21962BB109B9003AD4E8 /* resUserSupportedCountModel.swift */,
 				60BE21C82BB26DC9003AD4E8 /* resUseCase.swift */,
 				601593A62C5B640700C0F657 /* timezoneResponseModel.swift */,
+				60D4C19E2C912993008CD17A /* EndpointResponseModel.swift */,
 			);
 			path = response;
 			sourceTree = "<group>";
@@ -587,6 +593,7 @@
 				995AD78229922A7000810273 /* Uint8toBit.swift in Sources */,
 				60BE21EE2BB3A0B9003AD4E8 /* Ex+User.swift in Sources */,
 				60BE21D32BB29B04003AD4E8 /* Ex+Utility.swift in Sources */,
+				60D4C19F2C912993008CD17A /* EndpointResponseModel.swift in Sources */,
 				99AEB52629347EC000CCAC9C /* BluetoothToolModel.swift in Sources */,
 				9992E5052B6B455100E44AB0 /* CredentialRequestModel.swift in Sources */,
 				60BE21C92BB26DC9003AD4E8 /* resUseCase.swift in Sources */,
@@ -607,6 +614,7 @@
 				99CB54402993685100A5C06F /* AccessResponseModel.swift in Sources */,
 				9992E4EF2B68DBFE00E44AB0 /* N9ResponseModel.swift in Sources */,
 				9992E5242B6C788C00E44AB0 /* DeviceStatusModelN82.swift in Sources */,
+				60D4C19D2C9120A5008CD17A /* EndpointRequestModel.swift in Sources */,
 				99AEB4FD29347B4900CCAC9C /* BluetoothService.swift in Sources */,
 				9992E4FB2B6B3F9800E44AB0 /* SetupCredentialRequestModel.swift in Sources */,
 				60BE21D12BB29A30003AD4E8 /* Config.swift in Sources */,

@@ -57,6 +57,7 @@ public protocol SunionBluetoothToolDelegate: AnyObject {
     func v3OTA(value: resOTAUseCase?)
     func v3User(value: resUserUseCase?)
     func v3Credential(value: resCredentialUseCase?)
+    func v3Endpoint(value: resEndpointUseCase?)
 }
 
 
@@ -106,4 +107,5 @@ extension SunionBluetoothToolDelegate {
     public func v3OTA(value: resOTAUseCase?) {}
     public func v3User(value: resUserUseCase?) {}
     public func v3Credential(value: resCredentialUseCase?) {}
+    public func v3Endpoint(value: resEndpointUseCase?) {}
 }

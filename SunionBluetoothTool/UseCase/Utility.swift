@@ -32,5 +32,9 @@ public class Utility  {
     public func isMatter() {
         tool?.tool?.bluetoothService?.V3isMatter()
     }
+    
+    public func setEndpoint(type: EndpointTargetEnum, data: [UInt8]) {
+        tool?.tool?.bluetoothService?.V3EndPoint(type: type, data: data)
+    }
 
 }
