@@ -80,6 +80,7 @@ public class resCredentialUseCase {
     public var isCreatedorEdited: Bool?
     public var isDeleted: Bool?
     public var setup: SetupCredentialModel?
+    public var hash: String?
 }
 
 public class resEndpointUseCase {

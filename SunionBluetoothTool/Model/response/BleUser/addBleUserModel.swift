@@ -36,7 +36,7 @@ public class addBleUserModel {
         
         // name length
       
-        let nLength = tokenName.count
+        let nLength = tokenName.data(using: .utf8)?.count ?? 0
         byteArray.append(UInt8(nLength))
       
         // id length

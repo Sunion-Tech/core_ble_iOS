@@ -1471,6 +1471,10 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res = resCredentialUseCase()
                 res.isDeleted = model.isSuccess
                 self.delegate?.commandState(value: .v3Credential(res))
+            case .N99(let model):
+                let res = resCredentialUseCase()
+                res.hash = model.hash
+                self.delegate?.commandState(value: .v3Credential(res))
             default:
                 break
             }

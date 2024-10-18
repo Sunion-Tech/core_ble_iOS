@@ -36,6 +36,8 @@ public class Credential  {
         tool?.tool?.bluetoothService?.V3getCredential(model: model)
     }
     
-
+    public func getHash() {
+        tool?.tool?.bluetoothService?.v3getCredentailHash()
+    }
 
 }

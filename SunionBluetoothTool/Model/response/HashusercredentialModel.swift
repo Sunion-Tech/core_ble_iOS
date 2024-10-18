@@ -20,7 +20,7 @@ public class HashusercredentialModel {
         self.getTarget()
     }
     
-    public var data: [UInt8]? {
+    public var hash: String? {
         self.getData()
     }
     
@@ -36,12 +36,12 @@ public class HashusercredentialModel {
         }
     }
     
-    private func getData() -> [UInt8]? {
+    private func getData() -> String? {
         guard self.response[safe: 1] != nil else { return nil }
         
         let data = Array(self.response[1...self.response.count - 1])
         
-        return data
+        return data.toHexString()
         
     }
 }
