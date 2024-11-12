@@ -94,9 +94,12 @@ class BluetoothService: NSObject {
         self.mackAddress = mackAddress
         self.delegate = delegate
         self.aes1key = aes1Key
+      
         self.oneTimeToken = token
         self.v3udid = udid
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        
+        delegate?.debug(level: .info, value: "initBLE: mac-\(mackAddress), uuid-\(udid), aes1Key-\(aes1Key.toHexString()), aes2Key-\(aes2key?.toHexString())")
         
         CommandService.shared.logHandler = { logMessage in
             
@@ -896,7 +899,8 @@ extension BluetoothService: CBPeripheralDelegate {
                     return
                 }
                 if tokenPermission == .none || tokenPermission == .error {
-                    self.delegate?.bluetoothState(State: .disconnect(.illegalToken))
+                    let token = self.permanentToken ?? self.oneTimeToken
+                    self.delegate?.bluetoothState(State: .disconnect(.illegalToken(token?.toHexString())))
                     return
                 }
             

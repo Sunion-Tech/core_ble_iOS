@@ -20,7 +20,7 @@ public enum disconnectState {
     case discoverServices(String?)
     case discoverCharacteristics
     case deviceRefused
-    case illegalToken
+    case illegalToken(String?)
     case normal
 }
 
