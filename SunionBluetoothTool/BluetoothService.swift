@@ -847,6 +847,7 @@ extension BluetoothService: CBPeripheralDelegate {
             self.delegate?.commandState(value: .deviceStatus(data))
             // deviceStatus\direction
         case .N82(let model):
+            commandType = .N8
             // 保留藍芽資料
             self.delegate?.updateData(value: self.data)
             self.delegate?.commandState(value: .v3deviceStatus(model))
