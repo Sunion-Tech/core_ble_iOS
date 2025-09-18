@@ -7,9 +7,15 @@
 
 import Foundation
 import SwiftyJSON
+import UIKit
 
 public class SunionBluetoothTool: NSObject {
     
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+    
+    public var isBackgroundTaskRunning: Bool {
+        return backgroundTask != .invalid
+    }
 
     public static let shared = SunionBluetoothTool()
     public var data: BluetoothToolModel?
@@ -23,6 +29,38 @@ public class SunionBluetoothTool: NSObject {
         return useCase(tool: self)
     }()
 
+    // 開始背景傳輸
+     public func startBackgroundTask() {
+         if backgroundTask == .invalid {
+             backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "BLEBackground") {
+                 self.delegate?.debug(level: .info, value: "[BG] Background task expired, ending task")
+         
+                 // 到期自動結束
+                 self.endBackgroundTask()
+             }
+             self.delegate?.debug(level: .info, value: "[BG] 開始註冊 Background Task，ID: \(backgroundTask.rawValue)")
+         }else {
+             self.delegate?.debug(level: .info, value: "[BG] 已有註冊中的 Background Task，ID: \(backgroundTask.rawValue)")
+       
+         }
+     }
+
+     public func endBackgroundTask() {
+         if backgroundTask != .invalid {
+             self.delegate?.debug(level: .info, value: "[BG] 結束 Background Task，ID: \(backgroundTask.rawValue)")
+             UIApplication.shared.endBackgroundTask(backgroundTask)
+             backgroundTask = .invalid
+         }
+     }
+     
+     // BLE 傳輸觸發這裡
+     public func didStartTransfer() {
+         startBackgroundTask()
+     }
+
+     public func didEndTransfer() {
+         endBackgroundTask()
+     }
    
     // MARK: - QrCode
     public func decodeQrCode(barcodeKey: String, qrCode: String) -> BluetoothToolModel? {

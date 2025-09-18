@@ -120,11 +120,16 @@ class BluetoothService: NSObject {
     }
     
     func disconnect() {
+        self.centralManager.stopScan()
         if let connectedPeripheral = connectedPeripheral {
             delegate?.bluetoothState(State: .disconnect(.normal))
+            
             self.centralManager.cancelPeripheralConnection(connectedPeripheral)
+            
         }
     }
+    
+
     
     func connectWithIdentifier(value: String) {
         
@@ -158,7 +163,7 @@ class BluetoothService: NSObject {
         delegate?.debug(level: .info, value: "Start Scan")
 
         action = .deviceStatus(nil)
-        delegate?.bluetoothState(State: .connecting)
+        delegate?.bluetoothState(State: .scanning)
         centralManager.scanForPeripherals(withServices: nil, options: nil)
         
     

@@ -10,6 +10,7 @@ import Foundation
 public enum bluetoothState {
     case enable
     case disable
+    case scanning
     case connecting
     case connected(String)
     case disconnect(disconnectState)
