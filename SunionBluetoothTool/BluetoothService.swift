@@ -607,10 +607,13 @@ extension BluetoothService: CBCentralManagerDelegate {
             }
         }
         
+        let range = 2..<10
+        
         if let udid = v3udid,
             let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data ,
-           manufacturerData.starts(with: [0xE3, 0x0C]) {
-            let range = 2..<10
+           manufacturerData.starts(with: [0xE3, 0x0C]),
+           range.upperBound <= manufacturerData.count {
+          
             let uuidData = manufacturerData.subdata(in: range)
          
             // 與udid 一樣的裝置
@@ -620,11 +623,7 @@ extension BluetoothService: CBCentralManagerDelegate {
                 self.data.identifier = peripheral.identifier.uuidString
                 self.delegate?.updateData(value: self.data)
                 connectedPeripheral = peripheral
-                
-                
-                DispatchQueue.global().async {
-                    self.centralManager.connect(self.connectedPeripheral!, options: nil)
-                }
+                self.centralManager.connect(peripheral, options: nil)
             }
             
         }
