@@ -36,6 +36,30 @@ extension BluetoothServiceDelegate {
 
 class BluetoothService: NSObject {
     
+    
+    private func bleLog(_ stage: String, _ message: String, level: LogLevel = .info) {
+        delegate?.debug(level: level, value: "[BLE][\(stage)] \(message)")
+    }
+
+    private func centralStateText(_ state: CBManagerState) -> String {
+        switch state {
+        case .unknown:
+            return "unknown"
+        case .resetting:
+            return "resetting"
+        case .unsupported:
+            return "unsupported"
+        case .unauthorized:
+            return "unauthorized"
+        case .poweredOff:
+            return "poweredOff"
+        case .poweredOn:
+            return "poweredOn"
+        @unknown default:
+            return "unknown_default"
+        }
+    }
+    
     private let serviceUUID: [CBUUID] = [
         CBUUID(string: "fc3d8cf8-4ddc-7ade-1dd9-2497851131d7")
     ]
@@ -98,8 +122,9 @@ class BluetoothService: NSObject {
         self.oneTimeToken = token
         self.v3udid = udid
         centralManager = CBCentralManager(delegate: self, queue: nil)
+    
         
-        delegate?.debug(level: .info, value: "initBLE: mac-\(mackAddress), uuid-\(udid), aes1Key-\(aes1Key.toHexString()), aes2Key-\(aes2key?.toHexString())")
+        bleLog("1-init", "mac=\(mackAddress ?? "nil"), uuid=\(udid ?? "nil"), aes1Key=\(aes1Key.toHexString()), token=\(token.toHexString()), aes2Key=\(aes2key?.toHexString() ?? "nil"), centralState=\(centralStateText(centralManager.state))")
         
         CommandService.shared.logHandler = { logMessage in
             
@@ -109,6 +134,8 @@ class BluetoothService: NSObject {
     
     private func deviceTokenExchange() {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            
+            bleLog("10-token-exchange", "missing peripheral or writableCharacteristic, peripheral=\(connectedPeripheral?.identifier.uuidString ?? "nil"), writable=\(writableCharacteristic?.uuid.uuidString ?? "nil")", level: .error)
             return
         }
         self.data.identifier = peripheral.identifier.uuidString
@@ -116,10 +143,16 @@ class BluetoothService: NSObject {
         delegate?.debug(level: .info, value: "aes1: \(aes1key?.toHexString())")
         delegate?.debug(level: .info, value: "aes2: \(aes2key?.toHexString())")
         let command = CommandService.shared.createAction(with: .C0(c0RandomData), key: aes1key!)
+        
+        bleLog("10-token-exchange", "send C0 random challenge")
+        
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
     func disconnect() {
+        
+        bleLog("disconnect", "manual disconnect requested, connectedPeripheral=\(connectedPeripheral?.identifier.uuidString ?? "nil"), isScanning=\(centralManager.isScanning)")
+        
         self.centralManager.stopScan()
         if let connectedPeripheral = connectedPeripheral {
             delegate?.bluetoothState(State: .disconnect(.normal))
@@ -132,26 +165,31 @@ class BluetoothService: NSObject {
 
     
     func connectWithIdentifier(value: String) {
-        
+        bleLog("2-connectWithIdentifier", "input=\(value), centralState=\(centralStateText(centralManager.state))")
         action = .deviceStatus(nil)
         delegate?.bluetoothState(State: .connecting)
       
         if let uid = UUID(uuidString: value) {
            
             let cbs = centralManager.retrievePeripherals(withIdentifiers: [uid])
-
+            bleLog("2-connectWithIdentifier", "retrievedCount=\(cbs.count)")
             if let first = cbs.first {
               
-              
+                bleLog("2-connectWithIdentifier", "found cached peripheral name=\(first.name ?? "nil"), identifier=\(first.identifier.uuidString), state=\(first.state.rawValue)")
                 self.autoStartTime = Date().timeIntervalSince1970
                 self.connectedPeripheral = first
          
                 DispatchQueue.global().async {
+                    self.bleLog("3-connect", "call central.connect for cached peripheral identifier=\(self.connectedPeripheral?.identifier.uuidString ?? "nil")")
                     self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
             }
             
-            
+            if cbs.isEmpty {
+                bleLog("2-connectWithIdentifier", "no cached peripheral found for identifier=\(value)", level: .error)
+            }
+        } else {
+            bleLog("2-connectWithIdentifier", "invalid UUID string=\(value)", level: .error)
         }
 
     }
@@ -160,13 +198,18 @@ class BluetoothService: NSObject {
     //MARK: - 連線 + 交換token
     func startConnecting() {
 
-        delegate?.debug(level: .info, value: "Start Scan")
+        bleLog("2-startConnecting", "start scan, centralState=\(centralStateText(centralManager.state)), isScanning=\(centralManager.isScanning), mac=\(mackAddress ?? "nil"), udid=\(v3udid ?? "nil")")
 
         action = .deviceStatus(nil)
         delegate?.bluetoothState(State: .scanning)
+        
+        if centralManager.state != .poweredOn {
+            bleLog("2-startConnecting", "scan requested before poweredOn", level: .error)
+        }
+        
         centralManager.scanForPeripherals(withServices: nil, options: nil)
         
-    
+        bleLog("2-startConnecting", "scanForPeripherals called, isScanning=\(centralManager.isScanning)")
         
         workItem = DispatchWorkItem {
             if self.centralManager.isScanning {
@@ -176,7 +219,7 @@ class BluetoothService: NSObject {
                 
                 self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
             
-                self.delegate?.debug(level: .debug, value: "Stopped scanning after 60 seconds")
+                self.bleLog("scan-timeout", "stopped scanning after 60 seconds, no matching peripheral discovered", level: .debug)
                 
             }
         }
@@ -574,7 +617,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     // step 1
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        
+        bleLog("central-state", "state changed to \(centralStateText(central.state))")
         if central.state == .poweredOn {
             delegate?.bluetoothState(State: .enable)
         } else {
@@ -588,11 +631,15 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-        
+        bleLog("4-didDiscover", "name=\(peripheral.name ?? "nil"), identifier=\(peripheral.identifier.uuidString), rssi=\(RSSI), advKeys=\(advertisementData.keys.map { $0 }.joined(separator: ","))", level: .debug)
+
         if let mac = mackAddress, mac != "" {
             guard let name = peripheral.name else { return }
             
             let macAddressSuffix = mac.subString(start: 6, end: 11).uppercased()
+            
+            bleLog("4-didDiscover-mac", "targetMac=\(mac), suffix=\(macAddressSuffix), peripheralName=\(peripheral.name ?? "nil")", level: .debug)
+            
             if name.hasPrefix("BT_Lock") || name.hasPrefix("Gateway_"),
                name.lockNameToMacAddress.uppercased().hasSuffix(macAddressSuffix) {
        
@@ -602,6 +649,8 @@ extension BluetoothService: CBCentralManagerDelegate {
                 self.delegate?.updateData(value: self.data)
                 connectedPeripheral = peripheral
                 DispatchQueue.global().async {
+                    
+                    self.bleLog("5-connect", "call central.connect from didDiscover, identifier=\(self.connectedPeripheral?.identifier.uuidString ?? "nil")")
                     self.centralManager.connect(self.connectedPeripheral!, options: nil)
                 }
             }
@@ -615,14 +664,20 @@ extension BluetoothService: CBCentralManagerDelegate {
            range.upperBound <= manufacturerData.count {
           
             let uuidData = manufacturerData.subdata(in: range)
+            
+            bleLog("4-didDiscover-udid", "targetUdid=\(udid), manufacturerData=\(manufacturerData.toHexString()), extracted=\(uuidData.toHexString())", level: .debug)
          
             // 與udid 一樣的裝置
             if uuidData.toHexString().lowercased() == udid.lowercased() {
+                
+                bleLog("4-didDiscover-udid", "matched by udid, preparing connect")
            
                 delegate?.debug(level: .info, value: "Find Device- uuid: \(udid)")
                 self.data.identifier = peripheral.identifier.uuidString
                 self.delegate?.updateData(value: self.data)
                 connectedPeripheral = peripheral
+                
+                bleLog("5-connect", "call central.connect from didDiscover by udid, identifier=\(peripheral.identifier.uuidString)")
                 self.centralManager.connect(peripheral, options: nil)
             }
             
@@ -635,7 +690,7 @@ extension BluetoothService: CBCentralManagerDelegate {
                 self.centralManager.stopScan()
                 
                 self.delegate?.bluetoothState(State: .disconnect(.deviceRefused))
-                self.delegate?.debug(level: .debug, value: "Stopped discover after 60 seconds")
+                self.bleLog("discover-timeout", "stopped scanning after discover window timeout", level: .debug)
             }
         }
         
@@ -650,7 +705,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
    
-        delegate?.debug(level: .info, value: "didConnect: \(peripheral.name)")
+        bleLog("6-didConnect", "name=\(peripheral.name ?? "nil"), identifier=\(peripheral.identifier.uuidString), state=\(peripheral.state.rawValue)")
         
         if let name = peripheral.name {
             delegate?.bluetoothState(State: .connected(name))
@@ -664,13 +719,14 @@ extension BluetoothService: CBCentralManagerDelegate {
         workItem?.cancel()
         workItem = nil
         centralManager.stopScan()
+        bleLog("7-discoverServices", "discoverServices(nil) called")
         peripheral.discoverServices(nil)
  
     }
     
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-
+        bleLog("disconnect-callback", "name=\(peripheral.name ?? "nil"), identifier=\(peripheral.identifier.uuidString), error=\(String(describing: error))", level: error == nil ? .info : .error)
         if error != nil  {
             delegate?.debug(level: .error, value: "didDisconnectPeripheral error: \(error.debugDescription)")
             delegate?.bluetoothState(State: .disconnect(.fail))
@@ -680,7 +736,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
  
-        delegate?.debug(level: .error, value: "didFailToConnect: \(error.debugDescription)")
+        bleLog("connect-failed", "name=\(peripheral.name ?? "nil"), identifier=\(peripheral.identifier.uuidString), error=\(String(describing: error))", level: .error)
         delegate?.bluetoothState(State: .disconnect(.fail))
     }
     
@@ -697,7 +753,7 @@ extension BluetoothService: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         
-      
+        bleLog("7-didDiscoverServices", "error=\(String(describing: error))")
         
         if (error != nil) {
             
@@ -709,7 +765,7 @@ extension BluetoothService: CBPeripheralDelegate {
             delegate?.bluetoothState(State: .disconnect(.discoverServices(nil)))
             return
         }
-        
+        bleLog("7-didDiscoverServices", "serviceCount=\(services.count), services=\(services.map { $0.uuid.uuidString }.joined(separator: ","))")
         let info = services.first { service in
             return service.uuid.uuidString == "180A"
         }
@@ -721,10 +777,15 @@ extension BluetoothService: CBPeripheralDelegate {
             return service.uuid.uuidString == serviceUUID.first?.uuidString
         }
       
-     
+        bleLog("7-didDiscoverServices", "deviceInfoFound=\(info != nil), customFound=\(custom != nil), targetCustomUUID=\(serviceUUID.first?.uuidString ?? "nil")")
+        guard let info = info, let custom = custom else {
+            bleLog("7-didDiscoverServices", "required services not found, info=\(info?.uuid.uuidString ?? "nil"), custom=\(custom?.uuid.uuidString ?? "nil")", level: .error)
+            delegate?.bluetoothState(State: .disconnect(.discoverServices("required services not found")))
+            return
+        }
 
         // [Device Information, customserviceUUID]
-        targetServices = [ info!, custom!]
+        targetServices = [ info, custom]
        
         // Device Information -> get firewareVersion
         let service = self.data.FirmwareVersion == nil ? targetServices?.first : targetServices?.last
@@ -736,7 +797,7 @@ extension BluetoothService: CBPeripheralDelegate {
     // step 2
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        
+        bleLog("8-didDiscoverCharacteristics", "service=\(service.uuid.uuidString), error=\(String(describing: error))")
     
         guard let characteristics = service.characteristics else {
             delegate?.bluetoothState(State: .disconnect(.discoverCharacteristics))
@@ -744,17 +805,18 @@ extension BluetoothService: CBPeripheralDelegate {
         }
         
 
-        delegate?.debug(level: .info, value: "didDiscoverCharacteristicsFor")
+        bleLog("8-didDiscoverCharacteristics", "characteristicCount=\(characteristics.count)")
+        bleLog("8-didDiscoverCharacteristics", "processing discovered characteristics")
         
         for characteristic in characteristics {
          
-            delegate?.debug(level: .info, value: "\(characteristic)")
+            bleLog("8-characteristic", "uuid=\(characteristic.uuid.uuidString), properties=\(characteristic.properties.rawValue)", level: .debug)
             
             let propertie = characteristic.properties
             
             if propertie.contains(.notify), characteristic.uuid == notifyUUID {
         
-                delegate?.debug(level: .info, value: "setNotifyValue: \(characteristic)")
+                bleLog("8-characteristic", "setNotifyValue(true) for uuid=\(characteristic.uuid.uuidString)")
                 peripheral.setNotifyValue(true, for: characteristic)
                 
             }
@@ -765,7 +827,7 @@ extension BluetoothService: CBPeripheralDelegate {
             }
             
             if propertie.contains(.writeWithoutResponse), characteristic.uuid == notifyUUID {
-         
+                bleLog("8-characteristic", "assigned writableCharacteristic uuid=\(characteristic.uuid.uuidString)")
                 writableCharacteristic = characteristic
             }
             
@@ -774,6 +836,7 @@ extension BluetoothService: CBPeripheralDelegate {
             if propertie.contains(.read) {
                
                 if characteristic.uuid.uuidString == "2A26" {
+                    bleLog("8-characteristic", "read firmware characteristic uuid=\(characteristic.uuid.uuidString)")
                     peripheral.readValue(for: characteristic)
                     
                 }
@@ -786,7 +849,8 @@ extension BluetoothService: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
    
-        delegate?.debug(level: .info, value: "didUpdateNotificationStateFor: \(characteristic)")
+        bleLog("9-didUpdateNotificationState", "uuid=\(characteristic.uuid.uuidString), isNotifying=\(characteristic.isNotifying), error=\(String(describing: error))")
+        bleLog("9-didUpdateNotificationState", "begin deviceTokenExchange")
         deviceTokenExchange()
         
     }
@@ -794,14 +858,15 @@ extension BluetoothService: CBPeripheralDelegate {
     
     // step 5
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        
+        bleLog("11-didUpdateValue", "uuid=\(characteristic.uuid.uuidString), error=\(String(describing: error)), valueLength=\(characteristic.value?.count ?? 0)")
         // get Firmware version
         if self.data.FirmwareVersion == nil {
            
   
             let str = String(data: characteristic.value!, encoding: .utf8)
             self.data.FirmwareVersion = str
-            delegate?.debug(level: .info, value: "FirmwareVersion: \(str)")
+            bleLog("11-firmware", "FirmwareVersion=\(str ?? "nil")")
+            bleLog("8-discoverCharacteristics", "discoverCharacteristics on custom service after firmware read")
             self.connectedPeripheral!.discoverCharacteristics(nil, for: self.targetServices!.last!)
             return
         }
@@ -809,7 +874,7 @@ extension BluetoothService: CBPeripheralDelegate {
         
         
         let response = CommandService.shared.resolveAction(characteristic, key: self.aes2key ?? self.aes1key!)
-        
+        bleLog("11-resolveAction", "response=\(response)", level: .debug)
         // 錯誤處理
         switch response {
         case .error(_):
@@ -886,6 +951,7 @@ extension BluetoothService: CBPeripheralDelegate {
         case .deviceStatus:
             switch response {
             case .C0(let array):
+                bleLog("12-C0", "received C0 response random=\(array.toHexString())")
                 self.aes2key = self.getKey2(randomNum1: c0RandomData, randomNum2: array)
                 self.data.aes2Key = self.aes2key!
                 let command = CommandService.shared.createAction(with: .C1(self.permanentToken ?? self.oneTimeToken!), key: self.aes2key!)
@@ -893,11 +959,11 @@ extension BluetoothService: CBPeripheralDelegate {
                     self.delegate?.bluetoothState(State: .disconnect(.fail))
                     return
                 }
+                bleLog("13-C1", "send C1 token exchange with token=\((self.permanentToken ?? self.oneTimeToken ?? []).toHexString())")
                 peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
             case .C1(let tokenType, let tokenPermission):
               
-                delegate?.debug(level: .info, value: "tokenType: \(tokenType)")
-                delegate?.debug(level: .info, value: "tokenPermission: \(tokenPermission)")
+                bleLog("14-C1", "tokenType=\(tokenType), tokenPermission=\(tokenPermission)")
                
                 guard let peripheral = connectedPeripheral else {
                     self.delegate?.bluetoothState(State: .disconnect(.fail))
