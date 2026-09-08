@@ -1,4 +1,5 @@
+# === 🍎 macOS 系統檔案 ===
+.DS_Store
 
-SunionBluetoothTool.xcodeproj/project.xcworkspace/xcuserdata/sunionuser2.xcuserdatad/
-
-SunionBluetoothTool.xcodeproj/project.xcworkspace/xcuserdata/ct.xcuserdatad/
+# === 🧑‍💻 Xcode 個人使用者狀態 ===
+xcuserdata/
