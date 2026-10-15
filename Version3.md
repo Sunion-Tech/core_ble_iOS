@@ -1101,6 +1101,13 @@ SunionBluetoothTool.shared.Usecase.BleUser.create(model: AddBleUserModel)
 |tokenPermission|TokenPermission|all<br>limit
 | idenity| String| unique id for user
 
+### createPermanent
+Command 8F (add permanent BleUser). Same input as `create`; result is returned in delegate `v3BleUser` as `createdPermanent` (AddTokenResult: isSuccess / index / token).
+```
+SunionBluetoothTool.shared.Usecase.BleUser.createPermanent(model: AddBleUserModel)
+```
+* tokenName max 19 bytes (`addBleUserModel.tokenNameMaxBytes`)
+
 ### edit
 ```
 SunionBluetoothTool.shared.Usecase.BleUser.edit(model: EditBleUserModel)
@@ -1144,6 +1151,27 @@ SunionBluetoothTool.shared.Usecase.BleUser.qrCode(barcodeKey: String, tokenIndex
 | modelName | String | name of model
 | deviceName | String | name of device
 
+
+### offlineShareString
+Build the share string for wifi / gateway device offline share (Sunion-Tech/iKeyConnect#32). Token and index come from `createPermanent` (8F), so no N8B is sent. Returns synchronously.
+```
+SunionBluetoothTool.shared.Usecase.BleUser.offlineShareString(barcodeKey: String, tokenIndex: Int, token: [UInt8], aes1Key: Data, macAddress: String?, uuid: String, userName: String, modelName: String, deviceName: String, role: String, shareToName: String) -> String?
+```
+
+#### Parameter
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+|barcodeKey|String| enCode QrCode
+| tokenIndex | Int | "I", index from 8F
+| token | [UInt8] | "T", token from 8F
+|aes1Key| Data | "K"
+| macAddress| String? | "A", can be empty
+|uuid| String| "U", must have
+| userName| String| "F", name of share from
+| modelName | String | "M"
+| deviceName | String | "L"
+| role | String | "R", Manager or User
+| shareToName | String | "N", name of share to
 
 ### Delegate function
 ```
