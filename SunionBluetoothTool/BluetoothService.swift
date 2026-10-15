@@ -1437,6 +1437,10 @@ extension BluetoothService: CBPeripheralDelegate {
                 let res  = resTokenUseCase()
                 res.created = model
                 self.delegate?.commandState(value: .v3BleUser(res))
+            case .N8F(let model):
+                let res  = resTokenUseCase()
+                res.createdPermanent = model
+                self.delegate?.commandState(value: .v3BleUser(res))
             case .N8D(let model):
                 let res  = resTokenUseCase()
                 res.isEdited = model

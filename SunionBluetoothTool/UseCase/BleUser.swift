@@ -29,6 +29,10 @@ public class BleUser  {
         tool?.tool?.bluetoothService?.V3createbleUser(model: model)
     }
     
+    public func createPermanent(model: addBleUserModel) {
+        tool?.tool?.bluetoothService?.V3createPermanentbleUser(model: model)
+    }
+    
     public func edit(model: EditBleUserModel) {
         tool?.tool?.bluetoothService?.V3editbleUser(model: model)
     }
