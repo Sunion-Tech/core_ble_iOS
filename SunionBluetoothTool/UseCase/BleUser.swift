@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 
 public class BleUser  {
@@ -43,6 +44,14 @@ public class BleUser  {
     
     public func qrCode(barcodeKey: String, tokenIndex: Int, aes1Key: Data, macAddress: String?, uuid: String?, userName: String, modelName: String, deviceName: String) {
         tool?.tool?.bluetoothService?.V3getbleUserQrCode(barcodeKey: barcodeKey, tokenIndex: tokenIndex, aes1Key: aes1Key, macAddress: macAddress, uuid: uuid, userName: userName, modelName: modelName, deviceName: deviceName)
+    }
+    
+    // offline share (wifi / gateway device offline): token is from 8F, no need N8B
+    // I: token index, R: Manager or User, N: share to user name
+    public func offlineShareString(barcodeKey: String, tokenIndex: Int, token: [UInt8], aes1Key: Data, macAddress: String?, uuid: String, userName: String, modelName: String, deviceName: String, role: String, shareToName: String) -> String? {
+        let dic = ["T": token.toHexString(), "K": aes1Key.toHexString(), "A": macAddress ?? "", "F": userName, "L": deviceName, "M": modelName, "U": uuid, "I": String(tokenIndex), "R": role, "N": shareToName]
+        guard let json = JSON(dic).rawString() else { return nil }
+        return AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey)
     }
 
 }
