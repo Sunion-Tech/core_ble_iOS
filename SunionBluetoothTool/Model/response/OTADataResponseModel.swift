@@ -30,7 +30,7 @@ public class OTADataResponseModel {
         guard let index2 = response[safe: 2] else { return 0 }
         guard let index3 = response[safe: 3] else { return 0 }
         let data = Data([index, index1, index2, index3])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         return Int(intValue)
     }

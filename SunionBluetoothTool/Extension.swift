@@ -221,9 +221,14 @@ extension Collection where Indices.Iterator.Element == Index {
 
 
 // MARK: - bytes
-extension ContiguousBytes {
-    func object<T>() -> T {
-        withUnsafeBytes { $0.load(as: T.self) }
+extension Sequence where Element == UInt8 {
+    /// Little-endian UInt32 assembled byte by byte; shorter data is zero-padded, longer data uses the first 4 bytes.
+    var leUInt32: UInt32 {
+        var value: UInt32 = 0
+        for (i, byte) in self.prefix(4).enumerated() {
+            value |= UInt32(byte) << (8 * UInt32(i))
+        }
+        return value
     }
 }
 
