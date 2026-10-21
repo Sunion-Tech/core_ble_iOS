@@ -54,4 +54,35 @@ public class BleUser  {
         return AESModel.shared.encodeBase64String(json, barcodeKey: barcodeKey)
     }
 
+    // decode offline share string (keys same as offlineShareString), no state change
+    public func decodeOfflineShareString(barcodeKey: String, shareString: String) -> OfflineShareModel? {
+        guard let decode = AESModel.shared.decodeBase64String(shareString, barcodeKey: barcodeKey)?.replacingOccurrences(of: "\0", with: "") else { return nil }
+        let json = JSON(parseJSON: decode)
+        guard json.type == .dictionary else { return nil }
+        return OfflineShareModel(token: json["T"].stringValue.lowercased(),
+                                 aes1Key: json["K"].stringValue,
+                                 macAddress: json["A"].stringValue,
+                                 userName: json["F"].stringValue,
+                                 deviceName: json["L"].stringValue,
+                                 modelName: json["M"].stringValue,
+                                 uuid: json["U"].stringValue,
+                                 tokenIndex: json["I"].string.flatMap({ Int($0) }) ?? json["I"].int,
+                                 role: json["R"].stringValue,
+                                 shareToName: json["N"].stringValue)
+    }
+
+}
+
+// decoded offline share string
+public struct OfflineShareModel {
+    public let token: String        // T, hex lowercased
+    public let aes1Key: String      // K, hex
+    public let macAddress: String   // A
+    public let userName: String     // F, name of share from
+    public let deviceName: String   // L
+    public let modelName: String    // M
+    public let uuid: String         // U
+    public let tokenIndex: Int?     // I
+    public let role: String         // R, Manager or User
+    public let shareToName: String  // N, name of share to
 }

@@ -1173,6 +1173,26 @@ SunionBluetoothTool.shared.Usecase.BleUser.offlineShareString(barcodeKey: String
 | role | String | "R", Manager or User
 | shareToName | String | "N", name of share to
 
+### decodeOfflineShareString
+Decode the share string built by `offlineShareString`. Only decode, the tool state is not changed. Returns nil when decode fail.
+```
+SunionBluetoothTool.shared.Usecase.BleUser.decodeOfflineShareString(barcodeKey: String, shareString: String) -> OfflineShareModel?
+```
+
+#### OfflineShareModel
+| Parameter | Type | Description |
+| -------- | -------- | -------- |
+| token | String | "T", hex lowercased
+| aes1Key | String | "K", hex
+| macAddress | String | "A"
+| userName | String | "F", name of share from
+| deviceName | String | "L"
+| modelName | String | "M"
+| uuid | String | "U"
+| tokenIndex | Int? | "I", accept string or number
+| role | String | "R", Manager or User
+| shareToName | String | "N", name of share to
+
 ### Delegate function
 ```
  public v3BleUser(value: resTokenUseCase?) {
