@@ -42,6 +42,7 @@ public class resTokenUseCase {
     public var array: [Int]?
     public var data: BleUserModel?
     public var created: AddTokenResult?
+    public var createdPermanent: AddTokenResult?
     public var isEdited: Bool?
     public var isDeleted: Bool?
 }

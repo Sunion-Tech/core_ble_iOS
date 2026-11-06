@@ -14,6 +14,9 @@ public class addBleUserModel {
         case limit
     }
 
+    // 8C / 8F name max length (bytes)
+    public static let tokenNameMaxBytes = 19
+
     public var tokenName: String
     public var tokenPermission: TokenPermission
     public var idenity: String

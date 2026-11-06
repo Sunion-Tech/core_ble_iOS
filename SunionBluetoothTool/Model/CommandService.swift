@@ -116,6 +116,7 @@ public class CommandService {
         
         case E6(AddTokenModel)
         case N8C(addBleUserModel)
+        case N8F(addBleUserModel)
         
         case E7(EditTokenModel)
         case N8D(EditBleUserModel)
@@ -346,6 +347,12 @@ public class CommandService {
                 let command = model.command
                 let commandLength = UInt8(command.count)
                 var byteArray = [0x8C, commandLength]
+                command.forEach{byteArray.append($0)}
+                return byteArray
+            case .N8F(let model):
+                let command = model.command
+                let commandLength = UInt8(command.count)
+                var byteArray = [0x8F, commandLength]
                 command.forEach{byteArray.append($0)}
                 return byteArray
                 
@@ -607,6 +614,9 @@ public class CommandService {
             case .N8C(let model):
                 let commandLength = UInt8(model.command.count)
                 return commandLength
+            case .N8F(let model):
+                let commandLength = UInt8(model.command.count)
+                return commandLength
                 
             case .E7(let editTokenModel):
                 let commandLength = UInt8(editTokenModel.command.count)
@@ -766,6 +776,7 @@ public class CommandService {
         
         case E6(AddTokenResult)
         case N8C(AddTokenResult)
+        case N8F(AddTokenResult)
         
         case E7(Bool)
         case N8D(Bool)
@@ -904,6 +915,8 @@ public class CommandService {
                 return 0xE6
             case .N8C:
                 return 0x8C
+            case .N8F:
+                return 0x8F
                 
             case .E7:
                 return 0xE7
@@ -1340,6 +1353,9 @@ public class CommandService {
         case 0x8C:
             let result = AddTokenResult(response: data)
             return .N8C(result)
+        case 0x8F:
+            let result = AddTokenResult(response: data)
+            return .N8F(result)
             
         case 0xE7:
             let isSuccess = data.first == 0x01

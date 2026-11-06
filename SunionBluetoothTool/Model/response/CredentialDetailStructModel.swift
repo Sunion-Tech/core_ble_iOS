@@ -43,7 +43,7 @@ public class CredentialDetailStructModel: NSObject {
             
             
             let data = Data([firstByte, secondByte])
-            let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+            let uint32 = data.leUInt32
             let intValue = Int32(bitPattern: UInt32(uint32))
             return Int(intValue)
             
@@ -105,7 +105,7 @@ public class CredentialDetailStructModel: NSObject {
         }
         
         if type == .fingerprint || type == .face {
-            let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+            let uint32 = data.leUInt32
             let intValue = Int32(bitPattern: UInt32(uint32))
             return String(Int(intValue))
         }

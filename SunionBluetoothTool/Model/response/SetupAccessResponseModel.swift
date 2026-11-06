@@ -97,7 +97,7 @@ public class SetupAccessResponseModel {
         guard let index2 = self.response[safe: 3] else { return nil }
         
         let data = Data([index1, index2, 0x00, 0x00])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         
         // 65535 = [0xFF, 0xFF, 0x00, 0x00] = not support

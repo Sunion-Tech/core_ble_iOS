@@ -37,6 +37,15 @@ extension BluetoothService {
         peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
     }
     
+    func V3createPermanentbleUser(model: addBleUserModel) {
+        guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
+            return
+        }
+        action = .v3
+        let command =  CommandService.shared.createAction(with: .N8F(model), key: aes2key!)
+        peripheral.writeValue(command!, for: characteristic, type: .withoutResponse)
+    }
+    
     func V3editbleUser(model: EditBleUserModel) {
         guard let peripheral = connectedPeripheral, let characteristic = writableCharacteristic else {
             return

@@ -128,7 +128,7 @@ public class DeviceSetupResultModelN80 {
         guard let index8 = response[safe: 6] else { return nil }
         
         let data = Data([index5, index6, index7, index8])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         return Int(intValue)
         
@@ -140,7 +140,7 @@ public class DeviceSetupResultModelN80 {
         guard let index7 = response[safe: 9] else { return nil }
         guard let index8 = response[safe: 10] else { return nil }
         let data = Data([index5, index6, index7, index8])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         guard let index9 = response[safe: 11] else { return nil }
         guard let index10 = response[safe: 12] else { return nil }
@@ -148,7 +148,7 @@ public class DeviceSetupResultModelN80 {
         guard let index12 = response[safe: 14] else { return nil }
 
         let data2 = Data([index9, index10, index11, index12])
-        let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let digit = data2.leUInt32
         let digitValue = Int32(bitPattern: UInt32(digit))
       
         let withLeadingZero = String(format: "%09D", digitValue)
@@ -164,7 +164,7 @@ public class DeviceSetupResultModelN80 {
         guard let index7 = response[safe: 17] else { return nil }
         guard let index8 = response[safe: 18] else { return nil }
         let data = Data([index5, index6, index7, index8])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
 
 
@@ -174,7 +174,7 @@ public class DeviceSetupResultModelN80 {
         guard let index12 = response[safe: 22] else { return nil }
 
         let data2 = Data([index9, index10, index11, index12])
-        let digit = UInt32(littleEndian: data2.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let digit = data2.leUInt32
         let digitValue = Int32(bitPattern: UInt32(digit))
     
         let withLeadingZero = String(format: "%09D", digitValue)
@@ -281,7 +281,7 @@ public class DeviceSetupResultModelN80 {
         guard let index5 = response[safe: 29] else { return nil }
         guard let index6 = response[safe: 30] else { return nil }
         let data = Data([index5, index6, 0x00, 0x00])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         
         // 65535 = [0xFF, 0xFF, 0x00, 0x00] = not support
@@ -292,7 +292,7 @@ public class DeviceSetupResultModelN80 {
         guard let index5 = response[safe: 31] else { return nil }
         guard let index6 = response[safe: 32] else { return nil }
         let data = Data([index5, index6, 0x00, 0x00])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         
         // 65535 = [0xFF, 0xFF, 0x00, 0x00] = not support
@@ -303,7 +303,7 @@ public class DeviceSetupResultModelN80 {
         guard let index5 = response[safe: 33] else { return nil }
         guard let index6 = response[safe: 34] else { return nil }
         let data = Data([index5, index6, 0x00, 0x00])
-        let uint32 = UInt32(littleEndian: data.withUnsafeBytes { $0.load(as: UInt32.self) })
+        let uint32 = data.leUInt32
         let intValue = Int32(bitPattern: UInt32(uint32))
         
         // 65535 = [0xFF, 0xFF, 0x00, 0x00] = not support
